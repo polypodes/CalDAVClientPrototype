@@ -1,3 +1,19 @@
-les_polypodes_app_homepage:
-    path:     /hello/{name}
-    defaults: { _controller: LesPolypodesAppBundle:Default:index }
+les_polypodes_app_create:
+    path:     /events/create
+    defaults: { _controller: LesPolypodesAppBundle:Events:create }
+
+les_polypodes_app_read:
+    path:     /events/{id}
+    defaults: { _controller: LesPolypodesAppBundle:Events:read }
+
+les_polypodes_app_update:
+    path:     /events/update
+    defaults: { _controller: LesPolypodesAppBundle:Events:update }
+
+les_polypodes_app_delete:
+    path:     /events/delete
+    defaults: { _controller: LesPolypodesAppBundle:Events:delete }
+
+les_polypodes_app_list:
+    path:     /events
+    defaults: { _controller: LesPolypodesAppBundle:Events:list }
