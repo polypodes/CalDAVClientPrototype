@@ -1,0 +1,3 @@
+les_polypodes_app_homepage:
+    path:     /hello/{name}
+    defaults: { _controller: LesPolypodesAppBundle:Default:index }
