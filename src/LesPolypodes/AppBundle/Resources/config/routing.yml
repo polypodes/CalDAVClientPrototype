@@ -1,3 +1,7 @@
+les_polypodes_app_index:
+    path:     /
+    defaults: { _controller: LesPolypodesAppBundle:Events:index }
+
 les_polypodes_app_create:
     path:     /events/create
     defaults: { _controller: LesPolypodesAppBundle:Events:create }
@@ -7,11 +11,11 @@ les_polypodes_app_read:
     defaults: { _controller: LesPolypodesAppBundle:Events:read }
 
 les_polypodes_app_update:
-    path:     /events/update
+    path:     /events/update/{id}
     defaults: { _controller: LesPolypodesAppBundle:Events:update }
 
 les_polypodes_app_delete:
-    path:     /events/delete
+    path:     /events/delete/{id}
     defaults: { _controller: LesPolypodesAppBundle:Events:delete }
 
 les_polypodes_app_list:
