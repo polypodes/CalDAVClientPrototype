@@ -2,10 +2,16 @@
 
 A CalDAV/WebDAV PHP client using Sabre's [vObject](https://github.com/fruux/sabre-vobject) & [Faker](https://github.com/fzaninotto/Faker) to generate fake iCal & vCard objects.
 
+## Install
+
+```bash
+make
+make install
+```
 
 ## TODO
 
-See TODO list: [TODO.md](TODO.md)
+See [TODO.md](TODO.md)
 
 ## Fakely generates vObjects:
 
