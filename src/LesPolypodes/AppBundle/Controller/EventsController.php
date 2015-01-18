@@ -22,7 +22,7 @@ class EventsController extends Controller
         $vcard = new VObject\Component\VCard([
             'FN'    => $faker->name,
             'TEL'   => $faker->phoneNumber,
-            'EMAIL' => $faker->companyEmail
+            'EMAIL' => $faker->companyEmail,
         ]);
         $vcard->add('TEL', $faker->phoneNumber, ['type' => 'fax']);
 
@@ -32,13 +32,13 @@ class EventsController extends Controller
             'DTSTART' => $faker->dateTimeBetween('-2 years', 'now'),
             'RRULE' => 'FREQ=YEARLY',
         ]);
-        $vcal->add('ORGANIZER','mailto:' . $faker->companyEmail);
-        $vcal->add('ATTENDEE','mailto:' . $faker->freeEmail);
-        $vcal->add('ATTENDEE','mailto:' . $faker->freeEmail);
+        $vcal->add('ORGANIZER', 'mailto:'.$faker->companyEmail);
+        $vcal->add('ATTENDEE', 'mailto:'.$faker->freeEmail);
+        $vcal->add('ATTENDEE', 'mailto:'.$faker->freeEmail);
 
         return $this->render('LesPolypodesAppBundle:Events:create.html.twig', array(
             'vcard' => $vcard->serialize(),
-            'vcal' => $vcal->serialize()
+            'vcal' => $vcal->serialize(),
         ));
     }
 
