@@ -29,7 +29,16 @@
         "phploc/phploc" :               "*",
         "phpmd/phpmd" :                 "2.1.*",
         "pdepend/pdepend" :             "2.0.*",
-        "fabpot/php-cs-fixer":          "@stable"
+        "fabpot/php-cs-fixer":          "@stable",
+        "behat/behat":                  "~3.0@dev",
+        "behat/mink-extension":         "~2.0@dev",
+        "behat/mink":                   "~1.6@dev",
+        "behat/mink-browserkit-driver": "dev-master",
+        "behat/mink-goutte-driver":     "dev-master",
+        "behat/mink-selenium2-driver":  "dev-master",
+        "behat/symfony2-extension":     "2.0.x-dev",
+        "behat/mink-browserkit-driver": "*",
+        "knplabs/friendly-contexts":    "dev-master"
     },
     "scripts": {
         "post-root-package-install": [
