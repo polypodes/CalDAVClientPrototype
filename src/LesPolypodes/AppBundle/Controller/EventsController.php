@@ -17,15 +17,28 @@ class EventsController extends Controller
     {
         // see: https://github.com/fzaninotto/Faker
         $faker = Faker\Factory::create('fr_FR');
+
         // see http://sabre.io/vobject/usage/
         $vcard = new VObject\Component\VCard([
-            'FN'  => $faker->name,
-            'TEL' => $faker->phoneNumber,
+            'FN'    => $faker->name,
+            'TEL'   => $faker->phoneNumber,
+            'EMAIL' => $faker->companyEmail
         ]);
         $vcard->add('TEL', $faker->phoneNumber, ['type' => 'fax']);
 
+        $vcal = new VObject\Component\VCalendar();
+        $vcal->add('VEVENT', [
+            'SUMMARY' => $faker->sentence(),
+            'DTSTART' => $faker->dateTimeBetween('-2 years', 'now'),
+            'RRULE' => 'FREQ=YEARLY',
+        ]);
+        $vcal->add('ORGANIZER','mailto:' . $faker->companyEmail);
+        $vcal->add('ATTENDEE','mailto:' . $faker->freeEmail);
+        $vcal->add('ATTENDEE','mailto:' . $faker->freeEmail);
+
         return $this->render('LesPolypodesAppBundle:Events:create.html.twig', array(
-            'vcard' => $vcard->serialize()
+            'vcard' => $vcard->serialize(),
+            'vcal' => $vcal->serialize()
         ));
     }
 
