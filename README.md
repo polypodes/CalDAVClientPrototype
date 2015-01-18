@@ -1,6 +1,6 @@
 # CalDAV Client Prototype
 
-See TODO list: [TODO.md]
+See TODO list: [TODO.md](TODO.md)
 
 ## Fakely generates vObjects:
 
