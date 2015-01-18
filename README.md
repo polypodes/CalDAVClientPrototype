@@ -13,7 +13,7 @@ make
 make install
 ```
 
-Then go to http://caldavclientprototype/app_dev.php
+Then go to [http://caldavclientprototype/app_dev.php](http://caldavclientprototype/app_dev.php)
 
 ## TODO
 
