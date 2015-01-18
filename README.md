@@ -4,10 +4,16 @@ A CalDAV/WebDAV PHP client using Sabre's [vObject](https://github.com/fruux/sabr
 
 ## Install
 
+- 1/3: Add a new hostname entry in your `/etc/hosts/` file: You may choose `caldavclientprototype`
+- 2/3: Install a new Apache2 vhost - Have a look at the [apache2.conf](doc/apache2.conf) example file.
+- 3/3: Install web app:
+
 ```bash
 make
 make install
 ```
+
+Then go to http://caldavclientprototype/app_dev.php
 
 ## TODO
 
