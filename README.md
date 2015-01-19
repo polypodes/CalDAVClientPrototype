@@ -9,6 +9,8 @@ A CalDAV/WebDAV PHP client using Sabre's [vObject](https://github.com/fruux/sabr
 - 3/3: Install web app:
 
 ```bash
+git clone https://github.com/polypodes/CalDAVClientPrototype.git (or your own fork URL)
+cd CalDAVClientPrototype
 make
 make install
 ```
