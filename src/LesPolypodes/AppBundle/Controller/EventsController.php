@@ -36,9 +36,17 @@ class EventsController extends Controller
         $vcal->add('ATTENDEE', 'mailto:'.$faker->freeEmail);
         $vcal->add('ATTENDEE', 'mailto:'.$faker->freeEmail);
 
+        // TODO:
+        $result = false;
+        // 1 - Persist iCal Event into a remote WebCAL server
+        //$result = actionThatSaveiCalIntoCalDAV($vcal);
+        // 2 - Then display a confirmation message with created event:
+
+
         return $this->render('LesPolypodesAppBundle:Events:create.html.twig', array(
             'vcard' => $vcard->serialize(),
             'vcal' => $vcal->serialize(),
+            'result' => (int) $result,
         ));
     }
 
@@ -49,16 +57,22 @@ class EventsController extends Controller
 
     public function readAction()
     {
+        // TODO: fetch events between 2 datetimes
         return $this->render('LesPolypodesAppBundle:Events:read.html.twig');
     }
 
     public function updateAction()
     {
+        // TODO: update 1 event
+        // TODO: all events between 2 datetimes
+        // ! Think about rollback
         return $this->render('LesPolypodesAppBundle:Events:update.html.twig');
     }
 
     public function deleteAction()
     {
+        // TODO : delete on event
+        // ! Think about rollback
         return $this->render('LesPolypodesAppBundle:Events:delete.html.twig');
     }
 }
