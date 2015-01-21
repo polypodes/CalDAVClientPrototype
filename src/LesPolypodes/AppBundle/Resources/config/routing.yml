@@ -21,3 +21,7 @@ les_polypodes_app_delete:
 les_polypodes_app_list:
     path:     /events
     defaults: { _controller: LesPolypodesAppBundle:Events:list }
+
+les_polypodes_app_sabre_list:
+    path:     /sabre/events
+    defaults: { _controller: LesPolypodesAppBundle:Events:sabreList }

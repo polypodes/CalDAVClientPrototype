@@ -6,6 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sabre\VObject;
 use Faker;
 use LesPolypodes\AppBundle\Services\CalDAV\SimpleCalDAVClient;
+use Sabre\DAV;
 
 class EventsController extends Controller
 {
@@ -26,6 +27,27 @@ class EventsController extends Controller
         $events = $myClient->getEvents();
 
         return $this->render('LesPolypodesAppBundle:Events:list.html.twig', array(
+            'events' => $events
+        ));
+    }
+
+
+    public function sabreListAction() {
+        // http://sabre.io/dav/davclient/
+        $settings = array(
+            'baseUri' => 'http://192.168.1.32/cal.php/',
+            //'baseUri' => 'http://192.168.1.32/cal.php/calendars/',
+            'userName' => 'yolan',
+            'password' => 'yolan',
+        );
+
+        $client = new DAV\Client($settings);
+        $events = $client->propfind('calendars/yolan/test', array(
+            '{DAV:}displayname',
+            '{DAV:}getcontentlength',
+        ));
+        die(var_dump($events));
+        return $this->render('LesPolypodesAppBundle:Events:sabreList.html.twig', array(
             'events' => $events
         ));
     }
