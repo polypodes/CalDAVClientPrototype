@@ -1,2 +1,8 @@
 List
+
+<h2>Remote iCal Objects call</h2>
+{% for event in events %}
+    <pre>{{ event.data }}</pre>
+{% endfor %}
+
 {{ include('@LesPolypodesApp/Events/common/menu.html.twig') }}

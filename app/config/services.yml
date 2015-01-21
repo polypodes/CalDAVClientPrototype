@@ -4,6 +4,6 @@ parameters:
 #    parameter_name: value
 
 services:
-#    service_name:
-#        class: AppBundle\Directory\ClassName
+    cal_dav_client:
+         class: LesPolypodes\AppBundle\Service\CalDAV\SimpleCalDAVClient
 #        arguments: ["@another_service_name", "plain_value", "%parameter_name%"]

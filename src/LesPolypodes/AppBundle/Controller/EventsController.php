@@ -5,12 +5,29 @@ namespace LesPolypodes\AppBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sabre\VObject;
 use Faker;
+use LesPolypodes\AppBundle\Services\CalDAV\SimpleCalDAVClient;
 
 class EventsController extends Controller
 {
     public function listAction()
     {
-        return $this->render('LesPolypodesAppBundle:Events:list.html.twig');
+        $myClient = new SimpleCalDAVClient;
+
+        // MOVE THIS TO app/config/parameters.yml
+        $username = 'yolan';
+        $password = 'yolan';
+        $calendarName = 'test'; //laisser vide si inconnu
+        $urlbase = 'http://192.168.1.32/cal.php/calendars/';
+        // END MOVE
+
+        $url = sprintf("%s%s/%s", $urlbase, $username, $calendarName);
+        $myClient->connect($url, $username, $password);
+        $myClient->setCalendar($myClient->findCalendars()[$calendarName]);
+        $events = $myClient->getEvents();
+
+        return $this->render('LesPolypodesAppBundle:Events:list.html.twig', array(
+            'events' => $events
+        ));
     }
 
     public function createAction()
