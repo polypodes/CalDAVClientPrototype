@@ -7,7 +7,7 @@ les_polypodes_app_create:
     defaults: { _controller: LesPolypodesAppBundle:Events:create }
 
 les_polypodes_app_read:
-    path:     /events/{id}
+    path:     /events/view/{id}
     defaults: { _controller: LesPolypodesAppBundle:Events:read }
 
 les_polypodes_app_update:
@@ -20,8 +20,16 @@ les_polypodes_app_delete:
 
 les_polypodes_app_list:
     path:     /events
-    defaults: { _controller: LesPolypodesAppBundle:Events:list }
+    defaults: { _controller: LesPolypodesAppBundle:Events:scdcList }
 
 les_polypodes_app_sabre_list:
     path:     /sabre/events
     defaults: { _controller: LesPolypodesAppBundle:Events:sabreList }
+
+les_polypodes_app_list_event:
+    path:     /events/{name}
+    defaults: { _controller: LesPolypodesAppBundle:Events:scdcListEvent }
+
+les_polypodes_app_sabre_list_event:
+    path:     /sabre/events/{name}
+    defaults: { _controller: LesPolypodesAppBundle:Events:sabreListEvent }

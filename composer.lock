@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "3cf466e691a85bc86aeb4a0ab65b7b08",
+    "hash": "2e73151c5d7a6a8ca58af17fd410cc93",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -720,16 +720,16 @@
         },
         {
             "name": "fzaninotto/faker",
-            "version": "dev-master",
+            "version": "v1.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/fzaninotto/Faker.git",
-                "reference": "1dc843aaf1b6032a78082145cc2abe41f0ce0ec2"
+                "reference": "010c7efedd88bf31141a02719f51fb44c732d5a0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fzaninotto/Faker/zipball/1dc843aaf1b6032a78082145cc2abe41f0ce0ec2",
-                "reference": "1dc843aaf1b6032a78082145cc2abe41f0ce0ec2",
+                "url": "https://api.github.com/repos/fzaninotto/Faker/zipball/010c7efedd88bf31141a02719f51fb44c732d5a0",
+                "reference": "010c7efedd88bf31141a02719f51fb44c732d5a0",
                 "shasum": ""
             },
             "require": {
@@ -739,18 +739,14 @@
                 "phpunit/phpunit": "~4.0",
                 "squizlabs/php_codesniffer": "~1.5"
             },
-            "suggest": {
-                "ext-intl": "*"
-            },
             "type": "library",
             "extra": {
-                "branch-alias": {
-                    "dev-master": "1.5.x-dev"
-                }
+                "branch-alias": []
             },
             "autoload": {
-                "psr-4": {
-                    "Faker\\": "src/Faker/"
+                "psr-0": {
+                    "Faker": "src/",
+                    "Faker\\PHPUnit": "test/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -768,7 +764,7 @@
                 "faker",
                 "fixtures"
             ],
-            "time": "2015-01-12 09:54:32"
+            "time": "2014-06-04 14:43:02"
         },
         {
             "name": "incenteev/composer-parameter-handler",
@@ -2161,12 +2157,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Behat/MinkExtension.git",
-                "reference": "2ab8c00c59995824c6ebcd50617f8c3a4d78d2d9"
+                "reference": "ad17b046496593ddd89d0236c46feb1bf1326dff"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Behat/MinkExtension/zipball/2ab8c00c59995824c6ebcd50617f8c3a4d78d2d9",
-                "reference": "2ab8c00c59995824c6ebcd50617f8c3a4d78d2d9",
+                "url": "https://api.github.com/repos/Behat/MinkExtension/zipball/ad17b046496593ddd89d0236c46feb1bf1326dff",
+                "reference": "ad17b046496593ddd89d0236c46feb1bf1326dff",
                 "shasum": ""
             },
             "require": {
@@ -2212,7 +2208,7 @@
                 "test",
                 "web"
             ],
-            "time": "2014-10-08 08:13:38"
+            "time": "2015-01-19 10:19:43"
         },
         {
             "name": "behat/mink-goutte-driver",
@@ -2330,12 +2326,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Behat/Symfony2Extension.git",
-                "reference": "7553bf4ff14019aa678f988799ec087116fe3089"
+                "reference": "8e6b763438cb8ba221262aa85ae6ee6276e29351"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Behat/Symfony2Extension/zipball/7553bf4ff14019aa678f988799ec087116fe3089",
-                "reference": "7553bf4ff14019aa678f988799ec087116fe3089",
+                "url": "https://api.github.com/repos/Behat/Symfony2Extension/zipball/8e6b763438cb8ba221262aa85ae6ee6276e29351",
+                "reference": "8e6b763438cb8ba221262aa85ae6ee6276e29351",
                 "shasum": ""
             },
             "require": {
@@ -2382,7 +2378,7 @@
                 "framework",
                 "symfony"
             ],
-            "time": "2015-01-18 17:35:55"
+            "time": "2015-01-19 00:35:27"
         },
         {
             "name": "behat/transliterator",
@@ -3505,12 +3501,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "0c80aae88339b5f8cea664c443f7af6faabe7652"
+                "reference": "b92539368bdda39ecc77a4f6c0ba2c7dae1d24e0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/0c80aae88339b5f8cea664c443f7af6faabe7652",
-                "reference": "0c80aae88339b5f8cea664c443f7af6faabe7652",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/b92539368bdda39ecc77a4f6c0ba2c7dae1d24e0",
+                "reference": "b92539368bdda39ecc77a4f6c0ba2c7dae1d24e0",
                 "shasum": ""
             },
             "require": {
@@ -3569,7 +3565,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2015-01-18 15:56:00"
+            "time": "2015-01-21 07:53:00"
         },
         {
             "name": "phpunit/phpunit-mock-objects",
@@ -4244,7 +4240,6 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "fzaninotto/faker": 20,
         "phpunit/phpunit": 20,
         "fabpot/php-cs-fixer": 0,
         "behat/behat": 20,

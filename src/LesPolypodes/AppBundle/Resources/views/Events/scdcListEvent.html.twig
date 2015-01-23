@@ -1,8 +1,8 @@
-List
+ListEvent via SimpleCalDav
 
 <h2>Remote iCal Objects call</h2>
 {% for event in events %}
-    <pre>{{ event.data }}</pre>
+    <pre style="display:inline-block;margin:20px;">{{ event.data }}</pre>
 {% endfor %}
 
 {{ include('@LesPolypodesApp/Events/common/menu.html.twig') }}

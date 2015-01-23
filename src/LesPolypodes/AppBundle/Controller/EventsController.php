@@ -10,47 +10,109 @@ use Sabre\DAV;
 
 class EventsController extends Controller
 {
-    public function listAction()
+    public function scdcListAction()
     {
         $myClient = new SimpleCalDAVClient;
 
         // MOVE THIS TO app/config/parameters.yml
-        $username = 'yolan';
-        $password = 'yolan';
-        $calendarName = 'test'; //laisser vide si inconnu
-        $urlbase = 'http://192.168.1.32/cal.php/calendars/';
+        $username = 'yolan';    //'admin'
+        $password = 'yolan';    //'password'
+        $urlbase = 'http://baikal/app_dev.php/dav/cal/calendars/';
         // END MOVE
 
-        $url = sprintf("%s%s/%s", $urlbase, $username, $calendarName);
+        $url = sprintf("%s%s", $urlbase, $username);
         $myClient->connect($url, $username, $password);
-        $myClient->setCalendar($myClient->findCalendars()[$calendarName]);
+
+
+        $calendars = $myClient->findCalendars();
+        // die(var_dump($calendars));
+
+        return $this->render('LesPolypodesAppBundle:Events:scdcList.html.twig', array(
+            'calendars' => $calendars,
+        ));
+    }
+
+
+    public function scdcListEventAction($name)
+    {
+        $myClient = new SimpleCalDAVClient;
+
+        // MOVE THIS TO app/config/parameters.yml
+        $username = 'yolan';    //'admin'
+        $password = 'yolan';    //'password'
+        $urlbase = 'http://baikal/app_dev.php/dav/cal/calendars/';
+        // END MOVE
+
+        $url = sprintf("%s%s", $urlbase, $username);
+        $myClient->connect($url, $username, $password);
+
+        $calendarName = $name;
+        $calendarID = $myClient->findCalendarIDByName($calendarName);
+
+        if ($calendarID == null) {
+            throw new \Exception('No calendar found with the name "'.$calendarName.'".');
+        }
+
+        $myClient->setCalendar($myClient->findCalendars()[$calendarID]);
         $events = $myClient->getEvents();
 
-        return $this->render('LesPolypodesAppBundle:Events:list.html.twig', array(
+        // die(var_dump($events));
+
+        return $this->render('LesPolypodesAppBundle:Events:scdcListEvent.html.twig', array(
             'events' => $events
         ));
     }
 
 
-    public function sabreListAction() {
+    public function sabreListAction()
+    {
+
+        $username = 'yolan';    //'admin'
+        $password = 'yolan';    //'password'
+        $urlbase = 'http://baikal/app_dev.php/dav/cal/calendars/';
+
+        $settings = array(
+            'baseUri' => $urlbase.$username.'/',
+            'userName' => $username,
+            'password' => $password,
+        );
+
+        $client = new DAV\Client($settings);
+
+        // Réccupère les events du calendar
+        $calendars = $client->propfind(null, array('{DAV:}displayname', ), 1);
+        // die(var_dump($calendars));
+
+        // $calendars = $client->request('PROPFIND');
+        // die(var_dump($calendars['body']));
+
+        return $this->render('LesPolypodesAppBundle:Events:sabreListEvent.html.twig', array(
+            'calendars' => $calendars
+        ));
+    }
+
+
+    public function sabreListEventAction() {
         // http://sabre.io/dav/davclient/
         $settings = array(
-            'baseUri' => 'http://192.168.1.32/cal.php/',
-            //'baseUri' => 'http://192.168.1.32/cal.php/calendars/',
+            'baseUri' => 'http://baikal/cal.php/calendars/yolan/',
             'userName' => 'yolan',
             'password' => 'yolan',
         );
 
         $client = new DAV\Client($settings);
-        $events = $client->propfind('calendars/yolan/test', array(
+
+        // Réccupère les events du calendar
+        $events = $client->propfind('test', array(
             '{DAV:}displayname',
             '{DAV:}getcontentlength',
         ));
-        die(var_dump($events));
-        return $this->render('LesPolypodesAppBundle:Events:sabreList.html.twig', array(
+
+        return $this->render('LesPolypodesAppBundle:Events:sabreListEvent.html.twig', array(
             'events' => $events
         ));
     }
+
 
     public function createAction()
     {
