@@ -19,7 +19,7 @@
         "sensio/framework-extra-bundle":        "~3.0",
         "incenteev/composer-parameter-handler": "~2.0",
         "sabre/vobject":                        "~3.3",
-        "fzaninotto/faker":                     "dev-master",
+        "fzaninotto/faker":                     "~1.4",
         "sabre/dav": "~2.1.1"
     },
     "require-dev": {

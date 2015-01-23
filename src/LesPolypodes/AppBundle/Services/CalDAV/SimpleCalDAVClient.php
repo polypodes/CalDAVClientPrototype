@@ -505,4 +505,27 @@ class SimpleCalDAVClient
 
         $this->client->DoMKCALENDARRequest($url, $body);
     }
+
+
+    /**
+     * Rajout de Yolan, identifie l'id d'un calendrier grâce à son nom.
+     *
+     * Arguments:
+     * @param $name Nom du calendrier cherché.
+     *
+     * Return value:
+     * @return l'id du calendrié cherché, ou null si aucun n'est trouvé.
+     *
+     */
+    function findCalendarIDByName ($name)
+    {
+        $calendarID = null;
+
+        foreach ($this->findCalendars() as $key => $value) {
+            if($value->getDisplayName() == $name)
+                $calendarID = $key;
+        }
+
+        return $calendarID;
+    }
 }
