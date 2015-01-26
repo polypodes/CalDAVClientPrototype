@@ -15,6 +15,11 @@ make
 make install
 ```
 
+When prompt ask you for your CalDAV login/password/host, fill in the required values using a (local/remote) calDav server
+Do not forget to add this remote calDav to your `/etc/host` if it's a local dev-purpose server
+
+Mind any `app_dev.php` IP issue.
+
 Then go to [http://caldavclientprototype/app_dev.php](http://caldavclientprototype/app_dev.php)
 
 ## TODO
