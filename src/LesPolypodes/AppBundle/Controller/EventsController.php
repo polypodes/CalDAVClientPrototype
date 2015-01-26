@@ -10,21 +10,37 @@ use Sabre\DAV;
 
 class EventsController extends Controller
 {
+
+    protected $caldav_login = null;
+    protected $caldav_password = null;
+    protected $caldav_host = null;
+    protected $scdClient = null;
+    protected $sabreClient = null;
+
+
+    protected function getCalDavConnection()
+    {
+        error_reporting(E_ALL ^ E_NOTICE);
+        $this->caldav_login = $this->container->getParameter('caldav_login'); //'admin'
+        $this->caldav_password = $this->container->getParameter('caldav_password'); //'admin'
+        $this->caldav_host = $this->container->getParameter('caldav_host'); //'admin'
+    }
+
+    protected function getSimplecalDavClient()
+    {
+        $this->getCalDavConnection();
+        $this->scdClient = new SimpleCalDAVClient;
+        $url = sprintf("%s%s", $this->caldav_host, $this->caldav_login);
+        $this->scdClient->connect($url, $this->caldav_login, $this->caldav_password);
+
+        return $this->scdClient;
+    }
+
     public function scdcListAction()
     {
-        $myClient = new SimpleCalDAVClient;
+        $this->getSimplecalDavClient();
 
-        // MOVE THIS TO app/config/parameters.yml
-        $username = 'yolan';    //'admin'
-        $password = 'yolan';    //'password'
-        $urlbase = 'http://baikal/app_dev.php/dav/cal/calendars/';
-        // END MOVE
-
-        $url = sprintf("%s%s", $urlbase, $username);
-        $myClient->connect($url, $username, $password);
-
-
-        $calendars = $myClient->findCalendars();
+        $calendars = $this->scdClient->findCalendars();
         // die(var_dump($calendars));
 
         return $this->render('LesPolypodesAppBundle:Events:scdcList.html.twig', array(
@@ -35,7 +51,7 @@ class EventsController extends Controller
 
     public function scdcListEventAction($name)
     {
-        $myClient = new SimpleCalDAVClient;
+        $this->getSimplecalDavClient();
 
         // MOVE THIS TO app/config/parameters.yml
         $username = 'yolan';    //'admin'
@@ -44,17 +60,17 @@ class EventsController extends Controller
         // END MOVE
 
         $url = sprintf("%s%s", $urlbase, $username);
-        $myClient->connect($url, $username, $password);
+        $this->scdClient->connect($url, $username, $password);
 
         $calendarName = $name;
-        $calendarID = $myClient->findCalendarIDByName($calendarName);
+        $calendarID = $this->scdClient->findCalendarIDByName($calendarName);
 
         if ($calendarID == null) {
             throw new \Exception('No calendar found with the name "'.$calendarName.'".');
         }
 
-        $myClient->setCalendar($myClient->findCalendars()[$calendarID]);
-        $events = $myClient->getEvents();
+        $this->scdClient->setCalendar($this->scdClient->findCalendars()[$calendarID]);
+        $events = $this->scdClient->getEvents();
 
         // die(var_dump($events));
 
