@@ -80,7 +80,7 @@ class EventsController extends Controller
         $client = new DAV\Client($settings);
 
         // Réccupère les events du calendar
-        $calendars = $client->propfind(null, array('{DAV:}displayname', ), 1);
+        $calendars = $client->propfind(null, array('{DAV:}displayname'), 1);
         // die(var_dump($calendars));
 
         // $calendars = $client->request('PROPFIND');
