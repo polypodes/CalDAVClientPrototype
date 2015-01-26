@@ -42,25 +42,42 @@
 
 namespace LesPolypodes\AppBundle\Services\CalDAV;
 
+/**
+ * Class SimpleCalDAVClient
+ * @package LesPolypodes\AppBundle\Services\CalDAV
+ */
 class SimpleCalDAVClient
 {
 
-    // private $client;
-    // Accessibilit� modifi�e pour d�veloppement.
-    public $client;
+    /**
+     * @var
+     */
+    private $client;
+
+    /**
+     * @return mixed
+     * @throws \Exception
+     */
+    public function getClient() {
+        if (!isset($this->client)) {
+            throw new \Exception('No client defnied ; see self::connect().');
+        }
+
+        return $this->client;
+    }
 
     /**
      * function connect()
      * Connects to a CalDAV-Server.
      *
      * Arguments:
-     * @param $url URL to the CalDAV-server. E.g. http://exam.pl/baikal/cal.php/username/calendername/
-     * @param $user Username to login with
-     * @param $pass Password to login with
+     * @param string $url - url to the CalDAV-server. E.g. http://exam.pl/baikal/cal.php/username/calendername/
+     * @param string $user - username to login with
+     * @param string $pass - password to login with
      *
      * Debugging:
      * @throws CalDAVException
-     * For debugging purposes, just sorround everything with try { ... } catch (Exception $e) { echo $e->__toString(); }
+     * For debugging purposes, just surround everything with try { ... } catch (Exception $e) { echo $e->__toString(); }
      */
     function connect ($url, $user, $pass)
     {
@@ -68,13 +85,10 @@ class SimpleCalDAVClient
      //  Connect to CalDAV-Server and log in
         $client = new CalDAVClient($url, $user, $pass);
     
-     // Valid CalDAV-Server? Or is it just a WebDAV-Server?
         if (! $client->isValidCalDAVServer()) {
             if ($client->GetHttpResultCode() == '401') {
-// unauthorisized
                 throw new CalDAVException('Login failed', $client);
             } elseif ($client->GetHttpResultCode() == '') {
-// can't reach server
                 throw new CalDAVException('Can\'t reach server', $client);
             } else {
                 throw new CalDAVException('Could\'n find a CalDAV-collection under the url', $client);
@@ -84,10 +98,8 @@ class SimpleCalDAVClient
      // Check for errors
         if ($client->GetHttpResultCode() != '200') {
             if ($client->GetHttpResultCode() == '401') {
-// unauthorisized
                 throw new CalDAVException('Login failed', $client);
             } elseif ($client->GetHttpResultCode() == '') {
-// can't reach server
                 throw new CalDAVException('Can\'t reach server', $client);
             } else // Unknown status
             {
@@ -97,9 +109,10 @@ class SimpleCalDAVClient
     
         $this->client = $client;
     }
-    
+
+
     /**
-     * function findCalendars()
+     * findCalendars()
      *
      * Requests a list of all accessible calendars on the server
      *
@@ -108,75 +121,73 @@ class SimpleCalDAVClient
      *
      * Debugging:
      * @throws CalDAVException
-     * For debugging purposes, just sorround everything with try { ... } catch (Exception $e) { echo $e->__toString(); exit(-1); }
+     * For debugging purposes, just surround everything with try { ... } catch (Exception $e) { echo $e->__toString(); exit(-1); }
+     *
+     * @return mixed
+     * @throws \Exception
      */
-    function findCalendars()
+    public function findCalendars()
     {
         if (!isset($this->client)) {
-            throw new Exception('No connection. Try connect().');
+            throw new \Exception('No connection. Try connect().');
         }
         
-        return $this->client->FindCalendars(true);
+        return $this->getClient()->FindCalendars(true);
     }
-    
+
     /**
-     * function setCalendar()
+     * setCalendar()
      *
      * Sets the actual calendar to work with
      *
      * Debugging:
      * @throws CalDAVException
      * For debugging purposes, just sorround everything with try { ... } catch (Exception $e) { echo $e->__toString(); exit(-1); }
+     *
+     * @param CalDAVCalendar $calendar
+     *
+     * @throws \Exception
      */
-    function setCalendar (CalDAVCalendar $calendar)
+    public function setCalendar (CalDAVCalendar $calendar)
     {
         if (!isset($this->client)) {
-            throw new Exception('No connection. Try connect().');
+            throw new \Exception('No connection. Try connect().');
         }
         
         $this->client->SetCalendar($this->client->first_url_part.$calendar->getURL());
     }
-    
+
     /**
-     * function create()
      * Creates a new calendar resource on the CalDAV-Server (event, todo, etc.).
      *
-     * Arguments:
-     * @param $cal iCalendar-data of the resource you want to create.
-     *               Notice: The iCalendar-data contains the unique ID which specifies where the event is being saved.
+     * @param object $cal iCalendar-data of the resource you want to create.
+     *             Notice: The iCalendar-data contains the unique ID which specifies where the event is being saved.
      *
-     * Return value:
-     * @return An CalDAVObject-representation (see CalDAVObject.php) of your created resource
-     *
-     * Debugging:
+     * @return CalDAVObject - An CalDAVObject-representation (see CalDAVObject.php) of your created resource
      * @throws CalDAVException
-     * For debugging purposes, just sorround everything with try { ... } catch (Exception $e) { echo $e->__toString(); exit(-1); }
+     * @throws \Exception
      */
-    function create ($cal)
+    public function create ($cal)
     {
-     // Connection and calendar set?
-        if (!isset($this->client)) {
-            throw new Exception('No connection. Try connect().');
-        }
         if (!isset($this->client->calendar_url)) {
-            throw new Exception('No calendar selected. Try findCalendars() and setCalendar().');
+            throw new \Exception('No calendar selected. Try findCalendars() and setCalendar().');
         }
         
-     // Parse $cal for UID
+        // Parse $cal for UID
         if (! preg_match('#^UID:(.*?)\r?\n?$#m', $cal, $matches)) {
-            throw new Exception('Can\'t find UID in $cal');
+            throw new \Exception('Can\'t find UID in $cal');
         } else {
             $uid = $matches[1];
         }
     
-     // Is there a '/' at the end of the calendar_url?
+        // Is there a '/' at the end of the calendar_url?
         if (! preg_match('#^.*?/$#', $this->client->calendar_url, $matches)) {
             $url = $this->client->calendar_url.'/';
         } else {
             $url = $this->client->calendar_url;
         }
     
-     // Does $url.$uid.'.ics' already exist?
+        // Looking for $url.$uid.'.ics'
         $result = $this->client->GetEntryByHref($url.$uid.'.ics');
         if ($this->client->GetHttpResultCode() == '200') {
             throw new CalDAVException($url.$uid.'.ics already exists. UID not unique?', $this->client);
@@ -185,15 +196,13 @@ class SimpleCalDAVClient
             throw new CalDAVException('Recieved unknown HTTP status', $this->client);
         }
         
-     // Put it!
         $newEtag = $this->client->DoPUTRequest($url.$uid.'.ics', $cal);
     
-     // PUT-request successfull?
         if ($this->client->GetHttpResultCode() != '201') {
             if ($this->client->GetHttpResultCode() == '204') {
-// $url.$uid.'.ics' already existed on server
+            // $url.$uid.'.ics' already existed on server
                 throw new CalDAVException($url.$uid.'.ics already existed. Entry has been overwritten.', $this->client);
-            } else // Unknown status
+            } else
             {
                 throw new CalDAVException('Recieved unknown HTTP status', $this->client);
             }
@@ -203,6 +212,7 @@ class SimpleCalDAVClient
     }
     
     /**
+     * TODO: continue refactoring here
      * function change()
      * Changes a calendar resource (event, todo, etc.) on the CalDAV-Server.
      *
