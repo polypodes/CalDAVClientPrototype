@@ -53,15 +53,6 @@ class EventsController extends Controller
     {
         $this->getSimplecalDavClient();
 
-        // MOVE THIS TO app/config/parameters.yml
-        $username = 'yolan';    //'admin'
-        $password = 'yolan';    //'password'
-        $urlbase = 'http://baikal/app_dev.php/dav/cal/calendars/';
-        // END MOVE
-
-        $url = sprintf("%s%s", $urlbase, $username);
-        $this->scdClient->connect($url, $username, $password);
-
         $calendarName = $name;
         $calendarID = $this->scdClient->findCalendarIDByName($calendarName);
 
