@@ -102,7 +102,7 @@ class EventsController extends Controller
         // $calendars = $client->request('PROPFIND');
         // die(var_dump($calendars['body']));
 
-        return $this->render('LesPolypodesAppBundle:Events:sabreListEvent.html.twig', array(
+        return $this->render('LesPolypodesAppBundle:Events:sabreList.html.twig', array(
             'calendars' => $calendars
         ));
     }
