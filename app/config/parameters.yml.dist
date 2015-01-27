@@ -22,5 +22,5 @@ parameters:
     # CalDav parameters
     caldav_login: root
     caldav_password: root
-    caldav_host: http://baikal/app_dev.php/dav/cal/calendars/
+    caldav_host: http://baikal/dav/cal/calendars/
 
