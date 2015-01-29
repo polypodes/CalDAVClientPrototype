@@ -53,6 +53,43 @@ class EventsController extends Controller
         $this->scdClient->setCalendar($this->scdClient->findCalendars()[$calendarID]);
     }
 
+    protected function createFakeVCal()
+    {
+        // see: https://github.com/fzaninotto/Faker
+        $faker = Faker\Factory::create('fr_FR');
+
+        $vcal = new VObject\Component\VCalendar();
+        $vevent = $vcal->add('VEVENT');
+
+        $uid = $faker->numerify('ODE-####-####-####-####');
+        $datevent = $faker->dateTimeBetween('now', '+1 day');
+
+        $vevent->add('ORGANIZER', $faker->companyEmail);
+        $vevent->add('CREATED', $faker->dateTimeBetween('now', 'now'));
+        $vevent->add('UID', $uid);
+        $vevent->add('TRANSP', array('OPAQUE', 'TRANSPARENT')[rand(0,1)]);
+        $vevent->add('SUMMARY', $faker->sentence(2));
+        $vevent->add('LOCATION', $faker->streetAddress);
+        $vevent->add('DTSTART', $datevent);
+        $vevent->add('DTEND', $datevent->add(new \DateInterval('PT1H')));
+        $vevent->add('X-ODE-PRICE', sprintf('%d€', $faker->randomFloat(2, 0, 100)));
+        $vevent->add('DESCRIPTION', $faker->paragraph(3));
+
+        return $vcal;
+    }
+
+    protected function persistEvent($calName, $vcal)
+    {   
+        $this->setCalendarSCDC($calName);
+
+        $rawcal = $vcal->serialize();
+
+        if ($this->scdClient->create($rawcal) == null)
+            throw new \Exception('Can\'t persist the event named "'.$vcal->VEVENT->SUMMARY.'".');
+
+        return $rawcal;
+    }
+
     public function scdcListAction()
     {
         $this->getSimplecalDavClient();
@@ -107,7 +144,8 @@ class EventsController extends Controller
     }
 
 
-    public function sabreListEventAction() {
+    public function sabreListEventAction() 
+    {
         // http://sabre.io/dav/davclient/
         $settings = array(
             'baseUri' => 'http://baikal/cal.php/calendars/yolan/',
@@ -131,58 +169,14 @@ class EventsController extends Controller
 
     public function createAction()
     {
-        // see: https://github.com/fzaninotto/Faker
-        $faker = Faker\Factory::create('fr_FR');
-
-        // see http://sabre.io/vobject/usage/
-        // $vcard = new VObject\Component\VCard([
-        //     'FN'    => $faker->name,
-        //     'TEL'   => $faker->phoneNumber,
-        //     'EMAIL' => $faker->companyEmail,
-        // ]);
-        // $vcard->add('TEL', $faker->phoneNumber, ['type' => 'fax']);
-
-        // $vcal = new VObject\Component\VCalendar();
-        // $vcal->add('VEVENT', [
-        //     'SUMMARY' => $faker->sentence(3),
-        //     'DTSTART' => $faker->dateTimeBetween('now', '+1 day'),
-        //     'X-ODE-PRICE' => $faker->randomFloat(2, 0, 100),
-        // ]);
-
-        $vcal = new VObject\Component\VCalendar();
-        $vevent = $vcal->add('VEVENT');
-
-        $uid = $faker->numerify('ODE-####-####-####-####');
-        $datevent = $faker->dateTimeBetween('now', '+1 day');
-
-        $vevent->add('ORGANIZER', $faker->companyEmail);
-        $vevent->add('CREATED', $faker->dateTimeBetween('now', 'now'));
-        $vevent->add('UID', $uid);
-        $vevent->add('TRANSP', array('OPAQUE', 'TRANSPARENT')[rand(0,1)]);
-        $vevent->add('SUMMARY', $faker->sentence(2));
-        $vevent->add('LOCATION', $faker->streetAddress);
-        $vevent->add('DTSTART', $datevent);
-        $vevent->add('DTEND', $datevent->add(new \DateInterval('PT1H')));
-        $vevent->add('X-ODE-PRICE', sprintf('%d€', $faker->randomFloat(2, 0, 100)));
-        $vevent->add('DESCRIPTION', $faker->paragraph(3));
-
-        // TODO:
-        $result = false;
-        // 1 - Persist iCal Event into a remote WebCAL server
-        //$result = actionThatSaveiCalIntoCalDAV($vcal);
-        // 2 - Then display a confirmation message with created event:
-
         $calendarName = 'ODE Test 1';
-        $this->setCalendarSCDC($calendarName);
 
-        if ($this->scdClient->create($vcal->serialize()) != null)
-            $result = true;
+        $vcal = $this->createFakeVCal();
 
+        $this->persistEvent($calendarName, $vcal);
 
         return $this->render('LesPolypodesAppBundle:Events:create.html.twig', array(
-            // 'vcard' => $vcard->serialize(),
             'vcal' => $vcal->serialize(),
-            'result' => (int) $result,
             'name' => $calendarName,
         ));
     }
@@ -233,5 +227,21 @@ class EventsController extends Controller
         return $this->render('LesPolypodesAppBundle:Events:form.html.twig', array(
             'form' => $form->createView()
             ));
+    }
+
+    public function devInsertAction($n)
+    {
+        $calendarName = 'ODE Test 1';
+
+        for ($i = 0; $i < $n; $i++)
+        {
+            $vcal = $this->createFakeVCal();
+
+            $rawcal = $this->persistEvent($calendarName, $vcal);
+
+            $cals[] = $rawcal;
+        }
+
+        return $this->render('LesPolypodesAppBundle:Events:delete.html.twig');
     }
 }
