@@ -7,6 +7,8 @@ use Sabre\VObject;
 use Faker;
 use LesPolypodes\AppBundle\Services\CalDAV\SimpleCalDAVClient;
 use Sabre\DAV;
+use LesPolypodes\AppBundle\Entity\Task;
+use Symfony\Component\Form\Form;
 
 class EventsController extends Controller
 {
@@ -186,7 +188,23 @@ class EventsController extends Controller
 
     public function formAction()
     {
+        $task = new Task();
+        // Valeurs par défaut
+        $task->setName('Nom de l\'évènement');
+        $task->setStartDate(new \DateTime('today'));
+        $task->setEndDate(new \DateTime('tomorrow'));
+        $task->setDescription('Décrivez votre évènement');
+
+        $form = $this->createFormBuilder($task)
+            ->add('name', 'text')
+            ->add('startDate', 'date')
+            ->add('endDate', 'date')
+            ->add('description', 'textarea')
+            ->add('Valider', 'submit')
+            ->getForm();
         // TODO: 
-        return $this->render('LesPolypodesAppBundle:Events:form.html.twig');
+        return $this->render('LesPolypodesAppBundle:Events:form.html.twig', array(
+            'form' => $form->createView()
+            ));
     }
 }

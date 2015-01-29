@@ -1,2 +1,13 @@
 Form
+
+{{ form_start(form) }}
+	{{ form_errors(form) }}
+
+	{{ form_row(form.name) }}
+	{{ form_row(form.startDate) }}
+	{{ form_row(form.endDate) }}
+	{{ form_row(form.description) }}
+	
+{{ form_end(form) }}
+
 {{ include('@LesPolypodesApp/Events/common/menu.html.twig') }}
