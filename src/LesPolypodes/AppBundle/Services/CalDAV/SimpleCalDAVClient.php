@@ -72,12 +72,13 @@ class SimpleCalDAVClient
 
      //  Connect to CalDAV-Server and log in
         $client = new CalDAVClient($url, $user, $pass);
-
         if (! $client->isValidCalDAVServer()) {
+// die(var_dump($client->GetHttpResultCode()));
+
             if ($client->GetHttpResultCode() == '401') {
                 throw new CalDAVException('Login failed', $client);
             } elseif ($client->GetHttpResultCode() == '') {
-                throw new CalDAVException('Can\'t reach server', $client);
+                throw new CalDAVException(sprintf("Can't reach server, %d HTTP code caught", $client->GetHttpResultCode()), $client);
             } else {
                 throw new CalDAVException('Could\'n find a CalDAV-collection under the url', $client);
             }
@@ -469,7 +470,6 @@ EOT;
         foreach ($this->findCalendars() as $key => $value) {
             if ($value->getDisplayName() == $name)
                 $calendarID = $key;
-                break;
         }
 
         return $calendarID;

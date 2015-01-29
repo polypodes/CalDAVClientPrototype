@@ -101,6 +101,9 @@ class CalDAVClient
                 $this->protocol = 'tcp';
                 $this->port = 80;
             }
+            if('' != $matches[5]) {
+                $this->port = $matches[5];
+            }
             if ($matches[4] != '') {
                 $this->port = intval($matches[5]);
             }
@@ -143,7 +146,8 @@ class CalDAVClient
         $this->headers = array();
         $dav_options = $this->DoOptionsRequestAndGetDAVHeader();
         $valid_caldav_server = isset($dav_options['calendar-access']);
-
+// die(var_dump($dav_options));
+        
         return $valid_caldav_server;
     }
 
@@ -240,6 +244,7 @@ class CalDAVClient
         curl_setopt($this->ch, CURLINFO_HEADER_OUT, true);
 
         $response = curl_exec($this->ch);
+        //die(var_dump($url));
 
         if (false === $response) {
             // TODO better error handling

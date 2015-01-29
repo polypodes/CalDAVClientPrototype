@@ -33,3 +33,7 @@ les_polypodes_app_list_event:
 les_polypodes_app_sabre_list_event:
     path:     /sabre/events/{name}
     defaults: { _controller: LesPolypodesAppBundle:Events:sabreListEvent }
+
+les_polypodes_app_form:
+    path:     /events/form/
+    defaults: { _controller: LesPolypodesAppBundle:Events:form }
