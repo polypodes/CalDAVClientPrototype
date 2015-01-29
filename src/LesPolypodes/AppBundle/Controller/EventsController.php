@@ -68,20 +68,7 @@ class EventsController extends Controller
 
     public function scdcListEventAction($name)
     {
-<<<<<<< HEAD
-        $this->getSimplecalDavClient();
-
-        $calendarName = $name;
-        $calendarID = $this->scdClient->findCalendarIDByName($calendarName);
-
-        if ($calendarID == null) {
-            throw new \Exception('No calendar found with the name "'.$calendarName.'".');
-        }
-
-        $this->scdClient->setCalendar($this->scdClient->findCalendars()[$calendarID]);
-=======
         $this->setCalendarSCDC($name);
->>>>>>> bb142e134d6852352266ef7afeea8e1801a67e52
         $events = $this->scdClient->getEvents();
 
         // die(var_dump($events));
