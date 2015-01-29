@@ -469,7 +469,6 @@ EOT;
         foreach ($this->findCalendars() as $key => $value) {
             if ($value->getDisplayName() == $name)
                 $calendarID = $key;
-                break;
         }
 
         return $calendarID;

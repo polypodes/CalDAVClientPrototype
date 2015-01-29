@@ -3,6 +3,7 @@
 namespace LesPolypodes\AppBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Validator\Constraints\DateTime;
 use Sabre\VObject;
 use Faker;
 use LesPolypodes\AppBundle\Services\CalDAV\SimpleCalDAVClient;
@@ -36,6 +37,20 @@ class EventsController extends Controller
         return $this->scdClient;
     }
 
+    protected function setCalendarSCDC($name)
+    {
+        $this->getSimplecalDavClient();
+
+        $calendarName = $name;
+        $calendarID = $this->scdClient->findCalendarIDByName($calendarName);
+
+        if ($calendarID == null) {
+            throw new \Exception('No calendar found with the name "'.$calendarName.'".');
+        }
+
+        $this->scdClient->setCalendar($this->scdClient->findCalendars()[$calendarID]);
+    }
+
     public function scdcListAction()
     {
         $this->getSimplecalDavClient();
@@ -51,16 +66,7 @@ class EventsController extends Controller
 
     public function scdcListEventAction($name)
     {
-        $this->getSimplecalDavClient();
-
-        $calendarName = $name;
-        $calendarID = $this->scdClient->findCalendarIDByName($calendarName);
-
-        if ($calendarID == null) {
-            throw new \Exception('No calendar found with the name "'.$calendarName.'".');
-        }
-
-        $this->scdClient->setCalendar($this->scdClient->findCalendars()[$calendarID]);
+        $this->setCalendarSCDC($name);
         $events = $this->scdClient->getEvents();
 
         // die(var_dump($events));
@@ -127,22 +133,36 @@ class EventsController extends Controller
         $faker = Faker\Factory::create('fr_FR');
 
         // see http://sabre.io/vobject/usage/
-        $vcard = new VObject\Component\VCard([
-            'FN'    => $faker->name,
-            'TEL'   => $faker->phoneNumber,
-            'EMAIL' => $faker->companyEmail,
-        ]);
-        $vcard->add('TEL', $faker->phoneNumber, ['type' => 'fax']);
+        // $vcard = new VObject\Component\VCard([
+        //     'FN'    => $faker->name,
+        //     'TEL'   => $faker->phoneNumber,
+        //     'EMAIL' => $faker->companyEmail,
+        // ]);
+        // $vcard->add('TEL', $faker->phoneNumber, ['type' => 'fax']);
+
+        // $vcal = new VObject\Component\VCalendar();
+        // $vcal->add('VEVENT', [
+        //     'SUMMARY' => $faker->sentence(3),
+        //     'DTSTART' => $faker->dateTimeBetween('now', '+1 day'),
+        //     'X-ODE-PRICE' => $faker->randomFloat(2, 0, 100),
+        // ]);
 
         $vcal = new VObject\Component\VCalendar();
-        $vcal->add('VEVENT', [
-            'SUMMARY' => $faker->sentence(),
-            'DTSTART' => $faker->dateTimeBetween('-2 years', 'now'),
-            'RRULE' => 'FREQ=YEARLY',
-        ]);
-        $vcal->add('ORGANIZER', 'mailto:'.$faker->companyEmail);
-        $vcal->add('ATTENDEE', 'mailto:'.$faker->freeEmail);
-        $vcal->add('ATTENDEE', 'mailto:'.$faker->freeEmail);
+        $vevent = $vcal->add('VEVENT');
+
+        $uid = $faker->numerify('ODE-####-####-####-####');
+        $datevent = $faker->dateTimeBetween('now', '+1 day');
+
+        $vevent->add('ORGANIZER', $faker->companyEmail);
+        $vevent->add('CREATED', $faker->dateTimeBetween('now', 'now'));
+        $vevent->add('UID', $uid);
+        $vevent->add('TRANSP', array('OPAQUE', 'TRANSPARENT')[rand(0,1)]);
+        $vevent->add('SUMMARY', $faker->sentence(2));
+        $vevent->add('LOCATION', $faker->streetAddress);
+        $vevent->add('DTSTART', $datevent);
+        $vevent->add('DTEND', $datevent->add(new \DateInterval('PT1H')));
+        $vevent->add('X-ODE-PRICE', sprintf('%d€', $faker->randomFloat(2, 0, 100)));
+        $vevent->add('DESCRIPTION', $faker->paragraph(3));
 
         // TODO:
         $result = false;
@@ -150,11 +170,18 @@ class EventsController extends Controller
         //$result = actionThatSaveiCalIntoCalDAV($vcal);
         // 2 - Then display a confirmation message with created event:
 
+        $calendarName = 'ODE Test 1';
+        $this->setCalendarSCDC($calendarName);
+
+        if ($this->scdClient->create($vcal->serialize()) != null)
+            $result = true;
+
 
         return $this->render('LesPolypodesAppBundle:Events:create.html.twig', array(
-            'vcard' => $vcard->serialize(),
+            // 'vcard' => $vcard->serialize(),
             'vcal' => $vcal->serialize(),
             'result' => (int) $result,
+            'name' => $calendarName,
         ));
     }
 
