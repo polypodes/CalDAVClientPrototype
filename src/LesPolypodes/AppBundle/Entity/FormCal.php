@@ -7,8 +7,6 @@
         protected $name;
         protected $startDate;
         protected $endDate;
-        // protected $startTime;
-        // protected $endTime;
         protected $location;
         protected $description;
 
@@ -41,25 +39,15 @@
             $this->endDate = $endDate;
        }
 
-       // public function getStartTime()
-       // {
-       //      return $this->startTime;
-       // }
+       public function getLocation()
+       {
+            return $this->location;
+       }
 
-       // public function setStartTime(Time $startTime)
-       // {
-       //      $this->startTime = $startTime;
-       // }
-
-       // public function getEndTime()
-       // {
-       //      return $this->endTime;
-       // }
-
-       // public function setEndTime(Time $endTime)
-       // {
-       //      $this->endTime = $endTime;
-       // }
+       public function setLocation($location)
+       {
+            $this->location = $location;
+       }
 
        public function getDescription()
        {

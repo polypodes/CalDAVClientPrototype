@@ -54,12 +54,40 @@ class EventsController extends Controller
         $this->scdClient->setCalendar($this->scdClient->findCalendars()[$calendarID]);
     }
 
+    protected function createVCal($event)
+    {
+        // see: https://github.com/fzaninotto/Faker
+        $faker = Faker\Factory::create('fr_FR');
+
+        $vcal = new VObject\Component\VCalendar();
+        $vcal->PRODID = '-//ODE Dev//Form//FR';
+
+        $vevent = $vcal->add('VEVENT');
+
+        $uid = $faker->numerify('ODE-####-####-####-####');
+
+        // $vevent->add('ORGANIZER', $faker->companyEmail);
+        $vevent->add('CREATED', $faker->dateTimeBetween('now', 'now'));
+        $vevent->add('UID', $uid);
+        $vevent->add('TRANSP', array('OPAQUE', 'TRANSPARENT')[rand(0,1)]);
+        $vevent->add('SUMMARY', $event->getName());
+        $vevent->add('LOCATION', $event->getLocation());
+        $vevent->add('DTSTART', $event->getStartDate());
+        $vevent->add('DTEND', $event->getEndDate());
+        // $vevent->add('X-ODE-PRICE', sprintf('%d€', $faker->randomFloat(2, 0, 100)));
+        $vevent->add('DESCRIPTION', $event->getDescription());
+
+        return $vcal;
+    }
+
     protected function createFakeVCal()
     {
         // see: https://github.com/fzaninotto/Faker
         $faker = Faker\Factory::create('fr_FR');
 
         $vcal = new VObject\Component\VCalendar();
+        $vcal->PRODID = '-//ODE Dev//Faker//FR';
+
         $vevent = $vcal->add('VEVENT');
 
         $uid = $faker->numerify('ODE-####-####-####-####');
@@ -170,7 +198,7 @@ class EventsController extends Controller
 
     public function createAction()
     {
-        $calendarName = 'ODE Test 2';
+        $calendarName = 'ODE Test 1';
 
         $vcal = $this->createFakeVCal();
 
@@ -229,11 +257,14 @@ class EventsController extends Controller
 
         if($form->isValid())
         {
-            // $em = $this->getDoctrine()->getManager();
-            // $em->persist($event);
-            // $em->flush();
-            die(var_dump($event));
+            // $calendarName = 'ODE Test 1';
+
+            // $vcal = $this->createVCal($event);
+
+            // $this->persistEvent($calendarName, $vcal);
+
             return $this->redirect($this->generateUrl('les_polypodes_app_sabre_list' /*, array('id' => $event->getId())*/));
+            // return $this->forward('LesPolypodesAppBundle:Events:scdcListEvent', array( 'name' => $calendarName, ));
         }
         
         return $this->render('LesPolypodesAppBundle:Events:form.html.twig', array(
@@ -249,9 +280,7 @@ class EventsController extends Controller
         {
             $vcal = $this->createFakeVCal();
 
-            $rawcal = $this->persistEvent($calendarName, $vcal);
-
-            $cals[] = $rawcal;
+            $this->persistEvent($calendarName, $vcal);
         }
 
         return $this->forward('LesPolypodesAppBundle:Events:scdcListEvent', array( 'name' => $calendarName, ));
