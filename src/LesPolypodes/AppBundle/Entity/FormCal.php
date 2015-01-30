@@ -2,9 +2,7 @@
 
     namespace LesPolypodes\AppBundle\Entity;
 
-    // use Symfony\Component\Form\Form;
-
-    class Task
+    class FormCal
     {
         protected $name;
         protected $startDate;
