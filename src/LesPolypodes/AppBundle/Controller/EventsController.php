@@ -108,6 +108,11 @@ class EventsController extends Controller
     {
         $this->setCalendarSCDC($name);
         $events = $this->scdClient->getEvents();
+        
+        foreach ($events as $event)
+        {
+            var_dump(explode(':', $events));
+        }
 
         // die(var_dump($events));
 
@@ -120,8 +125,6 @@ class EventsController extends Controller
     {
         $this->setCalendarSCDC($name);
         $events = $this->scdClient->getEvents();
-
-        // die(var_dump($events));
 
         return $this->render('LesPolypodesAppBundle:Events:scdcListEventRow.html.twig', array(
             'events' => $events
