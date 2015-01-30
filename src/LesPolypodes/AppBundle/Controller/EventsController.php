@@ -123,7 +123,7 @@ class EventsController extends Controller
 
         // die(var_dump($events));
 
-        return $this->render('LesPolypodesAppBundle:Events:scdcListEvent.html.twig', array(
+        return $this->render('LesPolypodesAppBundle:Events:scdcListEventRow.html.twig', array(
             'events' => $events
         ));
     }
