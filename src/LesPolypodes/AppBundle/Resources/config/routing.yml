@@ -37,3 +37,9 @@ les_polypodes_app_sabre_list_event:
 les_polypodes_app_form:
     path:     /events/form/
     defaults: { _controller: LesPolypodesAppBundle:Events:form }
+
+les_polypodes_app_dev_insert:
+    path:     /dev/insert/{n}
+    defaults: { _controller: LesPolypodesAppBundle:Events:devInsert, n: 1}
+    requirements:
+        n: \d+
