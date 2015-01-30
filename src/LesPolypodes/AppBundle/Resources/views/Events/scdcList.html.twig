@@ -10,6 +10,9 @@ List via SimpleCalDAV
 	    	<button onclick="location.href='{{ path('les_polypodes_app_dev_insert', {name:calendar.displayname, n:10}) }}'">
 				Insert 10
 			</button>
+			<button onclick="location.href='{{ path('les_polypodes_app_list_event_row', {name:calendar.displayname}) }}'">
+				Row
+			</button>
 	    </li>
 	{% endfor %}
 </ul>
