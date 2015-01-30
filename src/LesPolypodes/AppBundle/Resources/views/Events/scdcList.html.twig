@@ -3,7 +3,14 @@ List via SimpleCalDAV
 <h2>Remote calendars</h2>
 <ul>
 	{% for calendar in calendars %}
-	    <li><a href="{{ path('les_polypodes_app_list_event', {name:calendar.displayname}) }}">{{ calendar.displayname }} (ID: {{ calendar.calendarid }})</a></li>
+	    <li>
+	    	<a href="{{ path('les_polypodes_app_list_event', {name:calendar.displayname}) }}">
+	    		{{ calendar.displayname }} (ID: {{ calendar.calendarid }})
+	    	</a>
+	    	<button onclick="location.href='{{ path('les_polypodes_app_dev_insert', {name:calendar.displayname, n:10}) }}'">
+				Insert 10
+			</button>
+	    </li>
 	{% endfor %}
 </ul>
 

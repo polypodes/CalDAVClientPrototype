@@ -229,9 +229,9 @@ class EventsController extends Controller
             ));
     }
 
-    public function devInsertAction($n)
+    public function devInsertAction($name, $n)
     {
-        $calendarName = 'ODE Test 1';
+        $calendarName = $name;
 
         for ($i = 0; $i < $n; $i++)
         {
@@ -242,6 +242,6 @@ class EventsController extends Controller
             $cals[] = $rawcal;
         }
 
-        return $this->render('LesPolypodesAppBundle:Events:delete.html.twig');
+        return $this->forward('LesPolypodesAppBundle:Events:scdcListEvent', array( 'name' => $calendarName, ));
     }
 }

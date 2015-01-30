@@ -9,7 +9,7 @@ Create :
 	<button onclick="location.href='{{ path('les_polypodes_app_create') }}'">
 		Create one more.
 	</button>
-	<button onclick="location.href='{{ path('les_polypodes_app_list') }}/{{ name }}'">
+	<button onclick="location.href='{{ path('les_polypodes_app_list', {name: name}) }}'">
 		See Events.
 	</button>
 </div>
