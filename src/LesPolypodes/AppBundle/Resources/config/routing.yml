@@ -22,17 +22,13 @@ les_polypodes_app_list:
     path:     /events
     defaults: { _controller: LesPolypodesAppBundle:Events:scdcList }
 
-les_polypodes_app_sabre_list:
-    path:     /sabre/events
-    defaults: { _controller: LesPolypodesAppBundle:Events:sabreList }
-
 les_polypodes_app_list_event:
     path:     /events/{name}
     defaults: { _controller: LesPolypodesAppBundle:Events:scdcListEvent }
 
-les_polypodes_app_sabre_list_event:
-    path:     /sabre/events/{name}
-    defaults: { _controller: LesPolypodesAppBundle:Events:sabreListEvent }
+les_polypodes_app_list_event_row:
+    path:     /events/row/{name}
+    defaults: { _controller: LesPolypodesAppBundle:Events:scdcListEventRow }
 
 les_polypodes_app_form:
     path:     /events/form/

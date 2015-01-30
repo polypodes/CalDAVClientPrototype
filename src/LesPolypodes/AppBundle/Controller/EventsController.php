@@ -116,57 +116,17 @@ class EventsController extends Controller
         ));
     }
 
-
-    public function sabreListAction()
+     public function scdcListEventRowAction($name)
     {
+        $this->setCalendarSCDC($name);
+        $events = $this->scdClient->getEvents();
 
-        $username = 'yolan';    //'admin'
-        $password = 'yolan';    //'password'
-        $urlbase = 'http://baikal/app_dev.php/dav/cal/calendars/';
+        // die(var_dump($events));
 
-        $settings = array(
-            'baseUri' => $urlbase.$username.'/',
-            'userName' => $username,
-            'password' => $password,
-        );
-
-        $client = new DAV\Client($settings);
-
-        // Réccupère les events du calendar
-        $calendars = $client->propfind(null, array('{DAV:}displayname'), 1);
-        // die(var_dump($calendars));
-
-        // $calendars = $client->request('PROPFIND');
-        // die(var_dump($calendars['body']));
-
-        return $this->render('LesPolypodesAppBundle:Events:sabreList.html.twig', array(
-            'calendars' => $calendars
-        ));
-    }
-
-
-    public function sabreListEventAction() 
-    {
-        // http://sabre.io/dav/davclient/
-        $settings = array(
-            'baseUri' => 'http://baikal/cal.php/calendars/yolan/',
-            'userName' => 'yolan',
-            'password' => 'yolan',
-        );
-
-        $client = new DAV\Client($settings);
-
-        // Réccupère les events du calendar
-        $events = $client->propfind('test', array(
-            '{DAV:}displayname',
-            '{DAV:}getcontentlength',
-        ));
-
-        return $this->render('LesPolypodesAppBundle:Events:sabreListEvent.html.twig', array(
+        return $this->render('LesPolypodesAppBundle:Events:scdcListEvent.html.twig', array(
             'events' => $events
         ));
     }
-
 
     public function createAction()
     {
