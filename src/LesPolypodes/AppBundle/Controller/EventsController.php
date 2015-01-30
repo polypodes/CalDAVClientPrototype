@@ -8,8 +8,9 @@ use Sabre\VObject;
 use Faker;
 use LesPolypodes\AppBundle\Services\CalDAV\SimpleCalDAVClient;
 use Sabre\DAV;
-use LesPolypodes\AppBundle\Entity\Task;
+use LesPolypodes\AppBundle\Entity\FormCal;
 use Symfony\Component\Form\Form;
+use Symfony\Component\HttpFoundation\Request;
 
 class EventsController extends Controller
 {
@@ -169,7 +170,7 @@ class EventsController extends Controller
 
     public function createAction()
     {
-        $calendarName = 'ODE Test 1';
+        $calendarName = 'ODE Test 2';
 
         $vcal = $this->createFakeVCal();
 
@@ -183,7 +184,7 @@ class EventsController extends Controller
 
     public function indexAction()
     {
-        return $this->render('LesPolypodesAppBundle:Events:index.html.twig');
+        return $this->render('LesPolypodesAppBundle:Events:index.html.twig');        
     }
 
     public function readAction()
@@ -207,26 +208,37 @@ class EventsController extends Controller
         return $this->render('LesPolypodesAppBundle:Events:delete.html.twig');
     }
 
-    public function formAction()
+    public function formAction(Request $request)
     {
-        $task = new Task();
+        $event = new FormCal();
         // Valeurs par défaut
-        $task->setName('Nom de l\'évènement');
-        $task->setStartDate(new \DateTime('today'));
-        $task->setEndDate(new \DateTime('tomorrow'));
-        $task->setDescription('Décrivez votre évènement');
+        $event->setName('Nom de l\'évènement');
+        $event->setStartDate(new \DateTime('today'));
+        $event->setEndDate(new \DateTime('tomorrow'));
+        $event->setDescription('Décrivez votre évènement');
 
-        $form = $this->createFormBuilder($task)
+        $form = $this->createFormBuilder($event)
             ->add('name', 'text')
             ->add('startDate', 'date')
             ->add('endDate', 'date')
             ->add('description', 'textarea')
             ->add('Valider', 'submit')
             ->getForm();
-        // TODO: 
+        
+        $form->handleRequest($request);
+
+        if($form->isValid())
+        {
+            // $em = $this->getDoctrine()->getManager();
+            // $em->persist($event);
+            // $em->flush();
+            die(var_dump($event));
+            return $this->redirect($this->generateUrl('les_polypodes_app_sabre_list' /*, array('id' => $event->getId())*/));
+        }
+        
         return $this->render('LesPolypodesAppBundle:Events:form.html.twig', array(
             'form' => $form->createView()
-            ));
+            ));       
     }
 
     public function devInsertAction($name, $n)
