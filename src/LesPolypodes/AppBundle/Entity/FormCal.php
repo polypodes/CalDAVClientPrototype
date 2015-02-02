@@ -57,7 +57,7 @@
             return $this->endTime;
         }
         
-        public function setEndTime(\Time $endTime = null)
+        public function setEndTime(\DateTime $endTime = null)
         {
             $this->endTime = $endTime;
         }

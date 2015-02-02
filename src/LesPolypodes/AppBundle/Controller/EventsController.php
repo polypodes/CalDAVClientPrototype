@@ -215,7 +215,7 @@ class EventsController extends Controller
         date_default_timezone_set('UTC');
         $heure = date("h");
         $minutes = date("i");
-echo $heure;
+
         $this->getSimplecalDavClient();
 
         $event = new FormCal();
