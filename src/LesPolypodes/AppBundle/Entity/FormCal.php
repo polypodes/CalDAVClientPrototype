@@ -11,6 +11,7 @@
         protected $endTime;
         protected $location;
         protected $description;
+        protected $price;
 
         public function getName()
         {
@@ -56,7 +57,7 @@
             return $this->endTime;
         }
         
-        public function setEndTime(\DateTime $endTime = null)
+        public function setEndTime(\Time $endTime = null)
         {
             $this->endTime = $endTime;
         }
@@ -69,6 +70,16 @@
        public function setLocation($location)
        {
             $this->location = $location;
+       }
+
+       public function getPrice()
+       {
+          return $this->price;
+       }
+
+       public function setPrice($price)
+       {
+          $this->price = $price;
        }
 
        public function getDescription()
