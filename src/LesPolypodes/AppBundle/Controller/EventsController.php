@@ -18,6 +18,7 @@ class EventsController extends Controller
     protected $caldav_login = null;
     protected $caldav_password = null;
     protected $caldav_host = null;
+    protected $maincal_Name = null;
     protected $scdClient = null;
     protected $sabreClient = null;
 
@@ -25,9 +26,10 @@ class EventsController extends Controller
     protected function getCalDavConnection()
     {
         error_reporting(E_ALL ^ E_NOTICE);
-        $this->caldav_login = $this->container->getParameter('caldav_login'); //'admin'
-        $this->caldav_password = $this->container->getParameter('caldav_password'); //'admin'
-        $this->caldav_host = $this->container->getParameter('caldav_host'); //'admin'
+        $this->caldav_login = $this->container->getParameter('caldav_login');
+        $this->caldav_password = $this->container->getParameter('caldav_password');
+        $this->caldav_host = $this->container->getParameter('caldav_host');
+        $this->maincal_Name = $this->container->getParameter('maincal_Name');
     }
 
     protected function getSimplecalDavClient()
@@ -42,13 +44,10 @@ class EventsController extends Controller
 
     protected function setCalendarSCDC($name)
     {
-        $this->getSimplecalDavClient();
-
-        $calendarName = $name;
-        $calendarID = $this->scdClient->findCalendarIDByName($calendarName);
+        $calendarID = $this->scdClient->findCalendarIDByName($name);
 
         if ($calendarID == null) {
-            throw new \Exception('No calendar found with the name "'.$calendarName.'".');
+            throw new \Exception('No calendar found with the name "'.$name.'".');
         }
 
         $this->scdClient->setCalendar($this->scdClient->findCalendars()[$calendarID]);
@@ -134,13 +133,15 @@ class EventsController extends Controller
 
     public function scdcListEventAction($name)
     {
+        $this->getSimplecalDavClient();
+
         $this->setCalendarSCDC($name);
         $events = $this->scdClient->getEvents();
         
-        foreach ($events as $event)
-        {
-            var_dump(explode(':', $events));
-        }
+        // foreach ($events as $event)
+        // {
+        //     var_dump(explode(':', $events));
+        // }
 
         // die(var_dump($events));
 
@@ -151,6 +152,8 @@ class EventsController extends Controller
 
      public function scdcListEventRowAction($name)
     {
+        $this->getSimplecalDavClient();
+
         $this->setCalendarSCDC($name);
         $events = $this->scdClient->getEvents();
 
@@ -161,15 +164,15 @@ class EventsController extends Controller
 
     public function createAction()
     {
-        $calendarName = 'ODE Test 2';
+        $this->getSimplecalDavClient();
 
         $vcal = $this->createFakeVCal();
 
-        $this->persistEvent($calendarName, $vcal);
+        $this->persistEvent($this->maincal_Name, $vcal);
 
         return $this->render('LesPolypodesAppBundle:Events:create.html.twig', array(
             'vcal' => $vcal->serialize(),
-            'name' => $calendarName,
+            'name' => $this->maincal_Name,
         ));
     }
 
@@ -201,6 +204,8 @@ class EventsController extends Controller
 
     public function formAction(Request $request)
     {
+        $this->getSimplecalDavClient();
+
         $event = new FormCal();
         // Valeurs par défaut
         $event->setName('Nom de l\'évènement');
@@ -220,13 +225,11 @@ class EventsController extends Controller
 
         if($form->isValid())
         {
-            // $calendarName = 'ODE Test 1';
+            $vcal = $this->createVCal($event);
 
-            // $vcal = $this->createVCal($event);
+            $this->persistEvent($calendarName, $vcal);
 
-            // $this->persistEvent($calendarName, $vcal);
-
-            return $this->redirect($this->generateUrl('les_polypodes_app_list' /*, array('id' => $event->getId())*/));
+            return $this->redirect($this->generateUrl('les_polypodes_app_list_event_row', array('name' => $this->maincal_Name) ));
             // return $this->forward('LesPolypodesAppBundle:Events:scdcListEvent', array( 'name' => $calendarName, ));
         }
         
@@ -237,6 +240,8 @@ class EventsController extends Controller
 
     public function devInsertAction($name, $n)
     {
+        $this->getSimplecalDavClient();
+
         $calendarName = $name;
 
         for ($i = 0; $i < $n; $i++)
