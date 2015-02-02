@@ -22,6 +22,13 @@ Mind any `app_dev.php` IP issue.
 
 Then go to [http://caldavclientprototype/app_dev.php](http://caldavclientprototype/app_dev.php)
 
+
+## Functional testing
+
+```bash
+bin/phpunit -c app
+```
+
 ## TODO
 
 See [TODO.md](TODO.md)
