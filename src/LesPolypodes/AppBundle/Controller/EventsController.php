@@ -161,7 +161,7 @@ class EventsController extends Controller
 
     public function createAction()
     {
-        $calendarName = 'ODE Test 1';
+        $calendarName = 'ODE Test 2';
 
         $vcal = $this->createFakeVCal();
 
@@ -226,7 +226,7 @@ class EventsController extends Controller
 
             // $this->persistEvent($calendarName, $vcal);
 
-            return $this->redirect($this->generateUrl('les_polypodes_app_sabre_list' /*, array('id' => $event->getId())*/));
+            return $this->redirect($this->generateUrl('les_polypodes_app_list' /*, array('id' => $event->getId())*/));
             // return $this->forward('LesPolypodesAppBundle:Events:scdcListEvent', array( 'name' => $calendarName, ));
         }
         
