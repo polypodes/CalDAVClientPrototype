@@ -7,6 +7,8 @@
         protected $name;
         protected $startDate;
         protected $endDate;
+        protected $startTime;
+        protected $endTime;
         protected $location;
         protected $description;
 
@@ -38,6 +40,26 @@
        {
             $this->endDate = $endDate;
        }
+
+       public function getStartTime()
+        {
+            return $this->startTime;
+        }
+        
+        public function setStartTime(\DateTime $startTime = null)
+        {
+            $this->startTime = $startTime;
+        }
+
+        public function getEndTime()
+        {
+            return $this->endTime;
+        }
+        
+        public function setEndTime(\DateTime $endTime = null)
+        {
+            $this->endTime = $endTime;
+        }
 
        public function getLocation()
        {
