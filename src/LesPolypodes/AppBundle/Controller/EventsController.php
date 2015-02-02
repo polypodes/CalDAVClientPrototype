@@ -157,14 +157,14 @@ class EventsController extends Controller
         ));
     }
 
-     public function scdcListEventRowAction($name)
+     public function scdcListEventRawAction($name)
     {
         $this->getSimplecalDavClient();
 
         $this->setCalendarSCDC($name);
         $events = $this->scdClient->getEvents();
 
-        return $this->render('LesPolypodesAppBundle:Events:scdcListEventRow.html.twig', array(
+        return $this->render('LesPolypodesAppBundle:Events:scdcListEventRaw.html.twig', array(
             'events' => $events
         ));
     }
