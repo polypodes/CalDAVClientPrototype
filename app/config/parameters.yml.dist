@@ -20,7 +20,8 @@ parameters:
     secret:            ThisTokenIsNotSoSecretChangeIt
 
     # CalDav parameters
-    caldav_login: root
-    caldav_password: root
-    caldav_host: http://baikal/dav/cal/calendars/
+    caldav_login:           odetest
+    caldav_password:        odetest
+    caldav_host:            http://baikal/app_dev.php/dav/cal/calendars/
+    caldav_maincal_name:    ODE Test 2
 

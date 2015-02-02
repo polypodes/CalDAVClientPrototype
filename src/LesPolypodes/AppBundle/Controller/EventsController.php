@@ -19,10 +19,12 @@ class EventsController extends Controller
     protected $caldav_login = null;
     protected $caldav_password = null;
     protected $caldav_host = null;
-    protected $maincal_Name = null;
+    protected $caldav_maincal_name = null;
     protected $scdClient = null;
     protected $sabreClient = null;
 
+
+    #TODO: refactor all this as a service!
 
     protected function getCalDavConnection()
     {
@@ -30,7 +32,7 @@ class EventsController extends Controller
         $this->caldav_login = $this->container->getParameter('caldav_login');
         $this->caldav_password = $this->container->getParameter('caldav_password');
         $this->caldav_host = $this->container->getParameter('caldav_host');
-        $this->maincal_Name = $this->container->getParameter('maincal_Name');
+        $this->caldav_maincal_name = $this->container->getParameter('caldav_maincal_name');
     }
 
     protected function getSimplecalDavClient()
@@ -177,23 +179,17 @@ class EventsController extends Controller
 
         $vcal = $this->createFakeVCal();
 
-        $this->persistEvent($this->maincal_Name, $vcal);
+        $this->persistEvent($this->caldav_maincal_name, $vcal);
 
         return $this->render('LesPolypodesAppBundle:Events:create.html.twig', array(
             'vcal' => $vcal->serialize(),
-            'name' => $this->maincal_Name,
+            'name' => $this->caldav_maincal_name,
         ));
     }
 
     public function indexAction()
     {
         return $this->render('LesPolypodesAppBundle:Events:index.html.twig');        
-    }
-
-    public function readAction()
-    {
-        // TODO: fetch events between 2 datetimes
-        return $this->render('LesPolypodesAppBundle:Events:read.html.twig');
     }
 
     public function updateAction()
@@ -244,14 +240,14 @@ class EventsController extends Controller
         
         $form->handleRequest($request);
 
-        // die($maincal_Name);
+        // die($caldav_maincal_name);
         if($form->isValid())
         {
             $vcal = $this->createVCal($event);
 
-            $this->persistEvent($this->maincal_Name, $vcal);
+            $this->persistEvent($this->caldav_maincal_name, $vcal);
 
-            return $this->redirect($this->generateUrl('les_polypodes_app_list_event_raw', array('name' => $this->maincal_Name) ));
+            return $this->redirect($this->generateUrl('les_polypodes_app_list_event_raw', array('name' => $this->caldav_maincal_name) ));
         }
         
         return $this->render('LesPolypodesAppBundle:Events:form.html.twig', array(

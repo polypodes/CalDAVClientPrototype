@@ -6,10 +6,6 @@ les_polypodes_app_create:
     path:     /events/create
     defaults: { _controller: LesPolypodesAppBundle:Events:create }
 
-les_polypodes_app_read:
-    path:     /events/view/{id}
-    defaults: { _controller: LesPolypodesAppBundle:Events:read }
-
 les_polypodes_app_update:
     path:     /events/update/{id}
     defaults: { _controller: LesPolypodesAppBundle:Events:update }

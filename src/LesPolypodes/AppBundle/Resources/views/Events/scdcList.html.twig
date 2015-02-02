@@ -1,18 +1,20 @@
 List via SimpleCalDAV
 
-<h2>Remote calendars</h2>
+<h2><span class="calLength">{{ calendars|length }}</span> Remote calendars{% if 0 < calendars|length  %} exist!{% endif %}
+
+</h2>
 <ul>
 	{% for calendar in calendars %}
 	    <li>
-	    	<a href="{{ path('les_polypodes_app_list_event', {name:calendar.displayname}) }}">
+	    	<a id="link_{{ loop.index}}" href="{{ path('les_polypodes_app_list_event', {name:calendar.displayname}) }}">
 	    		{{ calendar.displayname }} (ID: {{ calendar.calendarid }})
 	    	</a>
-	    	<button onclick="location.href='{{ path('les_polypodes_app_dev_insert', {name:calendar.displayname, n:10}) }}'">
-				Insert 10
-			</button>
-			<button onclick="location.href='{{ path('les_polypodes_app_list_event_raw', {name:calendar.displayname}) }}'">
-				Raw
-			</button>
+	    	| <a id="insert2_{{ loop.index }}" href="{{ path('les_polypodes_app_dev_insert', {name:calendar.displayname, n:2}) }}">
+				Insert 2</a>
+			| <a id="insert10_{{ loop.index }}" href="{{ path('les_polypodes_app_dev_insert', {name:calendar.displayname, n:10}) }}">
+				Insert 10</a>
+			| <a id="raw_{{ loop.index }}" href="{{ path('les_polypodes_app_list_event_raw', {name:calendar.displayname}) }}">
+				Raw</a>
 	    </li>
 	{% endfor %}
 </ul>

@@ -76,11 +76,11 @@ class SimpleCalDAVClient
 // die(var_dump($client->GetHttpResultCode()));
 
             if ($client->GetHttpResultCode() == '401') {
-                throw new CalDAVException('Login failed', $client);
+                throw new CalDAVException(sprintf("Login failed at %s", $url), $client);
             } elseif ($client->GetHttpResultCode() == '') {
-                throw new CalDAVException(sprintf("Can't reach server, %d HTTP code caught", $client->GetHttpResultCode()), $client);
+                throw new CalDAVException(sprintf("Can't reach server at %s, %s HTTP code caught", $url, $client->GetHttpResultCode()), $client);
             } else {
-                throw new CalDAVException('Could\'n find a CalDAV-collection under the url', $client);
+                throw new CalDAVException(sprintf("Couldn't find a CalDAV-collection under the url %s", $url), $client);
             }
         }
 
