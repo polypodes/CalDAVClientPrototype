@@ -4,6 +4,7 @@ namespace LesPolypodes\AppBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Validator\Constraints\DateTime;
+// use Symfony\Component\Validator\Constraints\Time;
 use Sabre\VObject;
 use Faker;
 use LesPolypodes\AppBundle\Services\CalDAV\SimpleCalDAVClient;
@@ -211,6 +212,10 @@ class EventsController extends Controller
 
     public function formAction(Request $request)
     {
+        date_default_timezone_set('UTC');
+        $heure = date("h");
+        $minutes = date("i");
+echo $heure;
         $this->getSimplecalDavClient();
 
         $event = new FormCal();
@@ -218,13 +223,21 @@ class EventsController extends Controller
         $event->setName('Nom de l\'évènement');
         $event->setStartDate(new \DateTime('today'));
         $event->setEndDate(new \DateTime('tomorrow'));
+        // $event->setStartTime(new \DateTime($heure));
+        // $event->setEndTime(new Time());
+        $event->setLocation('Adresse de l\'évènement');
         $event->setDescription('Décrivez votre évènement');
+        $event->setPrice('€');
 
         $form = $this->createFormBuilder($event)
             ->add('name', 'text')
             ->add('startDate', 'date')
             ->add('endDate', 'date')
+            ->add('startTime', 'time')
+            ->add('endTime', 'time')
+            ->add('location', 'text')
             ->add('description', 'textarea')
+            ->add('price', 'text')
             ->add('Valider', 'submit')
             ->getForm();
         
