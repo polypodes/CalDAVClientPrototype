@@ -148,8 +148,8 @@ class EventsController extends Controller
         foreach ($events as $event) {
             $vcal = $parser->read($event->getData());
             $dataContainer->vcal = $vcal;
-            $dataContainer->dateStart = (new \datetime($vcal->VEVENT->DTSTART))->format('Y-m-d H:i:s');
-            $dataContainer->dateEnd = (new \datetime($vcal->VEVENT->DTEND))->format('Y-m-d H:i:s');
+            $dataContainer->dateStart = (new \datetime($vcal->VEVENT->DTSTART))->format('Y-m-d H:i');
+            $dataContainer->dateEnd = (new \datetime($vcal->VEVENT->DTEND))->format('Y-m-d H:i');
 
             $datas[] = clone $dataContainer;
         }
