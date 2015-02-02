@@ -20,7 +20,7 @@
         "incenteev/composer-parameter-handler": "~2.0",
         "sabre/vobject":                        "~3.3",
         "fzaninotto/faker":                     "~1.4",
-        "sabre/dav": "~2.1.1"
+        "sabre/dav":                            "~2.1.1"
     },
     "require-dev": {
         "sensio/generator-bundle":      "~2.3",
