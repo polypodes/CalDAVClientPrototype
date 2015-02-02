@@ -1,8 +1,14 @@
 ListEvent via SimpleCalDav
 
 <h2>Remote iCal Objects call</h2>
-{% for event in events %}
-    <pre style="display:inline-block;margin:20px;">{{ event.data }}</pre>
+{% for data in datas %}
+    <fieldset style='margin-bottom: 10px;'>
+    	<legend>{{ data.vcal.vevent.summary }}</legend>
+    	<p>De : {{ data.dateStart }}&ensp;À : {{ data.dateEnd }}</p>
+    	<p>Lieu : {{ data.vcal.vevent.location }}</p>
+    	<p>{{ data.vcal.vevent.description }}</p>
+    </fieldset>
+    <hr color='#EEEEEE'>
 {% endfor %}
 
 {{ include('@LesPolypodesApp/Events/common/menu.html.twig') }}
