@@ -124,7 +124,6 @@ class EventsController extends Controller
         $this->getSimplecalDavClient();
 
         $calendars = $this->scdClient->findCalendars();
-        // die(var_dump($calendars));
 
         return $this->render('LesPolypodesAppBundle:Events:scdcList.html.twig', array(
             'calendars' => $calendars,
@@ -139,26 +138,34 @@ class EventsController extends Controller
         $this->setCalendarSCDC($name);
         $events = $this->scdClient->getEvents();
         
-        // foreach ($events as $event)
-        // {
-        //     var_dump(explode(':', $events));
-        // }
+        $parser = new VObject\Reader();
 
-        // die(var_dump($events));
+        $dataContainer = new \stdClass();
+        $dataContainer->vcal = null;
+        $dataContainer->start = null;
+        $dataContainer->end = null;
+
+        foreach ($events as $event) {
+            $dataContainer->vcal = $parser->read($event->getData());
+            $dataContainer->dateStart = (new \datetime($vcal->VEVENT->DTSTART))->format('Y-m-d H:i:s');
+            $dataContainer->dateEnd = (new \datetime($vcal->VEVENT->DTEND))->format('Y-m-d H:i:s');
+
+            $datas[] = $dataContainer;
+        }
 
         return $this->render('LesPolypodesAppBundle:Events:scdcListEvent.html.twig', array(
-            'events' => $events
+            'datas' => $datas
         ));
     }
 
-     public function scdcListEventRowAction($name)
+     public function scdcListEventRawAction($name)
     {
         $this->getSimplecalDavClient();
 
         $this->setCalendarSCDC($name);
         $events = $this->scdClient->getEvents();
 
-        return $this->render('LesPolypodesAppBundle:Events:scdcListEventRow.html.twig', array(
+        return $this->render('LesPolypodesAppBundle:Events:scdcListEventRaw.html.twig', array(
             'events' => $events
         ));
     }

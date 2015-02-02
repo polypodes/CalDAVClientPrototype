@@ -26,9 +26,9 @@ les_polypodes_app_list_event:
     path:     /events/{name}
     defaults: { _controller: LesPolypodesAppBundle:Events:scdcListEvent }
 
-les_polypodes_app_list_event_row:
-    path:     /events/row/{name}
-    defaults: { _controller: LesPolypodesAppBundle:Events:scdcListEventRow }
+les_polypodes_app_list_event_raw:
+    path:     /events/raw/{name}
+    defaults: { _controller: LesPolypodesAppBundle:Events:scdcListEventRaw }
 
 les_polypodes_app_form:
     path:     /events/form/
