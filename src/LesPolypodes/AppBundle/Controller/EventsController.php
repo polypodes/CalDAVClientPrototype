@@ -74,7 +74,7 @@ class EventsController extends Controller
         $vevent->add('LOCATION', $event->getLocation());
         $vevent->add('DTSTART', $event->getStartDate());
         $vevent->add('DTEND', $event->getEndDate());
-        // $vevent->add('X-ODE-PRICE', sprintf('%d€', $faker->randomFloat(2, 0, 100)));
+        $vevent->add('X-ODE-PRICE', sprintf('%d€', $event->getPrice()));
         $vevent->add('DESCRIPTION', $event->getDescription());
 
         return $vcal;
@@ -244,14 +244,14 @@ class EventsController extends Controller
         
         $form->handleRequest($request);
 
+        // die($maincal_Name);
         if($form->isValid())
         {
             $vcal = $this->createVCal($event);
 
-            $this->persistEvent($calendarName, $vcal);
+            $this->persistEvent($this->maincal_Name, $vcal);
 
-            return $this->redirect($this->generateUrl('les_polypodes_app_list_event_row', array('name' => $this->maincal_Name) ));
-            // return $this->forward('LesPolypodesAppBundle:Events:scdcListEvent', array( 'name' => $calendarName, ));
+            return $this->redirect($this->generateUrl('les_polypodes_app_list_event_raw', array('name' => $this->maincal_Name) ));
         }
         
         return $this->render('LesPolypodesAppBundle:Events:form.html.twig', array(
