@@ -37,7 +37,7 @@ class EventsController extends Controller
     {
         $this->getCalDavConnection();
         $this->scdClient = new SimpleCalDAVClient;
-        $url = sprintf("%s%s", $this->caldav_host, $this->caldav_login);
+        $url = sprintf("%s%s/", $this->caldav_host, $this->caldav_login);
         $this->scdClient->connect($url, $this->caldav_login, $this->caldav_password);
 
         return $this->scdClient;
