@@ -172,6 +172,7 @@ class SimpleCalDAVClient
         } else {
             $url = $this->getClient()->calendar_url;
         }
+        //$url .= '/';
 
         // Looking for $url.$uid.'.ics'
         $result = $this->getClient()->GetEntryByHref($url.$uid.'.ics');
@@ -189,7 +190,7 @@ class SimpleCalDAVClient
             // $url.$uid.'.ics' already existed on server
                 throw new CalDAVException($url.$uid.'.ics already existed. Entry has been overwritten.', $this->getClient());
             } else {
-                throw new CalDAVException(sprintf("Received unhandled %d HTTP status", $this->getClient()->GetHttpResultCode()), $this->getClient());
+                throw new CalDAVException(sprintf("Using %s, Received unhandled %s HTTP status", $url, $this->getClient()->GetHttpResultCode()), $this->getClient());
             }
         }
 
@@ -468,10 +469,11 @@ EOT;
         $calendarID = null;
 
         foreach ($this->findCalendars() as $key => $value) {
-            if ($value->getDisplayName() == $name)
+            if ($value->getDisplayName() === $name) {
                 $calendarID = $key;
+                break;
+            }
         }
-
         return $calendarID;
     }
 
