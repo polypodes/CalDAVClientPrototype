@@ -209,10 +209,6 @@ class EventsController extends Controller
 
     public function formAction(Request $request)
     {
-        date_default_timezone_set('UTC');
-        $heure = date("h");
-        $minutes = date("i");
-
         $this->getSimplecalDavClient();
 
         $event = new FormCal();
@@ -220,12 +216,12 @@ class EventsController extends Controller
         $event->setName('Nom de l\'évènement');
         $event->setStartDate(new \DateTime('today'));
         $event->setEndDate(new \DateTime('tomorrow'));
-        // $event->setStartTime(new \DateTime($heure));
-        // $event->setEndTime(new Time());
+        $event->setStartTime(new \DateTime());
+        $event->setEndTime((new \DateTime())->add(new \DateInterval('PT1H')));
         $event->setLocation('Adresse de l\'évènement');
         $event->setDescription('Décrivez votre évènement');
         $event->setPrice('€');
-
+        
         $form = $this->createFormBuilder($event)
             ->add('name', 'text')
             ->add('startDate', 'date')
