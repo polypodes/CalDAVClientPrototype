@@ -31,7 +31,7 @@ les_polypodes_app_form:
     defaults: { _controller: LesPolypodesAppBundle:Events:form }
 
 les_polypodes_app_dev_insert:
-    path:     /dev/insert/{name}/{n}
-    defaults: { _controller: LesPolypodesAppBundle:Events:devInsert, n: 1}
+    path:     /dev/insert/{name}/{n}/{type}
+    defaults: { _controller: LesPolypodesAppBundle:Events:devInsert, n: 1, type: standard}
     requirements:
         n: \d+

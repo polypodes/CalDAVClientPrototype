@@ -93,6 +93,7 @@ class EventsController extends Controller
         $vevent = $vcal->add('VEVENT');
 
         $uid = $faker->numerify('ODE-####-####-####-####');
+        // $uid = "dfghjkl";
         $datevent = $faker->dateTimeBetween('now', '+1 day');
 
         $vevent->add('ORGANIZER', $faker->companyEmail);
@@ -255,17 +256,33 @@ class EventsController extends Controller
             ));       
     }
 
-    public function devInsertAction($name, $n)
+    public function devInsertAction($name, $n, $type)
     {
         $this->getSimplecalDavClient();
 
         $calendarName = $name;
 
-        for ($i = 0; $i < $n; $i++)
-        {
-            $vcal = $this->createFakeVCal();
+        switch ($type){
+            case 'standard' :
+                for ($i = 0; $i < $n; $i++)
+                {
+                    $vcal = $this->createFakeVCal();
 
-            $this->persistEvent($calendarName, $vcal);
+                    $this->persistEvent($calendarName, $vcal);
+                }
+                break;
+            case 'compressed' :
+            // Not Working. Send 400 html code when VCAL contains multiple VEVENT with differents UID
+                $vcal = new VObject\Component\VCalendar();
+                $vcal->PRODID = '-//ODE Dev//Faker//FR';
+
+                for ($i = 0; $i < $n; $i++)
+                {
+                    $vcal->add($this->createFakeVCal()->VEVENT);
+                }
+
+                $this->persistEvent($calendarName, $vcal);
+                break;
         }
 
         return $this->forward('LesPolypodesAppBundle:Events:scdcListEvent', array( 'name' => $calendarName, ));
