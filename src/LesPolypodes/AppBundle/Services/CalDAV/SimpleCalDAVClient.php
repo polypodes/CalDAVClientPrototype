@@ -182,6 +182,37 @@ class SimpleCalDAVClient
             throw new CalDAVException(sprintf("Received unhandled %d HTTP status", $this->getClient()->GetHttpResultCode()), $this->getClient());
         }
 
+//         $cal='BEGIN:VCALENDAR
+// VERSION:2.0
+// PRODID:-//www.marudot.com//iCal Event Maker
+// CALSCALE:GREGORIAN
+// BEGIN:VTIMEZONE
+// TZID:Europe/London
+// BEGIN:DAYLIGHT
+// TZOFFSETFROM:+0000
+// TZOFFSETTO:+0100
+// DTSTART:19700329T010000
+// END:DAYLIGHT
+// END:VTIMEZONE
+// BEGIN:VEVENT
+// DTSTAMP:20150129T140743Z
+// UID:20150129T141743Z-1618306352@marudot.com
+// DTSTART:20150203T120000
+// END:VEVENT
+// END:VCALENDAR';
+
+/*
+BEGIN:VTIMEZONE
+TZID:Europe/London
+BEGIN:DAYLIGHT
+TZOFFSETFROM:+0000
+TZOFFSETTO:+0100
+DTSTART:19700329T010000
+END:DAYLIGHT
+END:VTIMEZONE
+*/
+die('<pre>'.$cal.'</pre>');
+
         $newEtag = $this->getClient()->DoPUTRequest($url.$uid.'.ics', $cal);
 
         if ($this->getClient()->GetHttpResultCode() != '201') {
@@ -189,7 +220,7 @@ class SimpleCalDAVClient
             // $url.$uid.'.ics' already existed on server
                 throw new CalDAVException($url.$uid.'.ics already existed. Entry has been overwritten.', $this->getClient());
             } else {
-                throw new CalDAVException(sprintf("Received unhandled %d HTTP status", $this->getClient()->GetHttpResultCode()), $this->getClient());
+                throw new CalDAVException(sprintf("Using %s, received unhandled %d HTTP status", $url, $this->getClient()->GetHttpResultCode()), $this->getClient());
             }
         }
 

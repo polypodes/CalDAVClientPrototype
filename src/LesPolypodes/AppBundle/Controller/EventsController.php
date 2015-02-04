@@ -37,7 +37,7 @@ class EventsController extends Controller
     {
         $this->getCalDavConnection();
         $this->scdClient = new SimpleCalDAVClient;
-        $url = sprintf("%s%s", $this->caldav_host, $this->caldav_login);
+        $url = sprintf("%s%s/", $this->caldav_host, $this->caldav_login);
         $this->scdClient->connect($url, $this->caldav_login, $this->caldav_password);
 
         return $this->scdClient;
@@ -88,6 +88,14 @@ class EventsController extends Controller
         $vcal = new VObject\Component\VCalendar();
         $vcal->PRODID = '-//ODE Dev//Faker//FR';
 
+        $vtimezone = $vcal->add('VTIMEZONE');
+        $vtimezone->add('TZID', 'Europe/London');
+
+        $daylight = $vtimezone->add('DAYLIGHT');
+        $daylight->add('TZOFFSETFROM', '+0000');
+        $daylight->add('TZOFFSETTO', '+0000');
+        $daylight->add('DTSTART', (new \DateTime())->format('Ymd\THis'));
+
         $vevent = $vcal->add('VEVENT');
 
         $uid = $faker->numerify('ODE-####-####-####-####');
@@ -96,6 +104,7 @@ class EventsController extends Controller
 
         $vevent->add('ORGANIZER', $faker->companyEmail);
         $vevent->add('CREATED', $faker->dateTimeBetween('now', 'now'));
+        $vevent->add('DTSTAMP', new \DateTime());
         $vevent->add('UID', $uid);
         $vevent->add('TRANSP', array('OPAQUE', 'TRANSPARENT')[rand(0,1)]);
         $vevent->add('SUMMARY', $faker->sentence(2));

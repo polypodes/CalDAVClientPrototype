@@ -5,9 +5,15 @@ ListEvent via SimpleCalDav
     <fieldset class='event' style='margin-bottom: 10px;'>
     	<legend>{{ data.vcal.vevent.summary }}</legend>
     	<p>De : {{ data.dateStart }}&ensp;À : {{ data.dateEnd }}</p>
-    	<p>Lieu : {{ data.vcal.vevent.location }}</p>
+    	{% if data.vcal.vevent.location is defined %}
+    		<p>Lieu : {{ data.vcal.vevent.location }}</p>
+    	{% endif %}
+    	
     	{% autoescape false %}
+    	{% if data.vcal.vevent.location is defined %}
     	<p>{{ data.vcal.vevent.description }}</p>
+    	{% endif %}
+    	
     	{% endautoescape %}
     </fieldset>
     <hr color='#EEEEEE'>
