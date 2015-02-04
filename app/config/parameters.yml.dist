@@ -14,8 +14,15 @@ parameters:
     secret:            ThisTokenIsNotSoSecretChangeIt
 
     # CalDav parameters
-    caldav_login:           odetest
-    caldav_password:        odetest
-    caldav_host:            http://baikal/app_dev.php/dav/cal/calendars/
-    caldav_maincal_name:    ODE Test 2
+    caldav:
+        baikal:
+            login:           odetest
+            password:        odetest
+            host:            http://baikal/app_dev.php/dav/cal/calendars/
+            maincal_name:    ODE Test 2
+        calserv:
+            login:           admin
+            password:        admin
+            host:            http://92.243.13.98:8443/calendars/users/
+            maincal_name:    calendar
 

@@ -38,19 +38,21 @@ class EventsController extends Controller
     protected function getBaikal_CalDavConnection()
     {
         error_reporting(E_ALL ^ E_NOTICE);
-        $this->caldav_login = $this->container->getParameter('caldav_login_baikal');
-        $this->caldav_password = $this->container->getParameter('caldav_password_baikal');
-        $this->caldav_host = $this->container->getParameter('caldav_host_baikal');
-        $this->caldav_maincal_name = $this->container->getParameter('caldav_maincal_name_baikal');
+        $caldav = $this->container->getParameter('caldav');
+        $this->caldav_login = $caldav['baikal']['login'];
+        $this->caldav_password = $caldav['baikal']['password'];
+        $this->caldav_host = $caldav['baikal']['host'];
+        $this->caldav_maincal_name = $caldav['baikal']['maincal_name'];
     }
 
     protected function getCalserv_CalDavConnection()
     {
         error_reporting(E_ALL ^ E_NOTICE);
-        $this->caldav_login= $this->container->getParameter('caldav_login_calserv');
-        $this->caldav_password = $this->container->getParameter('caldav_password_calserv');
-        $this->caldav_host = $this->container->getParameter('caldav_host_calserv');
-        $this->caldav_maincal_name = $this->container->getParameter('caldav_maincal_name_calserv');
+        $caldav = $this->container->getParameter('caldav');
+        $this->caldav_login= $caldav['calserv']['login'];
+        $this->caldav_password = $caldav['calserv']['password'];
+        $this->caldav_host = $caldav['calserv']['host'];
+        $this->caldav_maincal_name = $caldav['calserv']['maincal_name'];
     }
 
     protected function getSimplecalDavClient($serv)

@@ -1,7 +1,3 @@
 les_polypodes_app_baikal:
-    resource: "@LesPolypodesAppBundle/Resources/config/routingBaikal.yml"
-    prefix:   /baikal
-
-les_polypodes_app_calserv:
-    resource: "@LesPolypodesApp2Bundle/Resources/config/routingCalserv.yml"
-    prefix:   /calserv
+    resource: "@LesPolypodesAppBundle/Resources/config/routing.yml"
+    prefix:   /

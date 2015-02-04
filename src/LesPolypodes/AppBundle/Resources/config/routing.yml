@@ -1,41 +1,54 @@
 les_polypodes_app_index:
-    path:     /
+    path:     /{serv}/
     defaults: { _controller: LesPolypodesAppBundle:Events:index, serv: baikal }
+    requirements:
+        serv: baikal|calserv
 
 les_polypodes_app_create:
-    path:     /events/create
+    path:     /{serv}/events/create
     defaults: { _controller: LesPolypodesAppBundle:Events:create, serv: baikal }
+    requirements:
+        serv: baikal|calserv
 
 les_polypodes_app_update:
-    path:     /events/update/{id}
+    path:     /{serv}/events/update/{id}
     defaults: { _controller: LesPolypodesAppBundle:Events:update, serv: baikal }
+    requirements:
+        serv: baikal|calserv
 
 les_polypodes_app_delete:
-    path:     /events/delete/{id}
+    path:     /{serv}/events/delete/{id}
     defaults: { _controller: LesPolypodesAppBundle:Events:delete, serv: baikal }
+    requirements:
+        serv: baikal|calserv
 
 les_polypodes_app_list:
-    path:     /events
+    path:     /{serv}/events
     defaults: { _controller: LesPolypodesAppBundle:Events:scdcList, serv: baikal }
+    requirements:
+        serv: baikal|calserv
 
 les_polypodes_app_list_event:
-    path:     /events/{name}
+    path:     /{serv}/events/{name}
     defaults: { _controller: LesPolypodesAppBundle:Events:scdcListEvent, serv: baikal }
+    requirements:
+        serv: baikal|calserv
 
 les_polypodes_app_list_event_raw:
-    path:     /events/raw/{name}
+    path:     /{serv}/events/raw/{name}
     defaults: { _controller: LesPolypodesAppBundle:Events:scdcListEventRaw, serv: baikal }
+    requirements:
+        serv: baikal|calserv
 
 les_polypodes_app_form:
-    path:     /events/form/
+    path:     /{serv}/events/form/
     defaults: { _controller: LesPolypodesAppBundle:Events:form, serv: baikal }
+    requirements:
+        serv: baikal|calserv
 
 les_polypodes_app_dev_insert:
-    path:     /dev/insert/{name}/{n}/{type}
+    path:     /{serv}/dev/insert/{name}/{n}/{type}
     defaults: { _controller: LesPolypodesAppBundle:Events:devInsert, n: 1, type: standard, serv: baikal}
     requirements:
         n: \d+
-
-les_polypodes_app_test:
-    path:     /test
-    defaults: { _controller: LesPolypodesAppBundle:Events:test }
+        serv: baikal|calserv
