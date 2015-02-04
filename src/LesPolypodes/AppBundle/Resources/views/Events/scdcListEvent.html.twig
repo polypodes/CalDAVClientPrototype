@@ -16,6 +16,8 @@ ListEvent via SimpleCalDav
             {% autoescape false %}
         	<p>{{ data.vcal.vevent.description }}</p>
             {% endautoescape %}
+        {% else %}
+            <i>aucune description</i>
 		{% endif %}
     </fieldset>
     <hr color='#EEEEEE'>

@@ -60,7 +60,7 @@ class EventsController extends Controller
         $faker = Faker\Factory::create('fr_FR');
 
         $vcal = new VObject\Component\VCalendar();
-        $vcal->PRODID = '-//ODE Dev//Form//FR';
+        $vcal->PRODID = '-//ODE Dev//Form FR';
 
         $vevent = $vcal->add('VEVENT');
 
@@ -86,33 +86,36 @@ class EventsController extends Controller
         $faker = Faker\Factory::create('fr_FR');
 
         $vcal = new VObject\Component\VCalendar();
-        $vcal->PRODID = '-//ODE Dev//Faker//FR';
+        $vcal->PRODID = '-//ODE Dev//Faker FR';
 
         $vtimezone = $vcal->add('VTIMEZONE');
         $vtimezone->add('TZID', 'Europe/London');
 
-        $daylight = $vtimezone->add('DAYLIGHT');
-        $daylight->add('TZOFFSETFROM', '+0000');
-        $daylight->add('TZOFFSETTO', '+0000');
-        $daylight->add('DTSTART', (new \DateTime())->format('Ymd\THis'));
+        $vtimezone->add('BEGIN', 'DAYLIGHT');
+        $vtimezone->add('TZOFFSETFROM', '+0000');
+        $vtimezone->add('TZOFFSETTO', '+0000');
+        $vtimezone->add('DTSTART', (new \DateTime())->format('Ymd\THis'));
+        $vtimezone->add('END', 'DAYLIGHT');
 
         $vevent = $vcal->add('VEVENT');
 
         $uid = $faker->numerify('ODE-####-####-####-####');
-        // $uid = "dfghjkl";
+
         $datevent = $faker->dateTimeBetween('now', '+1 day');
 
         $vevent->add('ORGANIZER', $faker->companyEmail);
-        $vevent->add('CREATED', $faker->dateTimeBetween('now', 'now'));
-        $vevent->add('DTSTAMP', new \DateTime());
+        $vevent->add('CREATED', (new \DateTime())->format('Ymd\THis\Z'));
+        $vevent->add('DTSTAMP', (new \DateTime())->format('Ymd\THis\Z'));
         $vevent->add('UID', $uid);
         $vevent->add('TRANSP', array('OPAQUE', 'TRANSPARENT')[rand(0,1)]);
         $vevent->add('SUMMARY', $faker->sentence(2));
         $vevent->add('LOCATION', $faker->streetAddress);
-        $vevent->add('DTSTART', $datevent);
-        $vevent->add('DTEND', $datevent->add(new \DateInterval('PT1H')));
+        $vevent->add('DTSTART', $datevent->format('Ymd\THis'));
+        $vevent->add('DTEND', $datevent->add(new \DateInterval('PT1H'))->format('Ymd\THis'));
         $vevent->add('X-ODE-PRICE', sprintf('%d€', $faker->randomFloat(2, 0, 100)));
         $vevent->add('DESCRIPTION', $faker->paragraph(3));
+
+        // die('<pre>'.$vcal->serialize().'</pre>');
 
         return $vcal;
     }
