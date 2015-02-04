@@ -3,18 +3,20 @@ ListEvent via SimpleCalDav
 <h2>Remote iCal Objects call</h2>
 {% for data in datas %}
     <fieldset class='event' style='margin-bottom: 10px;'>
-    	<legend>{{ data.vcal.vevent.summary }}</legend>
+        {% if data.vcal.vevent.summary is defined %}
+    	   <legend>{{ data.vcal.vevent.summary }}</legend>
+        {% else %}
+            <legend>Évènement {{ loop.index }}</legend>
+        {% endif %}
     	<p>De : {{ data.dateStart }}&ensp;À : {{ data.dateEnd }}</p>
-    	{% if data.vcal.vevent.location is defined %}
-    		<p>Lieu : {{ data.vcal.vevent.location }}</p>
-    	{% endif %}
-    	
-    	{% autoescape false %}
-    	{% if data.vcal.vevent.location is defined %}
-    	<p>{{ data.vcal.vevent.description }}</p>
-    	{% endif %}
-    	
-    	{% endautoescape %}
+		{% if data.vcal.vevent.location is defined %}
+			<p>Lieu : {{ data.vcal.vevent.location }}</p>
+		{% endif %}
+		{% if data.vcal.vevent.description is defined %}
+            {% autoescape false %}
+        	<p>{{ data.vcal.vevent.description }}</p>
+            {% endautoescape %}
+		{% endif %}
     </fieldset>
     <hr color='#EEEEEE'>
 {% endfor %}

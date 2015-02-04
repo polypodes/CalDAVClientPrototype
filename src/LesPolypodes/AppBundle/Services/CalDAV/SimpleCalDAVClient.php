@@ -172,6 +172,7 @@ class SimpleCalDAVClient
         } else {
             $url = $this->getClient()->calendar_url;
         }
+        //$url .= '/';
 
         // Looking for $url.$uid.'.ics'
         $result = $this->getClient()->GetEntryByHref($url.$uid.'.ics');
@@ -499,10 +500,11 @@ EOT;
         $calendarID = null;
 
         foreach ($this->findCalendars() as $key => $value) {
-            if ($value->getDisplayName() == $name)
+            if ($value->getDisplayName() === $name) {
                 $calendarID = $key;
+                break;
+            }
         }
-
         return $calendarID;
     }
 
