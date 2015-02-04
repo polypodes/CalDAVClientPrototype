@@ -6,14 +6,14 @@ List via SimpleCalDAV
 <ul>
 	{% for calendar in calendars %}
 	    <li>
-	    	<a id="link_{{ loop.index}}" href="{{ path('les_polypodes_app_list_event', {name:calendar.displayname}) }}">
+	    	<a id="link_{{ loop.index}}" href="{{ path('les_polypodes_app_list_event', {name:calendar.displayname, serv: serv}) }}">
 	    		{{ calendar.displayname }} (ID: {{ calendar.calendarid }})
 	    	</a>
-	    	| <a id="insert2_{{ loop.index }}" href="{{ path('les_polypodes_app_dev_insert', {name:calendar.displayname, n:2}) }}">
+	    	| <a id="insert2_{{ loop.index }}" href="{{ path('les_polypodes_app_dev_insert', {name:calendar.displayname, n:2, serv: serv}) }}">
 				Insert 2</a>
-			| <a id="insert10_{{ loop.index }}" href="{{ path('les_polypodes_app_dev_insert', {name:calendar.displayname, n:10}) }}">
+			| <a id="insert10_{{ loop.index }}" href="{{ path('les_polypodes_app_dev_insert', {name:calendar.displayname, n:10, serv: serv}) }}">
 				Insert 10</a>
-			| <a id="raw_{{ loop.index }}" href="{{ path('les_polypodes_app_list_event_raw', {name:calendar.displayname}) }}">
+			| <a id="raw_{{ loop.index }}" href="{{ path('les_polypodes_app_list_event_raw', {name:calendar.displayname, serv: serv}) }}">
 				Raw</a>
 	    </li>
 	{% endfor %}

@@ -19,16 +19,6 @@ class EventsController extends Controller
     protected $caldav_host = null;
     protected $caldav_maincal_name = null;
 
-    // protected $caldav_login_baikal = null;
-    // protected $caldav_password_baikal = null;
-    // protected $caldav_host_baikal = null;
-    // protected $caldav_maincal_name_baikal = null;
-    //Connexion avec Calendar Server
-    // protected $caldav_login_calserv = null;
-    // protected $caldav_password_caserv = null;
-    // protected $caldav_host_calserv = null;
-    // protected $caldav_maincal_name_calserv = null;
-
     protected $scdClient = null;
     protected $sabreClient = null;
 
@@ -146,8 +136,6 @@ class EventsController extends Controller
         $vevent->add('X-ODE-PRICE', sprintf('%d€', $faker->randomFloat(2, 0, 100)));
         $vevent->add('DESCRIPTION', $faker->paragraph(3));
 
-        // die('<pre>'.$vcal->serialize().'</pre>');
-
         return $vcal;
     }
 
@@ -171,6 +159,7 @@ class EventsController extends Controller
 
         return $this->render('LesPolypodesAppBundle:Events:scdcList.html.twig', array(
             'calendars' => $calendars,
+            'serv' => $serv,
         ));
     }
 
@@ -199,7 +188,8 @@ class EventsController extends Controller
         }
 
         return $this->render('LesPolypodesAppBundle:Events:scdcListEvent.html.twig', array(
-            'datas' => $datas
+            'datas' => $datas,
+            'serv' => $serv,
         ));
     }
 
@@ -211,7 +201,8 @@ class EventsController extends Controller
         $events = $this->scdClient->getEvents();
 
         return $this->render('LesPolypodesAppBundle:Events:scdcListEventRaw.html.twig', array(
-            'events' => $events
+            'events' => $events,
+            'serv' => $serv,
         ));
     }
 
@@ -221,17 +212,20 @@ class EventsController extends Controller
 
         $vcal = $this->createFakeVCal();
 
-        $this->persistEvent($this->caldav_maincal_name_baikal, $vcal);
+        $this->persistEvent($this->caldav_maincal_name, $vcal);
 
         return $this->render('LesPolypodesAppBundle:Events:create.html.twig', array(
             'vcal' => $vcal->serialize(),
-            'name' => $this->caldav_maincal_name_baikal,
+            'name' => $this->caldav_maincal_name,
+            'serv' => $serv,
         ));
     }
 
     public function indexAction($serv)
     {
-        return $this->render('LesPolypodesAppBundle:Events:index.html.twig');        
+        return $this->render('LesPolypodesAppBundle:Events:index.html.twig', array(
+            'serv' => $serv,
+        ));
     }
 
     public function updateAction($serv)
@@ -239,14 +233,18 @@ class EventsController extends Controller
         // TODO: update 1 event
         // TODO: all events between 2 datetimes
         // ! Think about rollback
-        return $this->render('LesPolypodesAppBundle:Events:update.html.twig');
+        return $this->render('LesPolypodesAppBundle:Events:update.html.twig', array(
+            'serv' => $serv,
+        ));
     }
 
     public function deleteAction($serv)
     {
         // TODO : delete on event
         // ! Think about rollback
-        return $this->render('LesPolypodesAppBundle:Events:delete.html.twig');
+        return $this->render('LesPolypodesAppBundle:Events:delete.html.twig', array(
+            'serv' => $serv,
+        ));
     }
 
     public function formAction(Request $request, $serv)
@@ -278,18 +276,21 @@ class EventsController extends Controller
         
         $form->handleRequest($request);
 
-        // die($caldav_maincal_name_baikal);
         if($form->isValid())
         {
             $vcal = $this->createVCal($event);
 
-            $this->persistEvent($this->caldav_maincal_name_baikal, $vcal);
+            $this->persistEvent($this->caldav_maincal_name, $vcal);
 
-            return $this->redirect($this->generateUrl('les_polypodes_app_list_event_raw', array('name' => $this->caldav_maincal_name_baikal) ));
+            return $this->redirect($this->generateUrl('les_polypodes_app_list_event_raw', array(
+                'name' => $this->caldav_maincal_name,
+                'serv' => $serv,
+            )));
         }
         
         return $this->render('LesPolypodesAppBundle:Events:form.html.twig', array(
-            'form' => $form->createView()
+            'form' => $form->createView(),
+            'serv' => $serv
             ));       
     }
 
@@ -297,15 +298,13 @@ class EventsController extends Controller
     {
         $this->getSimplecalDavClient($serv);
 
-        $calendarName = $name;
-
         switch ($type){
             case 'standard' :
                 for ($i = 0; $i < $n; $i++)
                 {
                     $vcal = $this->createFakeVCal();
 
-                    $this->persistEvent($calendarName, $vcal);
+                    $this->persistEvent($name, $vcal);
                 }
                 break;
             case 'compressed' :
@@ -318,10 +317,13 @@ class EventsController extends Controller
                     $vcal->add($this->createFakeVCal()->VEVENT);
                 }
 
-                $this->persistEvent($calendarName, $vcal);
+                $this->persistEvent($name, $vcal);
                 break;
         }
 
-        return $this->forward('LesPolypodesAppBundle:Events:scdcListEvent', array( 'name' => $calendarName, ));
+        return $this->forward('LesPolypodesAppBundle:Events:scdcListEvent', array(
+                'name' => $name,
+                'serv' => $serv,
+            ));
     }
 }

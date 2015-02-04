@@ -183,38 +183,6 @@ class SimpleCalDAVClient
             throw new CalDAVException(sprintf("Received unhandled %d HTTP status", $this->getClient()->GetHttpResultCode()), $this->getClient());
         }
 
-//         $cal=
-// 'BEGIN:VCALENDAR
-// VERSION:2.0
-// PRODID:-//ODE Dev//Faker FR
-// CALSCALE:GREGORIAN
-// BEGIN:VTIMEZONE
-// TZID:Europe/London
-// BEGIN:DAYLIGHT
-// TZOFFSETFROM:+0000
-// TZOFFSETTO:+0000
-// DTSTART:20150204T114950
-// END:DAYLIGHT
-// END:VTIMEZONE
-// BEGIN:VEVENT
-// ORGANIZER:mmasse@louis.fr
-// CREATED:20150204T114950Z
-// DTSTAMP:20150204T114950Z
-// UID:ODE-0548-0448-2147-3057
-// TRANSP:OPAQUE
-// SUMMARY:Et quia ad.
-// LOCATION:rue de Pichon
-// DTSTART:20150205T080522
-// DTEND:20150205T090522
-// X-ODE-PRICE:65€
-// DESCRIPTION:Reprehenderit saepe a asperiores omnis inventore repellat nisi.
-//   Iusto necessitatibus distinctio sit rem aut iste. Ut quidem in officia no
-//  strum quia.
-// END:VEVENT
-// END:VCALENDAR';
-
-// die('<pre>'.$cal.'</pre>');
-
         $newEtag = $this->getClient()->DoPUTRequest($url.$uid.'.ics', $cal);
 
         if ($this->getClient()->GetHttpResultCode() != '201') {

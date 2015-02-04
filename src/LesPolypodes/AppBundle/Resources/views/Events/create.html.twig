@@ -6,10 +6,10 @@ Create :
 <h3>vCal:</h3>
 <pre>{{ vcal }}</pre>
 <div>
-	<button onclick="location.href='{{ path('les_polypodes_app_create') }}'">
+	<button onclick="location.href='{{ path('les_polypodes_app_create', {serv: serv}) }}'">
 		Create one more.
 	</button>
-	<button onclick="location.href='{{ path('les_polypodes_app_list_event', {name:name}) }}'">
+	<button onclick="location.href='{{ path('les_polypodes_app_list_event', {name:name, serv: serv}) }}'">
 		See Events.
 	</button>
 </div>

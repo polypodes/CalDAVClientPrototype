@@ -1,5 +1,5 @@
 les_polypodes_app_index:
-    path:     /{serv}/
+    path:     /{serv}
     defaults: { _controller: LesPolypodesAppBundle:Events:index, serv: baikal }
     requirements:
         serv: baikal|calserv
