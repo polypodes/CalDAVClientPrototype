@@ -13,29 +13,58 @@ use Symfony\Component\HttpFoundation\Request;
 
 class EventsController extends Controller
 {
-
+    // Connexion avec Baikal
     protected $caldav_login = null;
     protected $caldav_password = null;
     protected $caldav_host = null;
     protected $caldav_maincal_name = null;
+
+    // protected $caldav_login_baikal = null;
+    // protected $caldav_password_baikal = null;
+    // protected $caldav_host_baikal = null;
+    // protected $caldav_maincal_name_baikal = null;
+    //Connexion avec Calendar Server
+    // protected $caldav_login_calserv = null;
+    // protected $caldav_password_caserv = null;
+    // protected $caldav_host_calserv = null;
+    // protected $caldav_maincal_name_calserv = null;
+
     protected $scdClient = null;
     protected $sabreClient = null;
 
 
     #TODO: refactor all this as a service!
 
-    protected function getCalDavConnection()
+    protected function getBaikal_CalDavConnection()
     {
         error_reporting(E_ALL ^ E_NOTICE);
-        $this->caldav_login = $this->container->getParameter('caldav_login');
-        $this->caldav_password = $this->container->getParameter('caldav_password');
-        $this->caldav_host = $this->container->getParameter('caldav_host');
-        $this->caldav_maincal_name = $this->container->getParameter('caldav_maincal_name');
+        $this->caldav_login = $this->container->getParameter('caldav_login_baikal');
+        $this->caldav_password = $this->container->getParameter('caldav_password_baikal');
+        $this->caldav_host = $this->container->getParameter('caldav_host_baikal');
+        $this->caldav_maincal_name = $this->container->getParameter('caldav_maincal_name_baikal');
     }
 
-    protected function getSimplecalDavClient()
+    protected function getCalserv_CalDavConnection()
     {
-        $this->getCalDavConnection();
+        error_reporting(E_ALL ^ E_NOTICE);
+        $this->caldav_login= $this->container->getParameter('caldav_login_calserv');
+        $this->caldav_password = $this->container->getParameter('caldav_password_calserv');
+        $this->caldav_host = $this->container->getParameter('caldav_host_calserv');
+        $this->caldav_maincal_name = $this->container->getParameter('caldav_maincal_name_calserv');
+    }
+
+    protected function getSimplecalDavClient($serv)
+    {
+        switch($serv)
+        {
+            case "baikal": 
+                $this->getBaikal_CalDavConnection();
+                break;
+            case "calserv":
+                $this->getCalserv_CalDavConnection();
+                break;
+        }
+
         $this->scdClient = new SimpleCalDAVClient;
         $url = sprintf("%s%s/", $this->caldav_host, $this->caldav_login);
         $this->scdClient->connect($url, $this->caldav_login, $this->caldav_password);
@@ -120,9 +149,9 @@ class EventsController extends Controller
         return $rawcal;
     }
 
-    public function scdcListAction()
+    public function scdcListAction($serv)
     {
-        $this->getSimplecalDavClient();
+        $this->getSimplecalDavClient($serv);
 
         $calendars = $this->scdClient->findCalendars();
 
@@ -132,9 +161,9 @@ class EventsController extends Controller
     }
 
 
-    public function scdcListEventAction($name)
+    public function scdcListEventAction($name, $serv)
     {
-        $this->getSimplecalDavClient();
+        $this->getSimplecalDavClient($serv);
 
         $this->setCalendarSCDC($name);
         $events = $this->scdClient->getEvents();
@@ -160,9 +189,9 @@ class EventsController extends Controller
         ));
     }
 
-     public function scdcListEventRawAction($name)
+     public function scdcListEventRawAction($name, $serv)
     {
-        $this->getSimplecalDavClient();
+        $this->getSimplecalDavClient($serv);
 
         $this->setCalendarSCDC($name);
         $events = $this->scdClient->getEvents();
@@ -172,26 +201,26 @@ class EventsController extends Controller
         ));
     }
 
-    public function createAction()
+    public function createAction($serv)
     {
-        $this->getSimplecalDavClient();
+        $this->getSimplecalDavClient($serv);
 
         $vcal = $this->createFakeVCal();
 
-        $this->persistEvent($this->caldav_maincal_name, $vcal);
+        $this->persistEvent($this->caldav_maincal_name_baikal, $vcal);
 
         return $this->render('LesPolypodesAppBundle:Events:create.html.twig', array(
             'vcal' => $vcal->serialize(),
-            'name' => $this->caldav_maincal_name,
+            'name' => $this->caldav_maincal_name_baikal,
         ));
     }
 
-    public function indexAction()
+    public function indexAction($serv)
     {
         return $this->render('LesPolypodesAppBundle:Events:index.html.twig');        
     }
 
-    public function updateAction()
+    public function updateAction($serv)
     {
         // TODO: update 1 event
         // TODO: all events between 2 datetimes
@@ -199,16 +228,16 @@ class EventsController extends Controller
         return $this->render('LesPolypodesAppBundle:Events:update.html.twig');
     }
 
-    public function deleteAction()
+    public function deleteAction($serv)
     {
         // TODO : delete on event
         // ! Think about rollback
         return $this->render('LesPolypodesAppBundle:Events:delete.html.twig');
     }
 
-    public function formAction(Request $request)
+    public function formAction(Request $request, $serv)
     {
-        $this->getSimplecalDavClient();
+        $this->getSimplecalDavClient($serv);
 
         $event = new FormCal();
         // Valeurs par défaut
@@ -235,14 +264,14 @@ class EventsController extends Controller
         
         $form->handleRequest($request);
 
-        // die($caldav_maincal_name);
+        // die($caldav_maincal_name_baikal);
         if($form->isValid())
         {
             $vcal = $this->createVCal($event);
 
-            $this->persistEvent($this->caldav_maincal_name, $vcal);
+            $this->persistEvent($this->caldav_maincal_name_baikal, $vcal);
 
-            return $this->redirect($this->generateUrl('les_polypodes_app_list_event_raw', array('name' => $this->caldav_maincal_name) ));
+            return $this->redirect($this->generateUrl('les_polypodes_app_list_event_raw', array('name' => $this->caldav_maincal_name_baikal) ));
         }
         
         return $this->render('LesPolypodesAppBundle:Events:form.html.twig', array(
@@ -250,9 +279,9 @@ class EventsController extends Controller
             ));       
     }
 
-    public function devInsertAction($name, $n, $type)
+    public function devInsertAction($name, $n, $type, $serv)
     {
-        $this->getSimplecalDavClient();
+        $this->getSimplecalDavClient($serv);
 
         $calendarName = $name;
 
