@@ -77,24 +77,33 @@ class EventsController extends Controller
 
     protected function createVCal($event)
     {
-        // see: https://github.com/fzaninotto/Faker
         $faker = Faker\Factory::create('fr_FR');
 
         $vcal = new VObject\Component\VCalendar();
         $vcal->PRODID = '-//ODE Dev//Form FR';
 
+        $vtimezone = $vcal->add('VTIMEZONE');
+        $vtimezone->add('TZID', 'Europe/London');
+
+        $vtimezone->add('BEGIN', 'DAYLIGHT');
+        $vtimezone->add('TZOFFSETFROM', '+0000');
+        $vtimezone->add('TZOFFSETTO', '+0000');
+        $vtimezone->add('DTSTART', (new \DateTime())->format('Ymd\THis'));
+        $vtimezone->add('END', 'DAYLIGHT');
+
         $vevent = $vcal->add('VEVENT');
 
         $uid = $faker->numerify('ODE-####-####-####-####');
 
-        // $vevent->add('ORGANIZER', $faker->companyEmail);
-        $vevent->add('CREATED', $faker->dateTimeBetween('now', 'now'));
+        $vevent->add('ORGANIZER', $event->getOrganizer());
+        $vevent->add('CREATED', (new \DateTime())->format('Ymd\THis\Z'));
+        $vevent->add('DTSTAMP', (new \DateTime())->format('Ymd\THis\Z'));
         $vevent->add('UID', $uid);
-        $vevent->add('TRANSP', array('OPAQUE', 'TRANSPARENT')[rand(0,1)]);
+        // $vevent->add('TRANSP', array('OPAQUE', 'TRANSPARENT')[rand(0,1)]);
         $vevent->add('SUMMARY', $event->getName());
         $vevent->add('LOCATION', $event->getLocation());
-        $vevent->add('DTSTART', $event->getStartDate());
-        $vevent->add('DTEND', $event->getEndDate());
+        $vevent->add('DTSTART', $event->getStartDate()->format('Ymd\THis'));
+        $vevent->add('DTEND', $event->getEndDate()->format('Ymd\THis'));
         $vevent->add('X-ODE-PRICE', sprintf('%d€', $event->getPrice()));
         $vevent->add('DESCRIPTION', $event->getDescription());
 
@@ -266,27 +275,21 @@ class EventsController extends Controller
         $event = new FormCal();
         // Valeurs par défaut
         $event->setName('Nom de l\'évènement');
-        // $event->setStartDate(new \DateTime('today'));
-        // $event->setEndDate(new \DateTime('tomorrow'));
-        // $event->setStartTime(new \DateTime());
-        // $event->setEndTime((new \DateTime())->add(new \DateInterval('PT1H')));
         $event->setStartDate(new \DateTime());
-        $event->setEndDate(new \DateTime());
+        $event->setEndDate((new \DateTime())->add(new \DateInterval('PT1H')));
         $event->setLocation('Adresse de l\'évènement');
         $event->setDescription('Décrivez votre évènement');
-        $event->setPrice('0€');
-
-        // die(var_dump($event->getEndDate()));
+        $event->setPrice('0');
+        $event->setOrganizer('organisateur@exemple.com');
         
         $form = $this->createFormBuilder($event)
             ->add('name', 'text')
-            ->add('startDate', 'time')
-            ->add('endDate', 'time')
-            ->add('startTime', 'date')
-            ->add('endTime', 'date')
+            ->add('startDate', 'datetime')
+            ->add('endDate', 'datetime')
             ->add('location', 'text')
             ->add('description', 'textarea')
-            ->add('price', 'text')
+            ->add('price', 'money')
+            ->add('organizer','email')
             ->add('Valider', 'submit')
             ->getForm();
         
@@ -296,16 +299,18 @@ class EventsController extends Controller
         {
             $vcal = $this->createVCal($event);
 
+        // die('<pre>'.$vcal->serialize().'</pre>');
+
             $this->persistEvent($this->caldav_maincal_name, $vcal);
 
             return $this->redirect($this->generateUrl('les_polypodes_app_list_event_raw', array(
                 'name' => $this->caldav_maincal_name,
+                'serv' => $serv,
             )));
         }
         
         return $this->render('LesPolypodesAppBundle:Events:form.html.twig', array(
             'form' => $form->createView(),
-            'serv' => $serv
             ));       
     }
 
@@ -338,6 +343,7 @@ class EventsController extends Controller
 
         return $this->forward('LesPolypodesAppBundle:Events:scdcListEvent', array(
                 'name' => $name,
+                'serv' => $serv,
             ));
     }
 }

@@ -13,46 +13,32 @@
 			</div></td>
 		</div></tr>
 
-		<tr><td><div class="form-group">
-		    {{ form_label(form.startDate, "Date de début") }}
-		    {{ form_errors(form.startDate) }}
-      		<div class="col-sm-4">
-        		{{ form_widget(form.startDate) }}
-      		</div></td>
-    	</div>
+		  <tr><div class="form-group"><td>
+		    {{ form_label(form.startDate, "Date et heure de début") }}
+		    {{ form_errors(form.startDate) }}</td>
 
-    	<td><div class="form-group">
-      		{{ form_label(form.startDate, "Heure de début") }}
-      		{{ form_errors(form.startDate) }}
-      		<div class="col-sm-4">
-        		{{ form_widget(form.startDate) }}
-      		</div>
-   		</div></td></tr>
+    		<td><div class="col-sm-4">
+      		{{ form_widget(form.startDate) }}
+    		</div></td>
+    	</div></tr>
 
   		<tr><td><div class="form-group">
-      		{{ form_label(form.endDate, "Date de fin") }}
-      		{{ form_errors(form.endDate) }}
-      		<div class="col-sm-4">
-        		{{ form_widget(form.endDate) }}
-      		</div>
-   		</div></td>
+      		{{ form_label(form.endDate, "Date et heure de fin") }}
+      		{{ form_errors(form.endDate) }}</td>
 
-   		<td><div class="form-group">
-      		{{ form_label(form.endDate, "Heure de fin") }}
-      		{{ form_errors(form.endDate) }}
-      		<div class="col-sm-4">
-        		{{ form_widget(form.endDate) }}
-      		</div>
+    		<td><div class="col-sm-4">
+      		{{ form_widget(form.endDate) }}
+    		</div>
    		</div></td></tr>
 
-		<tr><div class="form-group">
-			<td>{{ form_label(form.location, "Adresse") }}
-			{{ form_errors(form.location) }}</td>
+  		<tr><div class="form-group">
+  			<td>{{ form_label(form.location, "Adresse") }}
+  			{{ form_errors(form.location) }}</td>
 
-			<td><div class="col-sm-4">
-				{{ form_widget(form.location) }}
-			</div></td>
-		</div></tr>
+  			<td><div class="col-sm-4">
+  				{{ form_widget(form.location) }}
+  			</div></td>
+  		</div></tr>
 
   		<tr><div class="form-group">
       		<td>{{ form_label(form.description, "Description de l'évènement") }}
@@ -63,17 +49,20 @@
     	</div></tr>
 
     	<tr><div class="form-group">
-    		<td>{{ form_label(form.price, "Prix de l'évènement") }}
-    			{{ form_errors(form.price) }}</td>
-    		<td> <div class="col-sm-4">
-    			{{ form_widget(form.price) }}
-    		</div></td>
-    	</div></tr></table>
+        <td>{{ form_label(form.price, "Prix de l'évènement") }}
+          {{ form_errors(form.price) }}</td>
+        <td> <div class="col-sm-4">
+          {{ form_widget(form.price) }}
+        </div></td>
+      </div></tr>
 
-			{# {{ form_row(form.name) }}
-			{{ form_row(form.startDate) }}
-			{{ form_row(form.endDate) }}
-			{{ form_row(form.description) }} #}
+      <tr><div class="form-group">
+        <td>{{ form_label(form.organizer, "Email de l'organisateur") }}
+          {{ form_errors(form.organizer) }}</td>
+        <td> <div class="col-sm-4">
+          {{ form_widget(form.organizer) }}
+        </div></td>
+      </div></tr></table>
 		
 	{{ form_end(form) }}
 </div>
