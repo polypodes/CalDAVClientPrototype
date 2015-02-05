@@ -188,6 +188,7 @@ class EventsController extends Controller
         }
 
         return $this->render('LesPolypodesAppBundle:Events:scdcListEvent.html.twig', array(
+            'events' => $events,
             'datas' => $datas,
             'serv' => $serv,
         ));
@@ -240,9 +241,14 @@ class EventsController extends Controller
 
     public function deleteAction($serv)
     {
+        $this->getSimplecalDavClient($serv);
+
+        $this->setCalendarSCDC($name);
+        $events = $this->scdClient->getEvents();
         // TODO : delete on event
         // ! Think about rollback
         return $this->render('LesPolypodesAppBundle:Events:delete.html.twig', array(
+            'events' => $events,
             'serv' => $serv,
         ));
     }
