@@ -154,10 +154,12 @@ class EventsController extends Controller
     public function scdcListAction($serv)
     {
         $this->getSimplecalDavClient($serv);
-
         $calendars = $this->scdClient->findCalendars();
 
+        $id = $this->setCalendarSCDC($name);
+
         return $this->render('LesPolypodesAppBundle:Events:scdcList.html.twig', array(
+            'id' => $id,
             'calendars' => $calendars
         ));
     }
@@ -239,12 +241,21 @@ class EventsController extends Controller
 
         $this->setCalendarSCDC($name);
         $events = $this->scdClient->getEvents();
-        // TODO : delete on event
-        // ! Think about rollback
 
-        return $this->render('LesPolypodesAppBundle:Events:delete.html.twig', array(
+        $this->setCalendarSCDC($name)->delete($name);
+
+        return $this->render('LesPolypodesAppBundle:Events:scdcList.html.twig', array(
+            'id' => $id,
             'events' => $events,
         ));
+
+        // $calendarID = $this->scdClient->findCalendarIDByName($name);
+
+        // if ($calendarID == null) {
+        //     throw new \Exception('No calendar found with the name "'.$name.'".');
+        // }
+
+        // $this->scdClient->setCalendar($this->scdClient->findCalendars()[$calendarID]);
 
     }
 
