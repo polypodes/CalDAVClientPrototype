@@ -1,8 +1,8 @@
 <hr />
 <ul>
-    <li><a href="{{ path('les_polypodes_app_create', {serv: serv}) }}">Create</a></li>
-    <li><a href="{{ path('les_polypodes_app_update', {serv: serv, id:1}) }}">Update</a></li>
-    <li><a href="{{ path('les_polypodes_app_delete', {serv: serv, id:1}) }}">Delete</a></li>
-    <li><a href="{{ path('les_polypodes_app_list', {serv: serv}) }}">List</a></li>
-    <li><a href="{{ path('les_polypodes_app_form', {serv: serv}) }}">Form</a></li>
+    <li><a href="{{ path('les_polypodes_app_create', {serv: app.request.get('serv')}) }}">Create</a></li>
+    <li><a href="{{ path('les_polypodes_app_update', {serv: app.request.get('serv'), id:1}) }}">Update</a></li>
+    <li><a href="{{ path('les_polypodes_app_delete', {serv: app.request.get('serv'), id:1}) }}">Delete</a></li>
+    <li><a href="{{ path('les_polypodes_app_list', {serv: app.request.get('serv')}) }}">List</a></li>
+    <li><a href="{{ path('les_polypodes_app_form', {serv: app.request.get('serv')}) }}">Form</a></li>
 </ul>

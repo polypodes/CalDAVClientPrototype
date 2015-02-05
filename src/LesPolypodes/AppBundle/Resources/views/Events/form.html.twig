@@ -5,68 +5,68 @@
 		{{ form_errors(form) }}
 
 		<table><tr><div class="form-group">
-			<td>{{ form_label(form.name, "Nom de l'évènement", {'label_attr': {'class': 'col-sm-3 control-label'}}) }}
+			<td>{{ form_label(form.name, "Nom de l'évènement") }}
 			{{ form_errors(form.name) }}</td>
 
 			<td><div class="col-sm-4">
-				{{ form_widget(form.name, {'attr': {'class': 'form-controle'}}) }}
+				{{ form_widget(form.name) }}
 			</div></td>
 		</div></tr>
 
 		<tr><td><div class="form-group">
-		    {{ form_label(form.startDate, "Date de début", {'label_attr': {'class': 'col-sm-3 control-label'}}) }}
+		    {{ form_label(form.startDate, "Date de début") }}
 		    {{ form_errors(form.startDate) }}
       		<div class="col-sm-4">
-        		{{ form_widget(form.startDate, {'attr': {'class': 'form-control'}}) }}
+        		{{ form_widget(form.startDate) }}
       		</div></td>
     	</div>
 
     	<td><div class="form-group">
-      		{{ form_label(form.startTime, "Heure de début", {'label_attr': {'class': 'col-sm-3 control-label'}}) }}
-      		{{ form_errors(form.startTime) }}
+      		{{ form_label(form.startDate, "Heure de début") }}
+      		{{ form_errors(form.startDate) }}
       		<div class="col-sm-4">
-        		{{ form_widget(form.startTime, {'attr': {'class': 'form-control'}}) }}
+        		{{ form_widget(form.startDate) }}
       		</div>
    		</div></td></tr>
 
   		<tr><td><div class="form-group">
-      		{{ form_label(form.endDate, "Date de fin", {'label_attr': {'class': 'col-sm-3 control-label'}}) }}
+      		{{ form_label(form.endDate, "Date de fin") }}
       		{{ form_errors(form.endDate) }}
       		<div class="col-sm-4">
-        		{{ form_widget(form.endDate, {'attr': {'class': 'form-control'}}) }}
+        		{{ form_widget(form.endDate) }}
       		</div>
    		</div></td>
 
    		<td><div class="form-group">
-      		{{ form_label(form.endTime, "Heure de fin", {'label_attr': {'class': 'col-sm-3 control-label'}}) }}
-      		{{ form_errors(form.endTime) }}
+      		{{ form_label(form.endDate, "Heure de fin") }}
+      		{{ form_errors(form.endDate) }}
       		<div class="col-sm-4">
-        		{{ form_widget(form.endTime, {'attr': {'class': 'form-control'}}) }}
+        		{{ form_widget(form.endDate) }}
       		</div>
    		</div></td></tr>
 
 		<tr><div class="form-group">
-			<td>{{ form_label(form.location, "Adresse", {'label_attr': {'class': 'col-sm-3 control-label'}}) }}
+			<td>{{ form_label(form.location, "Adresse") }}
 			{{ form_errors(form.location) }}</td>
 
 			<td><div class="col-sm-4">
-				{{ form_widget(form.location, {'attr': {'class': 'form-controle'}}) }}
+				{{ form_widget(form.location) }}
 			</div></td>
 		</div></tr>
 
   		<tr><div class="form-group">
-      		<td>{{ form_label(form.description, "Description de l'évènement", {'label_attr': {'class': 'col-sm-3 control-label'}}) }}
+      		<td>{{ form_label(form.description, "Description de l'évènement") }}
       		{{ form_errors(form.description) }}</td>
       		<td><div class="col-sm-4">
-        		{{ form_widget(form.description, {'attr': {'class': 'form-control'}}) }}
+        		{{ form_widget(form.description) }}
      		</div></td>
     	</div></tr>
 
     	<tr><div class="form-group">
-    		<td>{{ form_label(form.price, "Prix de l'évènement", {'label_attr': {'class': 'col-sm-3 control-label'}}) }}
+    		<td>{{ form_label(form.price, "Prix de l'évènement") }}
     			{{ form_errors(form.price) }}</td>
     		<td> <div class="col-sm-4">
-    			{{ form_widget(form.price, {'attr': {'class': 'form-control'}}) }}
+    			{{ form_widget(form.price) }}
     		</div></td>
     	</div></tr></table>
 

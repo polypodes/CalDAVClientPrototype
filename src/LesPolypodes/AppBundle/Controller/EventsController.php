@@ -49,11 +49,11 @@ class EventsController extends Controller
     {
         switch($serv)
         {
-            case "baikal": 
-                $this->getBaikal_CalDavConnection();
+            case "calserv": 
+                $this->getCalserv_CalDavConnection();                
                 break;
-            case "calserv":
-                $this->getCalserv_CalDavConnection();
+            default:
+                $this->getBaikal_CalDavConnection();
                 break;
         }
 
@@ -158,8 +158,7 @@ class EventsController extends Controller
         $calendars = $this->scdClient->findCalendars();
 
         return $this->render('LesPolypodesAppBundle:Events:scdcList.html.twig', array(
-            'calendars' => $calendars,
-            'serv' => $serv,
+            'calendars' => $calendars
         ));
     }
 
@@ -189,7 +188,6 @@ class EventsController extends Controller
 
         return $this->render('LesPolypodesAppBundle:Events:scdcListEvent.html.twig', array(
             'datas' => $datas,
-            'serv' => $serv,
         ));
     }
 
@@ -202,7 +200,6 @@ class EventsController extends Controller
 
         return $this->render('LesPolypodesAppBundle:Events:scdcListEventRaw.html.twig', array(
             'events' => $events,
-            'serv' => $serv,
         ));
     }
 
@@ -217,15 +214,14 @@ class EventsController extends Controller
         return $this->render('LesPolypodesAppBundle:Events:create.html.twig', array(
             'vcal' => $vcal->serialize(),
             'name' => $this->caldav_maincal_name,
-            'serv' => $serv,
         ));
     }
 
     public function indexAction($serv)
     {
-        return $this->render('LesPolypodesAppBundle:Events:index.html.twig', array(
-            'serv' => $serv,
-        ));
+        // $this->container->
+
+        return $this->render('LesPolypodesAppBundle:Events:index.html.twig');
     }
 
     public function updateAction($serv)
@@ -233,18 +229,14 @@ class EventsController extends Controller
         // TODO: update 1 event
         // TODO: all events between 2 datetimes
         // ! Think about rollback
-        return $this->render('LesPolypodesAppBundle:Events:update.html.twig', array(
-            'serv' => $serv,
-        ));
+        return $this->render('LesPolypodesAppBundle:Events:update.html.twig');
     }
 
     public function deleteAction($serv)
     {
         // TODO : delete on event
         // ! Think about rollback
-        return $this->render('LesPolypodesAppBundle:Events:delete.html.twig', array(
-            'serv' => $serv,
-        ));
+        return $this->render('LesPolypodesAppBundle:Events:delete.html.twig');
     }
 
     public function formAction(Request $request, $serv)
@@ -254,20 +246,24 @@ class EventsController extends Controller
         $event = new FormCal();
         // Valeurs par défaut
         $event->setName('Nom de l\'évènement');
-        $event->setStartDate(new \DateTime('today'));
-        $event->setEndDate(new \DateTime('tomorrow'));
-        $event->setStartTime(new \DateTime());
-        $event->setEndTime((new \DateTime())->add(new \DateInterval('PT1H')));
+        // $event->setStartDate(new \DateTime('today'));
+        // $event->setEndDate(new \DateTime('tomorrow'));
+        // $event->setStartTime(new \DateTime());
+        // $event->setEndTime((new \DateTime())->add(new \DateInterval('PT1H')));
+        $event->setStartDate(new \DateTime());
+        $event->setEndDate(new \DateTime());
         $event->setLocation('Adresse de l\'évènement');
         $event->setDescription('Décrivez votre évènement');
-        $event->setPrice('€');
+        $event->setPrice('0€');
+
+        // die(var_dump($event->getEndDate()));
         
         $form = $this->createFormBuilder($event)
             ->add('name', 'text')
-            ->add('startDate', 'date')
-            ->add('endDate', 'date')
-            ->add('startTime', 'time')
-            ->add('endTime', 'time')
+            ->add('startDate', 'time')
+            ->add('endDate', 'time')
+            ->add('startTime', 'date')
+            ->add('endTime', 'date')
             ->add('location', 'text')
             ->add('description', 'textarea')
             ->add('price', 'text')
@@ -284,7 +280,6 @@ class EventsController extends Controller
 
             return $this->redirect($this->generateUrl('les_polypodes_app_list_event_raw', array(
                 'name' => $this->caldav_maincal_name,
-                'serv' => $serv,
             )));
         }
         
@@ -323,7 +318,6 @@ class EventsController extends Controller
 
         return $this->forward('LesPolypodesAppBundle:Events:scdcListEvent', array(
                 'name' => $name,
-                'serv' => $serv,
             ));
     }
 }
