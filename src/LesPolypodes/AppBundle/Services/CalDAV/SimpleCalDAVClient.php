@@ -272,7 +272,7 @@ class SimpleCalDAVClient
     public function delete($href, $etag)
     {
         $this->checkCalendar();
-
+        
         // Is there a '/' at the end of the url?
         // WTF are you using this var for ?
         if (! preg_match('#^.*?/$#', $this->getClient()->calendar_url, $matches)) {
@@ -283,10 +283,11 @@ class SimpleCalDAVClient
 
      // Does $href exist?
         $result = $this->getClient()->GetEntryByHref($href);
+
         if (count($result) == 0) {
             throw new CalDAVException('Can\'t find '.$href.'on server', $this->getClient());
         }
-
+die (var_dump($result));
      // $etag correct?
         if ($result[0]['etag'] != $etag) {
             throw new CalDAVException('Wrong entity tag. The entity seems to have changed.', $this->getClient());

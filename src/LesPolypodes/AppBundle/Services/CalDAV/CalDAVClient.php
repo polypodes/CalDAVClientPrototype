@@ -146,7 +146,6 @@ class CalDAVClient
         $this->headers = array();
         $dav_options = $this->DoOptionsRequestAndGetDAVHeader();
         $valid_caldav_server = isset($dav_options['calendar-access']);
-// die(var_dump($dav_options));
         
         return $valid_caldav_server;
     }
@@ -244,7 +243,6 @@ class CalDAVClient
         curl_setopt($this->ch, CURLINFO_HEADER_OUT, true);
 
         $response = curl_exec($this->ch);
-        //die(var_dump($url));
 
         if (false === $response) {
             // TODO better error handling
@@ -1215,6 +1213,8 @@ EOFILTER;
         $etag = null;
         if (preg_match('{^ETag:\s+"([^"]*)"\s*$}im', $this->httpResponseHeaders, $matches)) {
             $etag = $matches[1];
+echo var_dump($this->httpResponseHeaders);
+     die(var_dump($this->httpResponseBody));
         } elseif (preg_match('{^ETag:\s+([^\s]*)\s*$}im', $this->httpResponseHeaders, $matches)) {
             $etag = $matches[1];
         }

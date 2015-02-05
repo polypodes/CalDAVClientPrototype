@@ -165,10 +165,7 @@ class EventsController extends Controller
         $this->getSimplecalDavClient($serv);
         $calendars = $this->scdClient->findCalendars();
 
-        $id = $this->setCalendarSCDC($name);
-
         return $this->render('LesPolypodesAppBundle:Events:scdcList.html.twig', array(
-            'id' => $id,
             'calendars' => $calendars
         ));
     }
@@ -244,7 +241,27 @@ class EventsController extends Controller
         return $this->render('LesPolypodesAppBundle:Events:update.html.twig');
     }
 
-    public function deleteAction($serv)
+    public function deleteAction($name, $id, $serv)
+    {
+        $this->getSimplecalDavClient($serv);
+
+        $this->setCalendarSCDC($name);
+        $events = $this->scdClient->getEvents();
+
+        echo var_dump($events).'<br/>';
+
+
+
+        $this->scdClient->delete($events[0]->getHref(), $events[0]->getEtag());
+die('ok');
+
+        return $this->render('LesPolypodesAppBundle:Events:scdcList.html.twig', array(
+            'id' => $id,
+            'events' => $events,
+        ));
+    }
+
+    public function deleteAllAction($name, $serv)
     {
         $this->getSimplecalDavClient($serv);
 
@@ -257,17 +274,7 @@ class EventsController extends Controller
             'id' => $id,
             'events' => $events,
         ));
-
-        // $calendarID = $this->scdClient->findCalendarIDByName($name);
-
-        // if ($calendarID == null) {
-        //     throw new \Exception('No calendar found with the name "'.$name.'".');
-        // }
-
-        // $this->scdClient->setCalendar($this->scdClient->findCalendars()[$calendarID]);
-
     }
-
     public function formAction(Request $request, $serv)
     {
         $this->getSimplecalDavClient($serv);
