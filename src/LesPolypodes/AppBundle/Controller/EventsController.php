@@ -19,7 +19,11 @@ class EventsController extends Controller
     protected $caldav_host = null;
     protected $caldav_maincal_name = null;
 
+    /**
+     * @var SimpleCalDAVClient
+     */
     protected $scdClient = null;
+
     protected $sabreClient = null;
 
 
@@ -165,8 +169,18 @@ class EventsController extends Controller
         $this->getSimplecalDavClient($serv);
         $calendars = $this->scdClient->findCalendars();
 
+        $result = array();
+        foreach($calendars as $i=>$calendar) {
+            $this->setCalendarSCDC($calendar->getDisplayName());
+            $events = $this->scdClient->getEvents();
+            $result[$i] = array(
+                "calendar" => $calendar,
+                "length" => count($events)
+            );
+        }
+
         return $this->render('LesPolypodesAppBundle:Events:scdcList.html.twig', array(
-            'calendars' => $calendars
+            'result' => $result
         ));
     }
 

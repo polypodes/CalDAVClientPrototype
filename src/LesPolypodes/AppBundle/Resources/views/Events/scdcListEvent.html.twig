@@ -9,7 +9,11 @@ ListEvent via SimpleCalDav
             <legend>Évènement {{ loop.index }}</legend>
         {% endif %}
 
-        <p color='#F20000'>| <a id="link_{{ loop.index}}" href="{{ path('les_polypodes_app_delete', {id:data.vcal.vevent.uid}) }}">Supprimer l'évènement</a> |</p>
+        <p color='#F20000'>|
+            {#
+            <a id="link_{{ loop.index}}" href="{{ path('les_polypodes_app_delete',
+            {id:data.vcal.vevent.uid}) }}">Supprimer l'évènement</a> |</p>
+                #}
 
     	<p>De : {{ data.dateStart }}&ensp;À : {{ data.dateEnd }}</p>
 		{% if data.vcal.vevent.location is defined %}

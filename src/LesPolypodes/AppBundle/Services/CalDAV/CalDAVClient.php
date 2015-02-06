@@ -256,7 +256,7 @@ class CalDAVClient
         }
 
 
-    echo '<br/>LAREPONSE : <br/><pre>'.$response.'</pre>';
+    //echo '<br/>LAREPONSE : <br/><pre>'.$response.'</pre>';
 
 
         $info = curl_getinfo($this->ch);
