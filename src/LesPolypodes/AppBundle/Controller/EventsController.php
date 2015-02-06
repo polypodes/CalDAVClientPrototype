@@ -185,8 +185,12 @@ class EventsController extends Controller
     }
 
 
-    public function scdcListEventAction($name, $serv)
+    public function scdcListEventAction($name, $serv, $begin=0)
     {
+        $end = microtime(true);
+
+        // echo ($end - $begin);
+
         $this->getSimplecalDavClient($serv);
 
         $this->setCalendarSCDC($name);
@@ -338,6 +342,9 @@ die('ok');
 
     public function devInsertAction($name, $n, $type, $serv)
     {
+        $begin = microtime(true);
+
+
         $this->getSimplecalDavClient($serv);
 
         switch ($type){
@@ -366,6 +373,7 @@ die('ok');
         return $this->forward('LesPolypodesAppBundle:Events:scdcListEvent', array(
                 'name' => $name,
                 'serv' => $serv,
+                'begin' => $begin,
             ));
     }
 }

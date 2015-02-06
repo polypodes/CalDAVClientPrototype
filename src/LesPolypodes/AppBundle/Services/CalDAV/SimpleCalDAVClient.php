@@ -287,7 +287,8 @@ class SimpleCalDAVClient
         if (count($result) == 0) {
             throw new CalDAVException('Can\'t find '.$href.'on server', $this->getClient());
         }
-die (var_dump($result));
+        
+// die (var_dump($result));
      // $etag correct?
         if ($result[0]['etag'] != $etag) {
             throw new CalDAVException('Wrong entity tag. The entity seems to have changed.', $this->getClient());
@@ -379,7 +380,7 @@ die (var_dump($result));
     /**
      * Sends a REPORT-request with a custom <C:filter>-tag.
      * @see http://www.rfcreader.com/#rfc4791_line1524 for more information about how to write filters.
-     * @param string $filter the stuff you want to send encapsulated in the <C:filter>-tag.
+     * @param string $filter the stuff you want to send encapsuGetEntryByHrefted in the <C:filter>-tag.
      *
      * @return array           of CalDAVObjects (See CalDAVObject.php), representing the found calendar resources.
      * @throws CalDAVException
