@@ -255,6 +255,10 @@ class CalDAVClient
             return false;
         }
 
+
+    echo '<br/>LAREPONSE : <br/><pre>'.$response.'</pre>';
+
+
         $info = curl_getinfo($this->ch);
 
         // Save request
@@ -1213,8 +1217,13 @@ EOFILTER;
         $etag = null;
         if (preg_match('{^ETag:\s+"([^"]*)"\s*$}im', $this->httpResponseHeaders, $matches)) {
             $etag = $matches[1];
+
+echo 'response header : ';
 echo var_dump($this->httpResponseHeaders);
+echo 'response body : ';
      die(var_dump($this->httpResponseBody));
+
+
         } elseif (preg_match('{^ETag:\s+([^\s]*)\s*$}im', $this->httpResponseHeaders, $matches)) {
             $etag = $matches[1];
         }

@@ -247,8 +247,9 @@ class EventsController extends Controller
 
         $this->setCalendarSCDC($name);
         $events = $this->scdClient->getEvents();
-
-        echo var_dump($events).'<br/>';
+        
+        echo 'ICI : ';
+        echo var_dump($events);
 
 
 
