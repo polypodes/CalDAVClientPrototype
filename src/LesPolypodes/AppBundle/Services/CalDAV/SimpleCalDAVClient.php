@@ -296,6 +296,7 @@ class SimpleCalDAVClient
      // Do the deletion
         $this->getClient()->DoDELETERequest($href, $etag);
 
+
      // Deletion successfull?
         if ($this->getClient()->GetHttpResultCode() != '200' and $this->getClient()->GetHttpResultCode() != '204') {
             throw new CalDAVException('Recieved unknown HTTP status', $this->getClient());

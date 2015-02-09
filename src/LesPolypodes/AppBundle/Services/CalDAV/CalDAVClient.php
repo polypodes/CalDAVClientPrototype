@@ -250,6 +250,7 @@ class CalDAVClient
 
         if (false === $response) {
             // TODO better error handling
+
             log_message(
                 'ERROR',
                 'Error requesting ' . $url . ': '

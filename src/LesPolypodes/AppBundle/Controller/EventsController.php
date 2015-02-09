@@ -290,12 +290,20 @@ class EventsController extends Controller
         $this->setCalendarSCDC($name);
         $events = $this->scdClient->getEvents();
 
-        $this->setCalendarSCDC($name)->delete($name);
 
-        return $this->render('LesPolypodesAppBundle:Events:scdcList.html.twig', array(
-            'id' => $id,
-            'events' => $events,
-        ));
+        while($events[0] != null)
+        {
+            $this->scdClient->delete($events[0]->getHref(), $events[0]->getEtag());
+
+            $this->getSimplecalDavClient($serv);
+
+            $this->setCalendarSCDC($name);
+            $events = $this->scdClient->getEvents();
+        }
+
+        return $this->redirect($this->generateUrl('les_polypodes_app_list', array(
+                'serv' => $serv,
+            )));
     }
 
     public function formAction(Request $request, $serv)
@@ -328,8 +336,6 @@ class EventsController extends Controller
         if($form->isValid())
         {
             $vcal = $this->createVCal($event);
-
-        // die('<pre>'.$vcal->serialize().'</pre>');
 
             $this->persistEvent($this->caldav_maincal_name, $vcal);
 

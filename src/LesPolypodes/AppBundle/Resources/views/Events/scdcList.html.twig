@@ -16,7 +16,7 @@ List via SimpleCalDAV
 				Insert 10</a>
 				</td><td><a id="raw_{{ loop.index }}" href="{{ path('les_polypodes_app_list_event_raw', {name:item.calendar.displayname, serv: app.request.get('serv')}) }}">
 				Raw</a>
-				</td><td><a id="delete_{{ loop.index }}" href="{# {{ path('les_polypodes_app_delete', {serv: app.request.get('serv')}) }} #}">
+				</td><td><a id="delete_{{ loop.index }}" href="{{ path('les_polypodes_app_delete_all', {name:item.calendar.displayname, serv: app.request.get('serv')}) }}">
 				Clean calendar</a>
 	    </td></tr>
 	{% endfor %}

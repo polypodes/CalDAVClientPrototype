@@ -16,15 +16,15 @@ les_polypodes_app_update:
     requirements:
         serv: baikal|calserv
 
-les_polypodes_app_delete:
-    path:     /{serv}/events/delete/{name}/{id}
-    defaults: { _controller: LesPolypodesAppBundle:Events:delete, serv: baikal }
-    requirements:
-        serv: baikal|calserv
-
 les_polypodes_app_delete_all:
     path:     /{serv}/events/delete/all/{name}
     defaults: { _controller: LesPolypodesAppBundle:Events:deleteAll, serv: baikal }
+    requirements:
+        serv: baikal|calserv
+
+les_polypodes_app_delete:
+    path:     /{serv}/events/delete/{name}/{id}
+    defaults: { _controller: LesPolypodesAppBundle:Events:delete, serv: baikal }
     requirements:
         serv: baikal|calserv
 
