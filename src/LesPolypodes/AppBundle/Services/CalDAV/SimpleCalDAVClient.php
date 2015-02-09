@@ -287,8 +287,7 @@ class SimpleCalDAVClient
         if (count($result) == 0) {
             throw new CalDAVException('Can\'t find '.$href.'on server', $this->getClient());
         }
-        
-// die (var_dump($result));
+
      // $etag correct?
         if ($result[0]['etag'] != $etag) {
             throw new CalDAVException('Wrong entity tag. The entity seems to have changed.', $this->getClient());

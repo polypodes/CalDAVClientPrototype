@@ -13,7 +13,11 @@
 namespace LesPolypodes\AppBundle\Services\CalDAV;
 
 class CalDAVClient
-{public $temp=false;
+{
+    // créer pour le débugage de Delete
+    public $temp=false;
+    
+
     /**
      * The calendar-URL we're using
      */
@@ -254,9 +258,6 @@ class CalDAVClient
 
             return false;
         }
-// echo (var_dump($this->temp));
-if($this->temp)
-    echo '<br/>LAREPONSE : <br/><pre>'.$response.'</pre>';
 
 
         $info = curl_getinfo($this->ch);
@@ -516,7 +517,7 @@ if($this->temp)
      *
      * @return int The HTTP Result Code for the DELETE
      */
-    public function DoDELETERequest($url, $etag = null)
+    public function DoDELETERequest($href, $etag = null)
     {
         $this->body = "";
 
@@ -524,7 +525,7 @@ if($this->temp)
         if ($etag != null) {
             $this->SetMatch(true, $etag);
         }
-        $this->DoRequest($url);
+        $this->DoRequest($this->calendar_url.$href);
 
         return $this->httpResultCode;
     }
@@ -1205,9 +1206,9 @@ EOFILTER;
      */
     public function GetEntryByHref($href)
     {
-    // $this->temp = true;
+
         //$href = str_replace( rawurlencode('/'),'/',rawurlencode($href));
-        $response = $this->DoGETRequest($href);
+        $response = $this->DoGETRequest($this->calendar_url.$href);
 
         $report = array();
 
@@ -1218,12 +1219,6 @@ EOFILTER;
         $etag = null;
         if (preg_match('{^ETag:\s+"([^"]*)"\s*$}im', $this->httpResponseHeaders, $matches)) {
             $etag = $matches[1];
-
-// echo 'response header : ';
-// echo var_dump($this->httpResponseHeaders);
-// echo 'response body : ';
-//      die(var_dump($this->httpResponseBody));
-
 
         } elseif (preg_match('{^ETag:\s+([^\s]*)\s*$}im', $this->httpResponseHeaders, $matches)) {
             $etag = $matches[1];
