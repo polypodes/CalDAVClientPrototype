@@ -34,15 +34,15 @@ les_polypodes_app_list:
     requirements:
         serv: baikal|calserv
 
-les_polypodes_app_list_event:
-    path:     /{serv}/events/{name}
-    defaults: { _controller: LesPolypodesAppBundle:Events:scdcListEvent, serv: baikal }
+les_polypodes_app_list_event_raw:
+    path:     /{serv}/events/raw/{name}/{start}/{end}
+    defaults: { _controller: LesPolypodesAppBundle:Events:scdcListEventRaw, serv: baikal, start: null, end: null }
     requirements:
         serv: baikal|calserv
 
-les_polypodes_app_list_event_raw:
-    path:     /{serv}/events/raw/{name}
-    defaults: { _controller: LesPolypodesAppBundle:Events:scdcListEventRaw, serv: baikal }
+les_polypodes_app_list_event:
+    path:     /{serv}/events/{name}/{start}/{end}
+    defaults: { _controller: LesPolypodesAppBundle:Events:scdcListEvent, serv: baikal, start: null, end: null }
     requirements:
         serv: baikal|calserv
 

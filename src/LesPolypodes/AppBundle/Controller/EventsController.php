@@ -185,12 +185,12 @@ class EventsController extends Controller
     }
 
 
-    public function scdcListEventAction($name, $serv)
+    public function scdcListEventAction($name, $serv, $start, $end)
     {
         $this->getSimplecalDavClient($serv);
 
         $this->setCalendarSCDC($name);
-        $events = $this->scdClient->getEvents();
+        $events = $this->scdClient->getEvents($start, $end);
         
         $parser = new VObject\Reader();
 
@@ -214,12 +214,12 @@ class EventsController extends Controller
         ));
     }
 
-     public function scdcListEventRawAction($name, $serv)
+     public function scdcListEventRawAction($name, $serv, $start, $end)
     {
         $this->getSimplecalDavClient($serv);
 
         $this->setCalendarSCDC($name);
-        $events = $this->scdClient->getEvents();
+        $events = $this->scdClient->getEvents($start, $end);
 
         return $this->render('LesPolypodesAppBundle:Events:scdcListEventRaw.html.twig', array(
             'events' => $events,

@@ -1,6 +1,6 @@
 ListEvent via SimpleCalDav | {{ app.request.get('serv') }} | {{ name }}
 
-<h2>Remote iCal Objects call</h2>
+<h2>Remote iCal Objects call - {{ datas|length }}</h2>
 {% for data in datas %}
     <fieldset class='event' style='margin-bottom: 10px;'>
         {% if data.vcal.vevent.summary is defined %}
