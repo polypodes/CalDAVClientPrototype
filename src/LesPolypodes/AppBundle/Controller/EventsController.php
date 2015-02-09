@@ -276,11 +276,10 @@ class EventsController extends Controller
 
         $this->scdClient->delete($event->getHref(), $event->getEtag());
 
-
-        return $this->redirect($this->generateUrl('les_polypodes_app_list_event', array(
-                'name' => $name,
-                'serv' => $serv,
-            )));
+        return $this->render('LesPolypodesAppBundle:Events:delete.html.twig', array(
+            'name' => $name,
+            'datas' => $datas,
+            ));
     }
 
     public function deleteAllAction($name, $serv)
