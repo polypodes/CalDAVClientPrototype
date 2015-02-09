@@ -10,7 +10,7 @@ class EventsControllerTest extends WebTestCase
     {
         $client = static::createClient();
 
-        $crawler = $client->request('GET', '/events');
+        $crawler = $client->request('GET', '/baikal/events');
 
         $this->assertTrue(1 === $crawler->filter('html:contains("Remote calendars exist!")')->count());
     }
@@ -19,7 +19,7 @@ class EventsControllerTest extends WebTestCase
     {
         $client = static::createClient();
 
-        $crawler = $client->request('GET', '/events');
+        $crawler = $client->request('GET', '/baikal/events');
 
         $link = $crawler->filter('a[id=raw_2]')->link();
         $crawler = $client->click($link);
@@ -30,7 +30,7 @@ class EventsControllerTest extends WebTestCase
     {
         $this->markTestSkipped("too long!");
         $client = static::createClient();
-        $crawler = $client->request('GET', '/events');
+        $crawler = $client->request('GET', '/baikal/events');
         $link = $crawler->filter('a[id=insert2_1]')->link();
         $crawler = $client->click($link);
         $this->assertTrue(2 <= $crawler->filter('fieldset.event')->count());
@@ -39,7 +39,7 @@ class EventsControllerTest extends WebTestCase
     public function testFormAction()
     {
         $client = static::createClient();
-        $crawler = $client->request('GET','/events');
+        $crawler = $client->request('GET','/baikal/events');
         $link = $crawler->filter('a:contains("Form")')->link();
         $crawler = $client->click($link);
         $this->assertEquals(1, $crawler->filter('html:contains("Formulaire")')->count());
@@ -64,7 +64,7 @@ class EventsControllerTest extends WebTestCase
     public function testCreateFakeAction()
     {
         $client = static::createClient();
-        $crawler = $client->request('GET','/events/create');
+        $crawler = $client->request('GET','/baikal/events/create');
         $this->assertEquals(1, $crawler->filter('html:contains("Fakely generated vObjects")')->count());
         $this->assertTrue(1 ===  $crawler->filter('html:contains("BEGIN:VCALENDAR")')->count());
         $this->assertTrue(1 ===  $crawler->filter('html:contains("END:VCALENDAR")')->count());
