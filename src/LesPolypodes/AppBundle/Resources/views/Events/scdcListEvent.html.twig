@@ -1,4 +1,4 @@
-ListEvent via SimpleCalDav
+ListEvent via SimpleCalDav | {{ app.request.get('serv') }} | {{ name }}
 
 <h2>Remote iCal Objects call</h2>
 {% for data in datas %}
@@ -11,8 +11,8 @@ ListEvent via SimpleCalDav
 
         <p color='#F20000'>|
             
-            <a id="link_{{ loop.index}}" {#href="{{ path('les_polypodes_app_delete',
-            {id:data.vcal.vevent.uid}) }}"#}>Supprimer l'évènement</a> |</p>
+            <a id="link_{{ loop.index}}" href="{{ path('les_polypodes_app_delete',
+            {serv: app.request.get('serv'), name:name, id:data.vcal.vevent.uid}) }}">Supprimer l'évènement</a> |</p>
                 
 
     	<p>De : {{ data.dateStart }}&ensp;À : {{ data.dateEnd }}</p>

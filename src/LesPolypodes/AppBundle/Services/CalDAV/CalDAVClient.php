@@ -1206,7 +1206,6 @@ EOFILTER;
      */
     public function GetEntryByHref($href)
     {
-
         //$href = str_replace( rawurlencode('/'),'/',rawurlencode($href));
         $response = $this->DoGETRequest($this->calendar_url.$href);
 

@@ -185,12 +185,8 @@ class EventsController extends Controller
     }
 
 
-    public function scdcListEventAction($name, $serv, $begin=0)
+    public function scdcListEventAction($name, $serv)
     {
-        $end = microtime(true);
-
-        // echo ($end - $begin);
-
         $this->getSimplecalDavClient($serv);
 
         $this->setCalendarSCDC($name);
@@ -213,7 +209,7 @@ class EventsController extends Controller
         }
 
         return $this->render('LesPolypodesAppBundle:Events:scdcListEvent.html.twig', array(
-            'events' => $events,
+            'name' => $name,
             'datas' => $datas,
         ));
     }
@@ -265,19 +261,26 @@ class EventsController extends Controller
 
         $this->setCalendarSCDC($name);
         $events = $this->scdClient->getEvents();
-        
-        echo 'ICI : ';
-        echo var_dump($events);
+
+        $parser = new VObject\Reader();
+
+        foreach ($events as $event) {
+
+            $vcal = $parser->read($event->getData());
+
+            if ($vcal->VEVENT->UID == $id)
+            {
+                break;
+            }
+        }
+
+        $this->scdClient->delete($event->getHref(), $event->getEtag());
 
 
-
-        $this->scdClient->delete($events[0]->getHref(), $events[0]->getEtag());
-die('ok');
-
-        return $this->render('LesPolypodesAppBundle:Events:scdcList.html.twig', array(
-            'id' => $id,
-            'events' => $events,
-        ));
+        return $this->redirect($this->generateUrl('les_polypodes_app_list_event', array(
+                'name' => $name,
+                'serv' => $serv,
+            )));
     }
 
     public function deleteAllAction($name, $serv)
@@ -294,6 +297,7 @@ die('ok');
             'events' => $events,
         ));
     }
+
     public function formAction(Request $request, $serv)
     {
         $this->getSimplecalDavClient($serv);
@@ -342,9 +346,6 @@ die('ok');
 
     public function devInsertAction($name, $n, $type, $serv)
     {
-        $begin = microtime(true);
-
-
         $this->getSimplecalDavClient($serv);
 
         switch ($type){
@@ -373,7 +374,6 @@ die('ok');
         return $this->forward('LesPolypodesAppBundle:Events:scdcListEvent', array(
                 'name' => $name,
                 'serv' => $serv,
-                'begin' => $begin,
             ));
     }
 }
