@@ -11,7 +11,7 @@ use LesPolypodes\AppBundle\Entity\FormCal;
 use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\Request;
 
-class EventsController extends Controller
+class EventsController extends BaseController
 {
     // Connexion avec Baikal
     protected $caldav_login = null;
@@ -31,7 +31,6 @@ class EventsController extends Controller
 
     protected function getBaikal_CalDavConnection()
     {
-        error_reporting(E_ALL ^ E_NOTICE);
         $caldav = $this->container->getParameter('caldav');
         $this->caldav_login = $caldav['baikal']['login'];
         $this->caldav_password = $caldav['baikal']['password'];
@@ -41,7 +40,6 @@ class EventsController extends Controller
 
     protected function getCalserv_CalDavConnection()
     {
-        error_reporting(E_ALL ^ E_NOTICE);
         $caldav = $this->container->getParameter('caldav');
         $this->caldav_login= $caldav['calserv']['login'];
         $this->caldav_password = $caldav['calserv']['password'];
@@ -54,7 +52,7 @@ class EventsController extends Controller
         switch($serv)
         {
             case "calserv": 
-                $this->getCalserv_CalDavConnection();                
+                $this->getCalserv_CalDavConnection();
                 break;
             default:
                 $this->getBaikal_CalDavConnection();
@@ -136,12 +134,13 @@ class EventsController extends Controller
         $uid = $faker->numerify('ODE-####-####-####-####');
 
         $datevent = $faker->dateTimeBetween('now', '+1 day');
-
+        $transparencies = array('OPAQUE', 'TRANSPARENT');
+        $transparency = array_rand($transparencies);
         $vevent->add('ORGANIZER', $faker->companyEmail);
         $vevent->add('CREATED', (new \DateTime())->format('Ymd\THis\Z'));
         $vevent->add('DTSTAMP', (new \DateTime())->format('Ymd\THis\Z'));
         $vevent->add('UID', $uid);
-        $vevent->add('TRANSP', array('OPAQUE', 'TRANSPARENT')[rand(0,1)]);
+        $vevent->add('TRANSP', $trasparency);
         $vevent->add('SUMMARY', $faker->sentence(2));
         $vevent->add('LOCATION', $faker->streetAddress);
         $vevent->add('DTSTART', $datevent->format('Ymd\THis'));
