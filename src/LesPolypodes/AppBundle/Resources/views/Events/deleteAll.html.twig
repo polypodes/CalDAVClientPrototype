@@ -1,0 +1,8 @@
+DeleteAll | {{ app.request.get('serv') }} | {{ name }}
+
+<h4>Le calendrier {{ name }} a bien été nettoyé !</h4>
+
+<meta http-equiv="refresh" content="3; {{ path('les_polypodes_app_list', {name:name, serv: app.request.get('serv')}) }}" />
+
+
+{{ include('@LesPolypodesApp/Events/common/menu.html.twig') }}

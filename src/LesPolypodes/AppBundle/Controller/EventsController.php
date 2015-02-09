@@ -300,9 +300,9 @@ class EventsController extends Controller
             $events = $this->scdClient->getEvents();
         }
 
-        return $this->redirect($this->generateUrl('les_polypodes_app_list', array(
-                'serv' => $serv,
-            )));
+        return $this->render('LesPolypodesAppBundle:Events:deleteAll.html.twig', array(
+            'name' => $name,
+            ));
     }
 
     public function formAction(Request $request, $serv)
