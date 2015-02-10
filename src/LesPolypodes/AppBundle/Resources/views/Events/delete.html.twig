@@ -1,9 +1,2 @@
-Delete | {{ app.request.get('serverName') }}
-
-<h4>L'évènement a bien été supprimé !</h4>
-
-<meta http-equiv="refresh" content="3; {{ path('les_polypodes_app_list_event',
-    {calendarName:calendarName, serverName: app.request.get('serverName')}) }}" />
-
-
+Delete
 {{ include('@LesPolypodesApp/Events/common/menu.html.twig') }}

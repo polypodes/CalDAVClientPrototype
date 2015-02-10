@@ -1,6 +1,13 @@
 ListEvent via SimpleCalDav | {{ app.request.get('serverName') }} | {{ calendarName }}
 
 <h2>Remote iCal Objects call - {{ datas|length }}</h2>
+
+{% for flashMessage in app.session.flashbag.get('notice') %}
+    <div class="flash-notice">
+        <h4>{{ flashMessage }}</h4>
+    </div>
+{% endfor %}
+
 {% for data in datas %}
     <fieldset class='event' style='margin-bottom: 10px;'>
         {% if data.vcal.vevent.summary is defined %}
@@ -14,7 +21,6 @@ ListEvent via SimpleCalDav | {{ app.request.get('serverName') }} | {{ calendarNa
             <a id="link_{{ loop.index}}" href="{{ path('les_polypodes_app_delete',
             {serverName: app.request.get('serverName'), calendarName:calendarName, id:data.vcal.vevent.uid}) }}">Supprimer l'évènement</a> |</p>
                 
-
     	<p>De : {{ data.dateStart }}&ensp;À : {{ data.dateEnd }}</p>
 		{% if data.vcal.vevent.location is defined %}
 			<p>Lieu : {{ data.vcal.vevent.location }}</p>

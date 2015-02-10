@@ -213,11 +213,15 @@ class EventsController extends Controller
         $calDavClient->delete($event->getHref(), $event->getEtag());
         $datas = [];
 
-        return $this->render('LesPolypodesAppBundle:Events:delete.html.twig', array(
+        $this->get('session')->getFlashBag()->add(
+            'notice',
+            'L\'évènement a bien été supprimé !');
+
+        return $this->redirect($this->generateUrl('les_polypodes_app_list_event', array(
             'calendarName' => $calendarName,
-            'datas' => $datas,
-            ));
-    }
+            'serverName' => $serverName,
+            )));
+     }
 
     /**
      * @param $calendarName
