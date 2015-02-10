@@ -1,60 +1,60 @@
 les_polypodes_app_index:
-    path:     /{serv}
-    defaults: { _controller: LesPolypodesAppBundle:Events:index, serv: baikal }
+    path:     /{serverName}
+    defaults: { _controller: LesPolypodesAppBundle:Events:index, serverName: baikal }
     requirements:
-        serv: baikal|calserv
+        serverName: baikal|calserv
 
 les_polypodes_app_create:
-    path:     /{serv}/events/create
-    defaults: { _controller: LesPolypodesAppBundle:Events:create, serv: baikal }
+    path:     /{serverName}/events/create
+    defaults: { _controller: LesPolypodesAppBundle:Events:create, serverName: baikal }
     requirements:
-        serv: baikal|calserv
+        serverName: baikal|calserv
 
 les_polypodes_app_update:
-    path:     /{serv}/events/update/{id}
-    defaults: { _controller: LesPolypodesAppBundle:Events:update, serv: baikal }
+    path:     /{serverName}/events/update/{id}
+    defaults: { _controller: LesPolypodesAppBundle:Events:update, serverName: baikal }
     requirements:
-        serv: baikal|calserv
+        serverName: baikal|calserv
 
 les_polypodes_app_delete:
-    path:     /{serv}/events/delete/{name}/{id}
-    defaults: { _controller: LesPolypodesAppBundle:Events:delete, serv: baikal }
+    path:     /{serverName}/events/delete/{calendarName}/{id}
+    defaults: { _controller: LesPolypodesAppBundle:Events:delete, serverName: baikal }
     requirements:
-        serv: baikal|calserv
+        serverName: baikal|calserv
 
 les_polypodes_app_delete_all:
-    path:     /{serv}/events/delete/all/{name}
-    defaults: { _controller: LesPolypodesAppBundle:Events:deleteAll, serv: baikal }
+    path:     /{serverName}/events/delete/all/{calendarName}
+    defaults: { _controller: LesPolypodesAppBundle:Events:deleteAll, serverName: baikal }
     requirements:
-        serv: baikal|calserv
+        serverName: baikal|calserv
 
 les_polypodes_app_list:
-    path:     /{serv}/events
-    defaults: { _controller: LesPolypodesAppBundle:Events:scdcList, serv: baikal }
+    path:     /{serverName}/events
+    defaults: { _controller: LesPolypodesAppBundle:Events:scdcList, serverName: baikal }
     requirements:
-        serv: baikal|calserv
+        serverName: baikal|calserv
 
 les_polypodes_app_list_event:
-    path:     /{serv}/events/{name}
-    defaults: { _controller: LesPolypodesAppBundle:Events:scdcListEvent, serv: baikal }
+    path:     /{serverName}/events/{calendarName}
+    defaults: { _controller: LesPolypodesAppBundle:Events:scdcListEvent, serverName: baikal }
     requirements:
-        serv: baikal|calserv
+        serverName: baikal|calserv
 
 les_polypodes_app_list_event_raw:
-    path:     /{serv}/events/raw/{name}
-    defaults: { _controller: LesPolypodesAppBundle:Events:scdcListEventRaw, serv: baikal }
+    path:     /{serverName}/events/raw/{calendarName}
+    defaults: { _controller: LesPolypodesAppBundle:Events:scdcListEventRaw, serverName: baikal }
     requirements:
-        serv: baikal|calserv
+        serverName: baikal|calserv
 
 les_polypodes_app_form:
-    path:     /{serv}/events/form/
-    defaults: { _controller: LesPolypodesAppBundle:Events:form, serv: baikal }
+    path:     /{serverName}/events/form/
+    defaults: { _controller: LesPolypodesAppBundle:Events:form, serverName: baikal }
     requirements:
-        serv: baikal|calserv
+        serverName: baikal|calserv
 
 les_polypodes_app_dev_insert:
-    path:     /{serv}/dev/insert/{name}/{n}/{type}
-    defaults: { _controller: LesPolypodesAppBundle:Events:devInsert, n: 1, type: standard, serv: baikal}
+    path:     /{serverName}/dev/insert/{calendarName}/{n}/{type}
+    defaults: { _controller: LesPolypodesAppBundle:Events:devInsert, n: 1, type: standard, serverName: baikal}
     requirements:
         n: \d+
-        serv: baikal|calserv
+        serverName: baikal|calserv

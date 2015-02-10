@@ -9,9 +9,10 @@
 namespace LesPolypodes\AppBundle\Services;
 
 use Symfony\Component\DependencyInjection\ContainerAware;
+use LesPolypodes\AppBundle\Services\CalDAV\SimpleCalDAVClient;
 
 
-class CalDAVConnection extends ContainerAware 
+class CalDAVClientProvider extends ContainerAware
 {
     /* MOVE Here from EventsController:
      * getSimplecalDavClient
@@ -22,6 +23,7 @@ class CalDAVConnection extends ContainerAware
      *
      */
 
+    //TODO: understand this:
     // NOTE : getSimplecalDavClient was protected, it becomes public
     // public function getSimplecalDavClient($serv)
     // {
@@ -34,9 +36,23 @@ class CalDAVConnection extends ContainerAware
     protected $caldav_maincal_name = null;
 
     /**
+     * @return string caldav maincal name
+     */
+    public function getCaldavMainCalName() {
+        return $this->caldav_maincal_name;
+    }
+
+    /**
      * @var SimpleCalDAVClient
      */
     protected $scdClient = null;
+
+    /**
+     * @return SimpleCalDAVClient
+     */
+    public function getScdClient() {
+        return $this->scdClient;
+    }
 
     protected $sabreClient = null;
 
@@ -58,7 +74,13 @@ class CalDAVConnection extends ContainerAware
         $this->caldav_maincal_name = $caldav['calserv']['maincal_name'];
     }
 
-    public function getSimplecalDavClient($serv)
+    /**
+     * @param $serv
+     *
+     * @return SimpleCalDAVClient
+     * @throws CalDAV\CalDAVException
+     */
+    public function getClient($serv)
     {
         switch($serv)
         {
@@ -77,14 +99,4 @@ class CalDAVConnection extends ContainerAware
         return $this->scdClient;
     }
 
-    public function setCalendarSCDC($name)
-    {
-        $calendarID = $this->scdClient->findCalendarIDByName($name);
-
-        if ($calendarID == null) {
-            throw new \Exception('No calendar found with the name "'.$name.'".');
-        }
-
-        $this->scdClient->setCalendar($this->scdClient->findCalendars()[$calendarID]);
-    }
 }

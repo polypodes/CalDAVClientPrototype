@@ -4,12 +4,12 @@ Create :
 {# <pre>{{ vcard }}</pre> #}
 
 <h3>vCal:</h3>
-<pre>{{ vcal }}</pre>
+<pre>{{ vCal }}</pre>
 <div>
-	<button onclick="location.href='{{ path('les_polypodes_app_create', {serv: app.request.get('serv')}) }}'">
+	<button onclick="location.href='{{ path('les_polypodes_app_create', {serverName: app.request.get('serverName')}) }}'">
 		Create one more.
 	</button>
-	<button onclick="location.href='{{ path('les_polypodes_app_list_event', {name:name, serv: app.request.get('serv')}) }}'">
+	<button onclick="location.href='{{ path('les_polypodes_app_list_event', {calendarName:calendarName, serverName: app.request.get('serverName')}) }}'">
 		See Events.
 	</button>
 </div>
