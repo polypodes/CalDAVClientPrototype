@@ -241,9 +241,14 @@ class EventsController extends Controller
             $events = $calDavClient->getEvents();
         }
 
-        return $this->render('LesPolypodesAppBundle:Events:deleteAll.html.twig', array(
+        $this->get('session')->getFlashBag()->add(
+            'notice',
+            'Le calendrier a bien été nettoyé !');
+
+        return $this->redirect($this->generateUrl('les_polypodes_app_list', array(
             'calendarName' => $calendarName,
-        ));
+            'serverName' => $serverName,
+            )));
     }
 
     /**
