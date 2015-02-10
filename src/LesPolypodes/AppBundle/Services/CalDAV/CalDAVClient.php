@@ -14,10 +14,6 @@ namespace LesPolypodes\AppBundle\Services\CalDAV;
 
 class CalDAVClient
 {
-    // créer pour le débugage de Delete
-    public $temp=false;
-    
-
     /**
      * The calendar-URL we're using
      */
@@ -30,6 +26,8 @@ class CalDAVClient
      */
     public $user_agent = 'simpleCalDAVclient';
 
+
+    // First part of the full url
     public $first_url_part;
 
     /**
@@ -54,24 +52,24 @@ class CalDAVClient
      */
     protected $calendar_urls;
     protected $headers = array();
-    protected $body = "";
-    protected $requestMethod = "GET";  // for debugging http headers sent
-    protected $httpRequest = "";   // for debugging xml sent
-    protected $xmlRequest = ""; // http headers received
-    protected $httpResponse = "";  // xml received
-    protected $xmlResponse = "";
-    protected $httpResultCode = ""; // our XML parser object
+    protected $body = "";   // xml sent
+    protected $requestMethod = "GET";   
+    protected $httpRequest = "";    // for debugging http headers sent
+    // protected $xmlRequest = "";     // for debugging xml sent
+    protected $httpResponse = "";   // http headers received
+    protected $xmlResponse = "";    // xml received
+    protected $httpResultCode = ""; 
 
-    // Requests timeout
+    // our XML parser object
     protected $parser;
 
-    // cURL handle
+    // Requests timeout
     private $timeout;
 
-    // Full URL
+    // cURL handle
     private $ch;
 
-    // First part of the full url
+    // Full URL
     private $full_url;
 
     /**
@@ -290,6 +288,8 @@ class CalDAVClient
         log_message('INTERNALS', 'RPLh: ' . var_export($this->httpResponseHeaders, TRUE));
         log_message('INTERNALS', 'RPLb: ' . var_export($this->httpResponseBody, TRUE));
         */
+
+// echo 'Req : <pre>HEAD:'.$this->httpRequest.'BODY:'.$this->body.'</pre><br/>Resp : <pre>'.$response.'</pre>';
 
         return $response;
     }
