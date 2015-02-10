@@ -2,3 +2,8 @@ services:
 #    les_polypodes_app.example:
 #        class: LesPolypodes\AppBundle\Example
 #        arguments: [@service_id, "plain_value", %parameter%]
+services:
+    calDAVConnection:
+        class: "LesPolypodes\AppBundle\Services\CalDAVConnection"
+        calls:
+            - [ setContainer,[ @service_container ] ]

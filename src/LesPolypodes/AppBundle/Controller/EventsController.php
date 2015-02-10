@@ -10,75 +10,10 @@ use Sabre\DAV;
 use LesPolypodes\AppBundle\Entity\FormCal;
 use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\Request;
+use LesPolypodes\AppBundle\Services\CalDAVConnection;
 
-class EventsController extends Controller
+class EventsController extends BaseController
 {
-    // Connexion avec Baikal
-    protected $caldav_login = null;
-    protected $caldav_password = null;
-    protected $caldav_host = null;
-    protected $caldav_maincal_name = null;
-
-    /**
-     * @var SimpleCalDAVClient
-     */
-    protected $scdClient = null;
-
-    protected $sabreClient = null;
-
-
-    #TODO: refactor all this as a service!
-
-    protected function getBaikal_CalDavConnection()
-    {
-        error_reporting(E_ALL ^ E_NOTICE);
-        $caldav = $this->container->getParameter('caldav');
-        $this->caldav_login = $caldav['baikal']['login'];
-        $this->caldav_password = $caldav['baikal']['password'];
-        $this->caldav_host = $caldav['baikal']['host'];
-        $this->caldav_maincal_name = $caldav['baikal']['maincal_name'];
-    }
-
-    protected function getCalserv_CalDavConnection()
-    {
-        error_reporting(E_ALL ^ E_NOTICE);
-        $caldav = $this->container->getParameter('caldav');
-        $this->caldav_login= $caldav['calserv']['login'];
-        $this->caldav_password = $caldav['calserv']['password'];
-        $this->caldav_host = $caldav['calserv']['host'];
-        $this->caldav_maincal_name = $caldav['calserv']['maincal_name'];
-    }
-
-    protected function getSimplecalDavClient($serv)
-    {
-        switch($serv)
-        {
-            case "calserv": 
-                $this->getCalserv_CalDavConnection();                
-                break;
-            default:
-                $this->getBaikal_CalDavConnection();
-                break;
-        }
-
-        $this->scdClient = new SimpleCalDAVClient;
-        $url = sprintf("%s%s/", $this->caldav_host, $this->caldav_login);
-        $this->scdClient->connect($url, $this->caldav_login, $this->caldav_password);
-
-        return $this->scdClient;
-    }
-
-    protected function setCalendarSCDC($name)
-    {
-        $calendarID = $this->scdClient->findCalendarIDByName($name);
-
-        if ($calendarID == null) {
-            throw new \Exception('No calendar found with the name "'.$name.'".');
-        }
-
-        $this->scdClient->setCalendar($this->scdClient->findCalendars()[$calendarID]);
-    }
-
     protected function createVCal($event)
     {
         $faker = Faker\Factory::create('fr_FR');
@@ -136,12 +71,13 @@ class EventsController extends Controller
         $uid = $faker->numerify('ODE-####-####-####-####');
 
         $datevent = $faker->dateTimeBetween('now', '+1 day');
-
+        $transparencies = array('OPAQUE', 'TRANSPARENT');
+        $transparency = array_rand($transparencies);
         $vevent->add('ORGANIZER', $faker->companyEmail);
         $vevent->add('CREATED', (new \DateTime())->format('Ymd\THis\Z'));
         $vevent->add('DTSTAMP', (new \DateTime())->format('Ymd\THis\Z'));
         $vevent->add('UID', $uid);
-        $vevent->add('TRANSP', array('OPAQUE', 'TRANSPARENT')[rand(0,1)]);
+        $vevent->add('TRANSP', $trasparency);
         $vevent->add('SUMMARY', $faker->sentence(2));
         $vevent->add('LOCATION', $faker->streetAddress);
         $vevent->add('DTSTART', $datevent->format('Ymd\THis'));
