@@ -10,6 +10,10 @@ use LesPolypodes\AppBundle\Services\CalDAVClientProvider;
 use Sabre\VObject\Component\VCalendar;
 use Sabre\VObject\Reader;
 
+/**
+ * Class EventsController
+ * @package LesPolypodes\AppBundle\Controller
+ */
 class EventsController extends Controller
 {
 
@@ -18,13 +22,12 @@ class EventsController extends Controller
      */
     protected $calDAVClientProvider;
 
-    // TODO: move this
     /**
-     * @param string $serverName
-     * @param string $calendarName
+     * @param string    $serverName
+     * @param string    $calendarName
      * @param VCalendar $vCal
      *
-     * @return string raw ics-formatted vCal
+     * @return string                                                  raw ics-formatted vCal
      * @throws \Exception
      * @throws \LesPolypodes\AppBundle\Services\CalDAV\CalDAVException
      */
@@ -52,7 +55,7 @@ class EventsController extends Controller
         $this->calDAVClientProvider = $this->container->get('calDAVClientProvider');
 
         $calDAVClient = $this->calDAVClientProvider->getClient($serverName);
-        if(!empty($calendarName)) {
+        if (!empty($calendarName)) {
             $calDAVClient->setCalendarByName($calendarName);
         }
 
@@ -60,6 +63,12 @@ class EventsController extends Controller
 
     }
 
+    /**
+     * @param $serverName
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     * @throws \LesPolypodes\AppBundle\Services\CalDAV\CalDAVException
+     */
     public function scdcListAction($serverName)
     {
         $calDavClient = $this->getSimplecalDavClient($serverName);
@@ -67,7 +76,7 @@ class EventsController extends Controller
 
         $result = array();
 
-        foreach($calendars as $i=>$calendar) {
+        foreach ($calendars as $i=>$calendar) {
             $calDavClient = $this->getSimplecalDavClient($serverName, $calendar->getDisplayName());
             $events = $calDavClient->getEvents();
             $result[$i] = array(
@@ -81,12 +90,18 @@ class EventsController extends Controller
         ));
     }
 
-
+    /**
+     * @param $calendarName
+     * @param $serverName
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     * @throws \LesPolypodes\AppBundle\Services\CalDAV\CalDAVException
+     */
     public function scdcListEventAction($calendarName, $serverName)
     {
         $calDavClient = $this->getSimplecalDavClient($serverName, $calendarName);
         $events = $calDavClient->getEvents();
-        
+
         $reader = new Reader();
 
         $dataContainer = new \stdClass();
@@ -110,7 +125,14 @@ class EventsController extends Controller
         ));
     }
 
-     public function scdcListEventRawAction($calendarName, $serverName)
+    /**
+     * @param $calendarName
+     * @param $serverName
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     * @throws \LesPolypodes\AppBundle\Services\CalDAV\CalDAVException
+     */
+    public function scdcListEventRawAction($calendarName, $serverName)
     {
         $calDavClient = $this->getSimplecalDavClient($serverName, $calendarName);
         $events = $calDavClient->getEvents();
@@ -120,6 +142,12 @@ class EventsController extends Controller
         ));
     }
 
+    /**
+     * @param $serverName
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     * @throws \Exception
+     */
     public function createAction($serverName)
     {
         $calDavClient = $this->getSimplecalDavClient($serverName);
@@ -135,11 +163,21 @@ class EventsController extends Controller
         ));
     }
 
+    /**
+     * @param $serverName
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
     public function indexAction($serverName)
     {
         return $this->render('LesPolypodesAppBundle:Events:index.html.twig');
     }
 
+    /**
+     * @param $serverName
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
     public function updateAction($serverName)
     {
         // TODO: update 1 event
@@ -148,6 +186,14 @@ class EventsController extends Controller
         return $this->render('LesPolypodesAppBundle:Events:update.html.twig');
     }
 
+    /**
+     * @param $calendarName
+     * @param $id
+     * @param $serverName
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     * @throws \LesPolypodes\AppBundle\Services\CalDAV\CalDAVException
+     */
     public function deleteAction($calendarName, $id, $serverName)
     {
         $calDavClient = $this->getSimplecalDavClient($serverName, $calendarName);
@@ -158,37 +204,50 @@ class EventsController extends Controller
         foreach ($events as $event) {
 
             $vCal = $reader->read($event->getData());
-            if ($vCal->VEVENT->UID == $id)
-            {
+            if ($vCal->VEVENT->UID == $id) {
                 break;
             }
         }
 
         $calDavClient->delete($event->getHref(), $event->getEtag());
         $datas = [];
+
         return $this->render('LesPolypodesAppBundle:Events:delete.html.twig', array(
             'calendarName' => $calendarName,
             'datas' => $datas,
             ));
     }
 
+    /**
+     * @param $calendarName
+     * @param $serverName
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     * @throws \LesPolypodes\AppBundle\Services\CalDAV\CalDAVException
+     */
     public function deleteAllAction($calendarName, $serverName)
     {
         $calDavClient = $this->getSimplecalDavClient($serverName, $calendarName);
 
         $events = $calDavClient->getEvents();
-        while($events[0] != null)
-        {
+        while ($events[0] != null) {
             $calDavClient->delete($events[0]->getHref(), $events[0]->getEtag());
-            $this->getSimplecalDavClient($serverName);
-            $this->setCalendarSCDC($calendarName);
+            $this->getSimplecalDavClient($serverName, $calendarName);
             $events = $calDavClient->getEvents();
         }
+
         return $this->render('LesPolypodesAppBundle:Events:deleteAll.html.twig', array(
             'name' => $calendarName,
         ));
     }
 
+    /**
+     * @param Request $request
+     * @param         $serverName
+     *
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     * @throws \Exception
+     */
     public function formAction(Request $request, $serverName)
     {
         $event = new FormCal();
@@ -200,7 +259,7 @@ class EventsController extends Controller
         $event->setDescription('Décrivez votre évènement');
         $event->setPrice('0');
         $event->setOrganizer('organisateur@exemple.com');
-        
+
         $form = $this->createFormBuilder($event)
             ->add('name', 'text')
             ->add('startDate', 'datetime')
@@ -211,11 +270,10 @@ class EventsController extends Controller
             ->add('organizer','email')
             ->add('Valider', 'submit')
             ->getForm();
-        
+
         $form->handleRequest($request);
 
-        if($form->isValid())
-        {
+        if ($form->isValid()) {
 
             $calDavClient = $this->getSimplecalDavClient($serverName);
             $vCalProvider = $this->container->get('vCalProvider');
@@ -228,20 +286,28 @@ class EventsController extends Controller
                 'serverName' => $serverName,
             )));
         }
-        
+
         return $this->render('LesPolypodesAppBundle:Events:form.html.twig', array(
             'form' => $form->createView(),
-            ));       
+            ));
     }
 
+    /**
+     * @param $calendarName
+     * @param $n
+     * @param $type
+     * @param $serverName
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     * @throws \Exception
+     */
     public function devInsertAction($calendarName, $n, $type, $serverName)
     {
         $calDavClient = $this->getSimplecalDavClient($serverName);
 
-        switch ($type){
+        switch ($type) {
             case 'standard' :
-                for ($i = 0; $i < $n; $i++)
-                {
+                for ($i = 0; $i < $n; $i++) {
                     $this->persistEvent(
                         $serverName,
                         $calendarName,
@@ -253,8 +319,7 @@ class EventsController extends Controller
                 $vCal = new VCalendar();
                 $vCal->PRODID = '-//ODE Dev//Faker//FR';
 
-                for ($i = 0; $i < $n; $i++)
-                {
+                for ($i = 0; $i < $n; $i++) {
                     $vCal->add($this->container->get('vCalProvider')->createFakeVCal()->VEVENT);
                 }
 
