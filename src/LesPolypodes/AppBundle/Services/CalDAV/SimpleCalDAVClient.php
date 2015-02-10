@@ -148,7 +148,7 @@ class SimpleCalDAVClient
     /**
      * Creates a new calendar resource on the CalDAV-Server (event, todo, etc.).
      *
-     * @param object $cal iCalendar-data of the resource you want to create.
+     * @param string raw ICS iCalendar-data of the resource you want to create.
      *                    Notice: The iCalendar-data contains the unique ID which specifies where the event is being saved.
      *
      * @return CalDAVObject    - An CalDAVObject-representation (see CalDAVObject.php) of your created resource
@@ -311,7 +311,7 @@ class SimpleCalDAVClient
      * @param null $finish the end point of the time interval. Must be in the format yyyymmddThhmmssZ and should be in
      *                     GMT. If omitted the value is set to +infinity.
      *
-     * @return array           of CalDAVObjects (See CalDAVObject.php), representing the found events.
+     * @return CalDAVObject[]           of CalDAVObjects (See CalDAVObject.php), representing the found events.
      * @throws CalDAVException
      * @throws \Exception
      */
@@ -497,5 +497,23 @@ EOT;
     public function findCalendars()
     {
         return $this->getClient()->FindCalendars(true);
+    }
+
+    /**
+     * @param string $calendarName
+     *
+     * @throws \Exception
+     *
+     * @return void
+     */
+    public function setCalendarByName($calendarName)
+    {
+        $calendarID = $this->findCalendarIDByName($calendarName);
+
+        if ($calendarID == null) {
+            throw new \Exception('No calendar found with the name "'.$calendarName.'".');
+        }
+
+        $this->setCalendar($this->findCalendars()[$calendarID]);
     }
 }
