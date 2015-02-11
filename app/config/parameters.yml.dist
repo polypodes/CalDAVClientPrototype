@@ -19,10 +19,8 @@ parameters:
             login:           odetest
             password:        odetest
             host:            http://baikal/app_dev.php/dav/cal/calendars/
-            maincal_name:    ODE Test 2
         calserv:
             login:           admin
             password:        admin
             host:            http://92.243.13.98:8443/calendars/users/
-            maincal_name:    ODE Test 2
 

@@ -33,14 +33,6 @@ class CalDAVClientProvider extends ContainerAware
     protected $caldav_login = null;
     protected $caldav_password = null;
     protected $caldav_host = null;
-    protected $caldav_maincal_name = null;
-
-    /**
-     * @return string caldav maincal name
-     */
-    public function getCaldavMainCalName() {
-        return $this->caldav_maincal_name;
-    }
 
     /**
      * @var SimpleCalDAVClient
@@ -62,7 +54,6 @@ class CalDAVClientProvider extends ContainerAware
         $this->caldav_login = $caldav['baikal']['login'];
         $this->caldav_password = $caldav['baikal']['password'];
         $this->caldav_host = $caldav['baikal']['host'];
-        $this->caldav_maincal_name = $caldav['baikal']['maincal_name'];
     }
 
     protected function getCalserv_CalDavConnection()
@@ -71,7 +62,6 @@ class CalDAVClientProvider extends ContainerAware
         $this->caldav_login= $caldav['calserv']['login'];
         $this->caldav_password = $caldav['calserv']['password'];
         $this->caldav_host = $caldav['calserv']['host'];
-        $this->caldav_maincal_name = $caldav['calserv']['maincal_name'];
     }
 
     /**
