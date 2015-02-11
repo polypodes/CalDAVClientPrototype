@@ -1,66 +1,85 @@
-les_polypodes_app_index:
+les_polypodes_app_index: # Liste des calendriers d'un serveur
     path:     /{serverName}
     defaults: { _controller: LesPolypodesAppBundle:Events:index, serverName: baikal }
     requirements:
         serverName: baikal|calserv
 
-les_polypodes_app_create:
-    path:     /{serverName}/events/create
+les_polypodes_app_add: # Ajoute un calendrier au serveur, ne fonctionne pas
+    path:     /{serverName}/add/{calendarName}
+    defaults: { _controller: LesPolypodesAppBundle:Events:add, serverName: baikal }
+    requirements:
+        serverName: baikal|calserv
+
+les_polypodes_app_list: # Liste des events d'un calendrier
+    path:     /{serverName}/{calendarName}
+    defaults: { _controller: LesPolypodesAppBundle:Events:event, serverName: baikal }
+    requirements:
+        serverName: baikal|calserv
+
+les_polypodes_app_list_raw: # Liste des events d'un calendrier en brut
+    path:     /{serverName}/{calendarName}/raw
+    defaults: { _controller: LesPolypodesAppBundle:Events:eventRaw, serverName: baikal, start: null, end: null }
+    requirements:
+        serverName: baikal|calserv
+
+les_polypodes_app_create: # Insère un event fake dans un calendrier et l'affiche 
+    path:     /{serverName}/{calendarName}/create
     defaults: { _controller: LesPolypodesAppBundle:Events:create, serverName: baikal }
     requirements:
         serverName: baikal|calserv
 
-les_polypodes_app_update:
-    path:     /{serverName}/events/update/{id}
-    defaults: { _controller: LesPolypodesAppBundle:Events:update, serverName: baikal }
-    requirements:
-        serverName: baikal|calserv
-
-les_polypodes_app_delete_all:
-    path:     /{serverName}/events/delete/all/{calendarName}
-    defaults: { _controller: LesPolypodesAppBundle:Events:deleteAll, serverName: baikal }
-    requirements:
-        serverName: baikal|calserv
-
-les_polypodes_app_delete:
-    path:     /{serverName}/events/delete/{calendarName}/{id}
-    defaults: { _controller: LesPolypodesAppBundle:Events:delete, serverName: baikal }
-    requirements:
-        serverName: baikal|calserv
-
-les_polypodes_app_list:
-    path:     /{serverName}/events
-    defaults: { _controller: LesPolypodesAppBundle:Events:scdcList, serverName: baikal }
-    requirements:
-        serverName: baikal|calserv
-
-les_polypodes_app_list_event_raw:
-    path:     /{serverName}/events/raw/{calendarName}
-    defaults: { _controller: LesPolypodesAppBundle:Events:scdcListEventRaw, serverName: baikal, start: null, end: null }
-    requirements:
-        serverName: baikal|calserv
-
-les_polypodes_app_list_event:
-    path:     /{serverName}/events/{calendarName}
-    defaults: { _controller: LesPolypodesAppBundle:Events:scdcListEvent, serverName: baikal, start: null, end: null }
-    requirements:
-        serverName: baikal|calserv
-
-les_polypodes_app_form:
-    path:     /{serverName}/events/form/
-    defaults: { _controller: LesPolypodesAppBundle:Events:form, serverName: baikal }
-    requirements:
-        serverName: baikal|calserv
-
-les_polypodes_app_dev_insert:
-    path:     /{serverName}/dev/insert/{calendarName}/{n}/{type}
-    defaults: { _controller: LesPolypodesAppBundle:Events:devInsert, n: 1, type: standard, serverName: baikal}
+les_polypodes_app_insert: # Insert 'n' évènements dans un calendrier
+    path:     /{serverName}/{calendarName}/insert/{n}
+    defaults: { _controller: LesPolypodesAppBundle:Events:insert, n: 1, serverName: baikal }
     requirements:
         n: \d+
         serverName: baikal|calserv
 
-les_polypodes_app_read:
-    path:     /{serverName}/events/read/
-    defaults: { _controller: LesPolypodesAppBundle:Events:read, serverName: baikal }
+les_polypodes_app_insert_cmp: # Insert 'n' évènements plus rapidement, ne fonctionne pas
+    path:      /{serverName}/{calendarName}/insert/{n}/compressed
+    defaults: { _controller: LesPolypodesAppBundle:Events:insertCmp, n:1, serverName: baikal }
+    requirements:
+        n: \d+
+        serverName: baikal|calserv
+
+les_polypodes_app_form: # Formulaire d'insertion d'un évènement
+    path:     /{serverName}/{calendarName}/form/
+    defaults: { _controller: LesPolypodesAppBundle:Events:form, serverName: baikal }
+    requirements:
+        serverName: baikal|calserv
+
+les_polypodes_app_select: # Formulaire de sélection d'évènements sur critère date, ne fonctionne pas
+    path:     /{serverName}/{calendarName}/select
+    defaults: { _controller: LesPolypodesAppBundle:Events:select, serverName: baikal }
+    requirements:
+        serverName: baikal|calserv
+
+les_polypodes_app_clear: # Supprime tous les events d'un calendrier
+    path:     /{serverName}/{calendarName}/clear
+    defaults: { _controller: LesPolypodesAppBundle:Events:clear, serverName: baikal }
+    requirements:
+        serverName: baikal|calserv
+
+les_polypodes_app_clear_hard: # Supprime un calendrier; puis le recréé
+    path:      /{serverName}/{calendarName}/clear/hard
+    defaults: { _controller: LesPolypodesAppBundle:Events:clearHard, serverName: baikal }
+    requirements:
+        serverName: baikal|calserv
+
+les_polypodes_app_event: # Visualise un évènement donné en propre et en brut
+    path:     /{serverName}/{calendarName}/{eventID}
+    defaults: { _controller: LesPolypodesAppBundle:Events:scdcListEvent, serverName: baikal, start: null, end: null }
+    requirements:
+        serverName: baikal|calserv
+
+les_polypodes_app_delete: # Supprime un event
+    path:     /{serverName}/{calendarName}/{eventID}/delete
+    defaults: { _controller: LesPolypodesAppBundle:Events:delete, serverName: baikal }
+    requirements:
+        serverName: baikal|calserv
+
+les_polypodes_app_update: # Modifie un event, ne fonctionne pas
+    path:     /{serverName}/{calendarName}/{eventID}/update
+    defaults: { _controller: LesPolypodesAppBundle:Events:update, serverName: baikal }
     requirements:
         serverName: baikal|calserv
