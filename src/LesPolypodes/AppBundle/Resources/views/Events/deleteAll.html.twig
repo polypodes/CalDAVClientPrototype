@@ -2,7 +2,7 @@ DeleteAll | {{ app.request.get('serverName') }} | {{ calendarName }}
 
 <h4>Le calendrier {{ calendarName }} a bien été nettoyé !</h4>
 
-<meta http-equiv="refresh" content="3; {{ path('les_polypodes_app_list', {calendarName:calendarName, serverName: app.request.get('serverName')}) }}" />
+{# <meta http-equiv="refresh" content="3; {{ path('les_polypodes_app_list', {calendarName:calendarName, serverName: app.request.get('serverName')}) }}" /> #}
 
 
 {{ include('@LesPolypodesApp/Events/common/menu.html.twig') }}

@@ -75,6 +75,8 @@ class EventsController extends Controller
         $calendars = $calDavClient->findCalendars();
         $result = array();
 
+        $calDavClient->deleteCal('delete');
+
         foreach ($calendars as $i=>$calendar) {
             // $calDavClient = $this->getSimplecalDavClient($serverName, $calendar->getDisplayName());
             $calDavClient->setCalendar($calendar);
