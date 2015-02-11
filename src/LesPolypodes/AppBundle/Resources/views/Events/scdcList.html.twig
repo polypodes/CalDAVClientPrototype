@@ -1,8 +1,13 @@
 List via SimpleCalDAV
 <h2><span class="calLength">{{ result|length }}</span>
-	Remote calendars{% if 0 < result|length  %} exist!{% endif %}
+	Remote calendars{% if 0 < result|length  %} exist!{% endif %}</h2>
 
-</h2>
+{% for flashMessage in app.session.flashbag.get('notice') %}
+    <div class="flash-notice">
+        <h4>{{ flashMessage }}</h4>
+    </div>
+{% endfor %}
+
 	<table>
 	{% for item in result %}
 	    	<tr>

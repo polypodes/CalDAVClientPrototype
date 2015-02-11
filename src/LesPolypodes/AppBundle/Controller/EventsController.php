@@ -215,11 +215,15 @@ class EventsController extends Controller
         $calDavClient->delete($event->getHref(), $event->getEtag());
         $datas = [];
 
-        return $this->render('LesPolypodesAppBundle:Events:delete.html.twig', array(
+        $this->get('session')->getFlashBag()->add(
+            'notice',
+            'L\'évènement a bien été supprimé !');
+
+        return $this->redirect($this->generateUrl('les_polypodes_app_list_event', array(
             'calendarName' => $calendarName,
-            'datas' => $datas,
-            ));
-    }
+            'serverName' => $serverName,
+            )));
+     }
 
     /**
      * @param $calendarName
@@ -239,9 +243,14 @@ class EventsController extends Controller
             $events = $calDavClient->getEvents();
         }
 
-        return $this->render('LesPolypodesAppBundle:Events:deleteAll.html.twig', array(
+        $this->get('session')->getFlashBag()->add(
+            'notice',
+            'Le calendrier a bien été nettoyé !');
+
+        return $this->redirect($this->generateUrl('les_polypodes_app_list', array(
             'calendarName' => $calendarName,
-        ));
+            'serverName' => $serverName,
+            )));
     }
 
     /**
@@ -334,5 +343,23 @@ class EventsController extends Controller
                 'calendarName' => $calendarName,
                 'serverName' => $serverName,
             ));
+    }
+
+    public function readAction ()
+    {
+        $sorting = new FormCal();
+        $sorting->setStartDate(new \DateTime());
+        $sorting->setEndDate((new \DateTime())->add(new \DateInterval('PT1H')));
+
+        $form = $this->createFormBuilder($sorting)
+            ->add('startDate', 'datetime')
+            ->add('endDate', 'datetime')
+            ->add('Valider', 'submit')
+            ->getForm();
+
+        return $this->render('LesPolypodesAppBundle:Events:read.html.twig', array(
+            'form' => $form->createView(),
+        ));
+
     }
 }
