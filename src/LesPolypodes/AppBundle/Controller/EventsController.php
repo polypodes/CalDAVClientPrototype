@@ -131,7 +131,7 @@ class EventsController extends Controller
         $calendars = $calDavClient->findCalendars();
         $result = array();
 
-        $calDavClient->deleteCal('delete');
+        $calDavClient->deleteCal($calendarName);
 
         return $this->redirect($this->generateUrl('les_polypodes_app_index', array(
             'serverName' => $serverName,
@@ -327,7 +327,7 @@ class EventsController extends Controller
 
             $this->persistEvent($serverName, $calendarName, $vCal);
 
-            return $this->redirect($this->generateUrl('les_polypodes_app_event_raw', array(
+            return $this->redirect($this->generateUrl('les_polypodes_app_event', array(
                 'calendarName' => $calendarName,
                 'serverName' => $serverName,
             )));
@@ -335,6 +335,7 @@ class EventsController extends Controller
 
         return $this->render('LesPolypodesAppBundle:Events:form.html.twig', array(
             'form' => $form->createView(),
+            'calendarName' => $calendarName,
             ));
     }
 
@@ -365,8 +366,9 @@ class EventsController extends Controller
             ->add('Valider', 'submit')
             ->getForm();
 
-        return $this->render('LesPolypodesAppBundle:Events:read.html.twig', array(
+        return $this->render('LesPolypodesAppBundle:Events:select.html.twig', array(
             'form' => $form->createView(),
+            'calendarName' => $calendarName,
         ));
     }
 
@@ -395,8 +397,7 @@ class EventsController extends Controller
             'notice',
             'Le calendrier a bien été nettoyé !');
 
-        return $this->redirect($this->generateUrl('les_polypodes_app_list', array(
-            'calendarName' => $calendarName,
+        return $this->redirect($this->generateUrl('les_polypodes_app_index', array(
             'serverName' => $serverName,
             )));
     }
@@ -426,19 +427,59 @@ class EventsController extends Controller
      *
      * @param $serverName
      * @param $calendarName
-     * @param $n
+     * @param $eventID
      *
      * @return \Symfony\Component\HttpFoundation\Response
      * @throws \Exception
      */
-    public function viewAction ()
+    public function viewAction ($serverName, $calendarName, $eventID)
     {
         // TODO: Select one event by UID, display it.
 
-        return $this->render('LesPolypodesAppBundle:Events:read.html.twig', array(
+        return $this->render('LesPolypodesAppBundle:Events:view.html.twig', array(
             'form' => $form->createView(),
+            'calendarName' => $calendarName,
         ));
     }
+
+
+    /**
+     * Delete an Event, then display all the events.
+     *
+     * @param $serverName
+     * @param $calendarName
+     * @param $eventID
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     * @throws \LesPolypodes\AppBundle\Services\CalDAV\CalDAVException
+     */
+    public function deleteAction($serverName, $calendarName, $eventID)
+    {
+        $calDavClient = $this->getSimplecalDavClient($serverName, $calendarName);
+        $events = $calDavClient->getEvents();
+
+        $reader = new Reader();
+
+        foreach ($events as $event) {
+
+            $vCal = $reader->read($event->getData());
+            if ($vCal->VEVENT->UID == $eventID) {
+                break;
+            }
+        }
+
+        $calDavClient->delete($event->getHref(), $event->getEtag());
+        $datas = [];
+
+        $this->get('session')->getFlashBag()->add(
+            'notice',
+            'L\'évènement a bien été supprimé !');
+
+        return $this->redirect($this->generateUrl('les_polypodes_app_event', array(
+            'calendarName' => $calendarName,
+            'serverName' => $serverName,
+            )));
+     }
 
 
     /**
@@ -455,45 +496,9 @@ class EventsController extends Controller
         // TODO: update 1 event
         // TODO: all events between 2 datetimes
         // ! Think about rollback
-        return $this->render('LesPolypodesAppBundle:Events:update.html.twig');
-    }
-
-
-    /**
-     * Delete an Event, then display all the events.
-     *
-     * @param $serverName
-     * @param $calendarName
-     * @param $id
-     *
-     * @return \Symfony\Component\HttpFoundation\Response
-     * @throws \LesPolypodes\AppBundle\Services\CalDAV\CalDAVException
-     */
-    public function deleteAction($serverName, $calendarName, $id)
-    {
-        $calDavClient = $this->getSimplecalDavClient($serverName, $calendarName);
-        $events = $calDavClient->getEvents();
-
-        $reader = new Reader();
-
-        foreach ($events as $event) {
-
-            $vCal = $reader->read($event->getData());
-            if ($vCal->VEVENT->UID == $id) {
-                break;
-            }
-        }
-
-        $calDavClient->delete($event->getHref(), $event->getEtag());
-        $datas = [];
-
-        $this->get('session')->getFlashBag()->add(
-            'notice',
-            'L\'évènement a bien été supprimé !');
-
-        return $this->redirect($this->generateUrl('les_polypodes_app_list_event', array(
+        return $this->render('LesPolypodesAppBundle:Events:update.html.twig', array(
+            // 'form' => $form->createView(),
             'calendarName' => $calendarName,
-            'serverName' => $serverName,
-            )));
-     }
+        ));
+    }
 }

@@ -16,10 +16,10 @@ Events | {{ app.request.get('serverName') }} | {{ calendarName }}
             <legend>Évènement {{ loop.index }}</legend>
         {% endif %}
 
-        <p color='#F20000'>|
-            
-            <a id="link_{{ loop.index}}" href="{{ path('les_polypodes_app_delete',
-            {serverName: app.request.get('serverName'), calendarName:calendarName, id:data.vcal.vevent.uid}) }}">Supprimer l'évènement</a> |</p>
+        | <a id="view_{{ loop.index}}" href="{{ path('les_polypodes_app_view', {serverName: app.request.get('serverName'), calendarName:calendarName, eventID:data.vcal.vevent.uid}) }}">View this event</a>
+        | <a id="delete_{{ loop.index}}" href="{{ path('les_polypodes_app_delete', {serverName: app.request.get('serverName'), calendarName:calendarName, eventID:data.vcal.vevent.uid}) }}">Delete this event</a>
+        | <a id="update_{{ loop.index}}" href="{{ path('les_polypodes_app_update', {serverName: app.request.get('serverName'), calendarName:calendarName, eventID:data.vcal.vevent.uid}) }}">Edit this event</a>
+        |
                 
     	<p>De : {{ data.dateStart }}&ensp;À : {{ data.dateEnd }}</p>
 		{% if data.vcal.vevent.location is defined %}

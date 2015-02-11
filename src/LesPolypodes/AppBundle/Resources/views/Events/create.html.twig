@@ -1,11 +1,11 @@
-Events | {{ app.request.get('serverName') }} | {{ calendarName }}
+Create | {{ app.request.get('serverName') }} | {{ calendarName }}
 
 <h2>Fakely generated VCalendar</h2>
 
 <h3>ICS FORMAT:</h3>
 <pre>{{ vCal }}</pre>
 <div>
-	<button onclick="location.href='{{ path('les_polypodes_app_create', {serverName: app.request.get('serverName')}) }}'">
+	<button onclick="location.href='{{ path('les_polypodes_app_create', {calendarName:calendarName, serverName: app.request.get('serverName')}) }}'">
 		Create one more.
 	</button>
 	<button onclick="location.href='{{ path('les_polypodes_app_event', {calendarName:calendarName, serverName: app.request.get('serverName')}) }}'">

@@ -10,15 +10,21 @@ les_polypodes_app_add: # Ajoute un calendrier au serveur, ne fonctionne pas
     requirements:
         serverName: baikal|calserv
 
-les_polypodes_app_list: # Liste des events d'un calendrier
+les_polypodes_app_remove: # supprime un calendrier
+    path:     /{serverName}/remove/{calendarName}
+    defaults: { _controller: LesPolypodesAppBundle:Events:remove, serverName: baikal }
+    requirements:
+        serverName: baikal|calserv
+
+les_polypodes_app_event: # Liste des events d'un calendrier
     path:     /{serverName}/{calendarName}
     defaults: { _controller: LesPolypodesAppBundle:Events:event, serverName: baikal }
     requirements:
         serverName: baikal|calserv
 
-les_polypodes_app_list_raw: # Liste des events d'un calendrier en brut
+les_polypodes_app_event_raw: # Liste des events d'un calendrier en brut
     path:     /{serverName}/{calendarName}/raw
-    defaults: { _controller: LesPolypodesAppBundle:Events:eventRaw, serverName: baikal, start: null, end: null }
+    defaults: { _controller: LesPolypodesAppBundle:Events:eventRaw, serverName: baikal }
     requirements:
         serverName: baikal|calserv
 
@@ -66,9 +72,9 @@ les_polypodes_app_clear_hard: # Supprime un calendrier; puis le recréé
     requirements:
         serverName: baikal|calserv
 
-les_polypodes_app_event: # Visualise un évènement donné en propre et en brut
+les_polypodes_app_view: # Visualise un évènement donné en propre et en brut
     path:     /{serverName}/{calendarName}/{eventID}
-    defaults: { _controller: LesPolypodesAppBundle:Events:scdcListEvent, serverName: baikal, start: null, end: null }
+    defaults: { _controller: LesPolypodesAppBundle:Events:view, serverName: baikal}
     requirements:
         serverName: baikal|calserv
 

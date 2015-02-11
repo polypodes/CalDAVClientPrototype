@@ -1,8 +1,13 @@
 <hr />
 <ul>
-    <li><a href="{{ path('les_polypodes_app_create', {serverName: app.request.get('serverName')}) }}">Create</a></li>
-    <li><a href="{{ path('les_polypodes_app_update', {serverName: app.request.get('serverName'), id:1}) }}">Update</a></li>
-    <li><a href="{{ path('les_polypodes_app_list', {serverName: app.request.get('serverName')}) }}">List</a></li>
-    <li><a href="{{ path('les_polypodes_app_form', {serverName: app.request.get('serverName')}) }}">Form</a></li>
-    <li><a href="{{ path('les_polypodes_app_read', {serverName: app.request.get('serverName')}) }}">Read</a></li>
+	<li><a href="{{ path('les_polypodes_app_index', {serverName: app.request.get('serverName')}) }}">Calendar List</a></li>
+    <li><a href="{{ path('les_polypodes_app_event', {calendarName: calendarName, serverName: app.request.get('serverName')}) }}">Events</a></li>
+    <li><a href="{{ path('les_polypodes_app_event_raw', {calendarName: calendarName, serverName: app.request.get('serverName')}) }}">Events (raw)</a></li>
+    <li><a href="{{ path('les_polypodes_app_form', {calendarName: calendarName, serverName: app.request.get('serverName')}) }}">Form</a></li>
+	<li><a href="{{ path('les_polypodes_app_select', {calendarName: calendarName, serverName: app.request.get('serverName')}) }}">Select</a></li>
+    <li><a href="{{ path('les_polypodes_app_create', {calendarName: calendarName, serverName: app.request.get('serverName')}) }}">Create</a></li>
+    <li><a href="{{ path('les_polypodes_app_insert', {calendarName: calendarName, n:10, serverName: app.request.get('serverName')}) }}">Insert 10</a></li>
+    <li><a href="{{ path('les_polypodes_app_clear', {calendarName: calendarName, serverName: app.request.get('serverName')}) }}">Clear</a></li>
+    <li><a href="{{ path('les_polypodes_app_clear_hard', {calendarName: calendarName, serverName: app.request.get('serverName')}) }}">Clear Hard</a></li>
+    <li><a href="{{ path('les_polypodes_app_remove', {calendarName: calendarName, serverName: app.request.get('serverName')}) }}">Remove</a></li>
 </ul>
