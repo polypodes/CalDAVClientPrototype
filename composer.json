@@ -18,11 +18,11 @@
         "incenteev/composer-parameter-handler": "~2.0",
         "sabre/vobject":                        "~3.3",
         "fzaninotto/faker":                     "~1.4",
-        "sabre/dav":                            "~2.1.1"
+        "sabre/dav":                            "~2.1.1",
+        "phpunit/phpunit": "~4.5"
     },
     "require-dev": {
         "sensio/generator-bundle":      "~2.3",
-        "phpunit/phpunit":              "dev-master",
         "squizlabs/php_codesniffer":    "2.*",
         "sebastian/phpcpd":             "*",
         "phploc/phploc" :               "*",

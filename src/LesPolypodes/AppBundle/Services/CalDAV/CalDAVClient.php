@@ -288,8 +288,18 @@ class CalDAVClient
         log_message('INTERNALS', 'RPLh: ' . var_export($this->httpResponseHeaders, TRUE));
         log_message('INTERNALS', 'RPLb: ' . var_export($this->httpResponseBody, TRUE));
         */
-
-// echo 'Req : <pre>HEAD:'.$this->httpRequest.'BODY:'.$this->body.'</pre><br/>Resp : <pre>'.$response.'</pre>';
+echo'<div>
+        <input type="button" value="';
+echo $this->requestMethod;
+echo '" onclick=
+            "if (this.parentNode.getElementsByTagName(\'div\')[0].style.display != \'block\') {
+                    this.parentNode.getElementsByTagName(\'div\')[0].style.display = \'block\';
+                } else {
+                    this.parentNode.getElementsByTagName(\'div\')[0].style.display = \'none\';
+                }"/>
+        <div style="display: none;">';
+echo 'Req : <pre>HEAD:'.$this->httpRequest.'BODY:'.$this->body.'</pre><br/>Resp : <pre>'.$response.'</pre>';
+echo '</div></div>';
 
         return $response;
     }
@@ -530,6 +540,20 @@ class CalDAVClient
 
         return $this->httpResultCode;
     }
+
+
+    public function DoRMCALRequest($id)
+    {
+        
+        $this->body = "";
+        $this->requestMethod = "DELETE";
+        $this->SetDepth('infinity');
+        $this->DoRequest($this->full_url.$id.'/');
+                die($this->httpResultCode);
+    }
+
+
+
 
     /**
      * Get/Set the calendar-home-set URL

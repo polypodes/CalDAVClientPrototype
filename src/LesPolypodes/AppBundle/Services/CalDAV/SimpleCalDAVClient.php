@@ -273,8 +273,7 @@ class SimpleCalDAVClient
     {
         $this->checkCalendar();
         
-        // Is there a '/' at the end of the url?
-        // WTF are you using this var for ?
+    // Is there a '/' at the end of the url?
         if (! preg_match('#^.*?/$#', $this->getClient()->calendar_url, $matches)) {
             $url = $this->getClient()->calendar_url.'/';
         } else {
@@ -302,6 +301,23 @@ class SimpleCalDAVClient
             throw new CalDAVException('Recieved unknown HTTP status', $this->getClient());
         }
     }
+
+
+
+    function deleteCal($calendarName)
+    {
+        $calendarID = $this->findCalendarIDByName($calendarName);
+        // $calendarID = $this->findCalendarIDByName($calendarName);
+
+        if ($calendarID == null) {
+            throw new \Exception('No calendar found with the name "'.$calendarName.'".');
+        }
+
+        $this->getClient()->DoRMCALRequest($calendarID);
+    }
+
+
+
 
     /**
      * Gets a all events from the CalDAV-Server which lie in a defined time interval.
