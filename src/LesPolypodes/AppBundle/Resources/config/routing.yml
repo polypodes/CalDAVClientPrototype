@@ -58,3 +58,9 @@ les_polypodes_app_dev_insert:
     requirements:
         n: \d+
         serverName: baikal|calserv
+
+les_polypodes_app_read:
+    path:     /{serverName}/events/read/
+    defaults: { _controller: LesPolypodesAppBundle:Events:read, serverName: baikal }
+    requirements:
+        serverName: baikal|calserv

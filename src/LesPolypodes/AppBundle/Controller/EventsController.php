@@ -342,4 +342,22 @@ class EventsController extends Controller
                 'serverName' => $serverName,
             ));
     }
+
+    public function readAction ()
+    {
+        $sorting = new FormCal();
+        $sorting->setStartDate(new \DateTime());
+        $sorting->setEndDate((new \DateTime())->add(new \DateInterval('PT1H')));
+
+        $form = $this->createFormBuilder($sorting)
+            ->add('startDate', 'datetime')
+            ->add('endDate', 'datetime')
+            ->add('Valider', 'submit')
+            ->getForm();
+
+        return $this->render('LesPolypodesAppBundle:Events:read.html.twig', array(
+            'form' => $form->createView(),
+        ));
+
+    }
 }
