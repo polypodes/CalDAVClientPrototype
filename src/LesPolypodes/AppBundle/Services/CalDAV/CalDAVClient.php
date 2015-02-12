@@ -519,7 +519,7 @@ class CalDAVClient
         $this->requestMethod = "MKCALENDAR";
 
         $this->SetContentType('application/xml; charset="utf-8"');
-        $this->DoRequest($url);
+        $this->DoXMLRequest($url);
         echo var_dump($this->body);
     }
 
@@ -545,8 +545,15 @@ class CalDAVClient
     }
 
     /**
-     * I'm working on this
+     * Delete the given event from the server.
+     *
+     *
      * @author yolan
+     *
+     * @param string $url The URL to make the request to
+     * @param string $etag The etag of an existing resource to be deleted, or '*' for any resource at that URL.
+     *
+     * @return int The HTTP Result Code for the DELETE
      */
     public function DoRMCALRequest($id)
     {

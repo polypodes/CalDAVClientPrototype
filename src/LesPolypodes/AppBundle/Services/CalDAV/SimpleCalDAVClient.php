@@ -303,7 +303,29 @@ class SimpleCalDAVClient
     }
 
 
+    /**
+     * Create a calendar
+     * 
+     * @author Yolan
+     * @param string $calendarName
+     *
+     * @throws \Exception
+     */
+    public function makeCal($calendarName)
+    {
 
+        $this->getClient()->DoMKCALENDARRequest($url, $body);
+    }
+
+
+    /**
+     * Delete the given calendar from the server
+     *
+     * @author Yolan
+     * @param string $calendarName
+     *
+     * @throws \Exception
+     */
     function deleteCal($calendarName)
     {
         $calendarID = $this->findCalendarIDByName($calendarName);
@@ -315,8 +337,6 @@ class SimpleCalDAVClient
 
         $this->getClient()->DoRMCALRequest($calendarID);
     }
-
-
 
 
     /**
@@ -421,57 +441,6 @@ class SimpleCalDAVClient
         return $report;
     }
 
-    /**
-     * @author Yolan
-     * @param string $url
-     * @param string $calname
-     *
-     * @throws \Exception
-     */
-    public function mkcal($url, $calname)
-    {
-        $body = <<<EOT
-<?xml version="1.0" encoding="utf-8" ?>
-<C:mkcalendar xmlns:D="DAV:"
-             xmlns:C="urn:ietf:params:xml:ns:caldav">
- <D:set>
-   <D:prop>
-     <D:displayname>'.$calname.'</D:displayname>
-     <C:calendar-description xml:lang="en"
->A calendar made to test the new feature.</C:calendar-description>
-     <C:supported-calendar-component-set>
-       <C:comp name="VEVENT"/>
-     </C:supported-calendar-component-set>
-     <C:calendar-timezone><![CDATA[BEGIN:VCALENDAR
-PRODID:-//SabreDAV//SabreDAV 1.8.7//EN
-VERSION:2.0
-CALSCALE:GREGORIAN
-BEGIN:VTIMEZONE
-TZID:Europe/Paris
-BEGIN:STANDARD
-DTSTART:19671029T020000
-RRULE:FREQ=YEARLY;BYDAY=-1SU;BYMONTH=10
-TZOFFSETFROM:-0400
-TZOFFSETTO:-0500
-TZNAME:Eastern Standard Time (US & Canada)
-END:STANDARD
-BEGIN:DAYLIGHT
-DTSTART:19870405T020000
-RRULE:FREQ=YEARLY;BYDAY=1SU;BYMONTH=4
-TZOFFSETFROM:-0500
-TZOFFSETTO:-0400
-TZNAME:Eastern Daylight Time (US & Canada)
-END:DAYLIGHT
-END:VTIMEZONE
-END:VCALENDAR
-]]></C:calendar-timezone>
-   </D:prop>
- </D:set>
-</C:mkcalendar>
-EOT;
-
-        $this->getClient()->DoMKCALENDARRequest($url, $body);
-    }
 
     /**
      * identifie l'id d'un calendrier grâce à son nom.

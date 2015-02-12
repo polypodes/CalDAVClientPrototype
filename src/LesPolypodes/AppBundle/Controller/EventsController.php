@@ -114,6 +114,9 @@ class EventsController extends Controller
             'notice',
             'Not implemented yet');
 
+        $calDavClient = $this->getSimplecalDavClient($serverName);
+        
+
         return $this->redirect($this->generateUrl('les_polypodes_app_index', array(
             'serverName' => $serverName,
         )));
@@ -133,7 +136,6 @@ class EventsController extends Controller
         
         $calDavClient = $this->getSimplecalDavClient($serverName);
         $calendars = $calDavClient->findCalendars();
-        $result = array();
 
         $calDavClient->deleteCal($calendarName);
 
