@@ -436,9 +436,30 @@ class EventsController extends Controller
     {
         // TODO: Select one event by UID, display it.
 
+        $calDavClient = $this->getSimplecalDavClient($serverName, $calendarName);
+        $events = $calDavClient->getEvents();
+
+        $reader = new Reader();
+
+        $dataContainer = new \stdClass();
+        $dataContainer->vcal = null;
+        $dataContainer->dateStart = null;
+        $dataContainer->dateEnd = null;
+
+        foreach ($events as $event){
+            $vCal = $reader->read($event->getData());
+            if ($vCal->VEVENT->UID == $eventID) {
+                break;
+            }
+        }
+
+        $dataContainer->vcal = $vCal;
+        $dataContainer->dateStart = (new \datetime($vCal->VEVENT->DTSTART))->format('Y-m-d H:i');
+        $dataContainer->dateEnd = (new \datetime($vCal->VEVENT->DTEND))->format('Y-m-d H:i');
+        
         return $this->render('LesPolypodesAppBundle:Events:view.html.twig', array(
-            'form' => $form->createView(),
             'calendarName' => $calendarName,
+            'data' => $dataContainer,
         ));
     }
 

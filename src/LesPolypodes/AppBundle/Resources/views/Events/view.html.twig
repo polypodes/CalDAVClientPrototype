@@ -1,3 +1,32 @@
 View | {{ app.request.get('serverName') }} | {{ calendarName }}
 
+<h4>Selected event</h4>
+
+<fieldset class='event' style='margin-bottom: 10px;'>
+        {% if data.vcal.vevent.summary is defined %}
+    	   <legend>{{ data.vcal.vevent.summary }}</legend>
+        {% else %}
+            <legend>Évènement</legend>
+        {% endif %}
+
+        | <a id="delete" href="{{ path('les_polypodes_app_delete', {serverName: app.request.get('serverName'), calendarName:calendarName, eventID:data.vcal.vevent.uid}) }}">Delete this event</a>
+        | <a id="update" href="{{ path('les_polypodes_app_update', {serverName: app.request.get('serverName'), calendarName:calendarName, eventID:data.vcal.vevent.uid}) }}">Edit this event</a>
+        |
+                
+    	<p>De : {{ data.dateStart }}&ensp;À : {{ data.dateEnd }}</p>
+		{% if data.vcal.vevent.location is defined %}
+			<p>Lieu : {{ data.vcal.vevent.location }}</p>
+		{% endif %}
+		{% if data.vcal.vevent.description is defined %}
+            {% autoescape false %}
+        	<p>{{ data.vcal.vevent.description }}</p>
+            {% endautoescape %}
+        {% else %}
+            <i>aucune description</i>
+		{% endif %}
+</fieldset>
+
+<h4 style="margin-bottom:0px;">Rawish Version</h4>
+<pre style="display:inline-block;margin:20px;">{{ data.vcal.serialize }}</pre>
+
 {{ include('@LesPolypodesApp/Events/common/menu.html.twig') }}
