@@ -3,6 +3,7 @@ les_polypodes_app_index: # Liste des calendriers d'un serveur
     defaults: { _controller: LesPolypodesAppBundle:Events:index, serverName: baikal }
     requirements:
         serverName: baikal|calserv
+        calendarName: \d
 
 les_polypodes_app_add: # Ajoute un calendrier au serveur, ne fonctionne pas
     path:     /{serverName}/add/{calendarName}

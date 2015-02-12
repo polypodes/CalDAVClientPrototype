@@ -3,6 +3,20 @@ Calendars | {{ app.request.get('serverName') }}
 <h2><span class="calLength">{{ result|length }}</span>
 	Remote calendars{% if 0 < result|length  %} exist!{% endif %}</h2>
 
+{% autoescape false %}
+<div style="margin-bottom:20px;">
+	<input type="text">
+	<button onclick="
+		var calname = this.parentNode.getElementsByTagName('input')[0].value;
+		if (calname.length > 0){
+			window.location.href = '{{ path('les_polypodes_app_index', {serverName: app.request.get('serverName')}) }}/add/' + calname;
+		} else {
+			alert('Empty value !');
+		}
+	">Add</button>
+</div>
+{% endautoescape %}
+
 {% for flashMessage in app.session.flashbag.get('notice') %}
     <div class="flash-notice">
         <h4>{{ flashMessage }}</h4>
@@ -30,7 +44,7 @@ Calendars | {{ app.request.get('serverName') }}
 				Clear</a>
 				</td><td><a id="clearhard_{{ loop.index }}" href="{{ path('les_polypodes_app_clear_hard', {calendarName:item.calendar.displayname, serverName: app.request.get('serverName')}) }}">
 				Clear Hard</a>
-				</td><td><a id="remove_{{ loop.index }}" href="{{ path('les_polypodes_app_remove', {calendarName:item.calendar.displayname, serverName: app.request.get('serverName')}) }}">
+				</td><td><a id="remove_{{ loop.index }}" href="{{ path('les_polypodes_app_remove', {calendarName:item.calendar.displayname, serverName: app.request.get('serverName')}) }}" onclick="return confirm('Are you sure?');">
 				Remove</a>
 	    </td></tr>
 	{% endfor %}
