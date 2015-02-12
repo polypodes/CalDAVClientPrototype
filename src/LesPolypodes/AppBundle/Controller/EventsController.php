@@ -110,6 +110,10 @@ class EventsController extends Controller
     public function addAction($serverName, $calendarName)
     {
         // TODO: add 1 calendar
+        $this->get('session')->getFlashBag()->add(
+            'notice',
+            'Not implemented yet');
+
         return $this->redirect($this->generateUrl('les_polypodes_app_index', array(
             'serverName' => $serverName,
         )));
@@ -395,7 +399,7 @@ class EventsController extends Controller
 
         $this->get('session')->getFlashBag()->add(
             'notice',
-            'Le calendrier a bien été nettoyé !');
+            'The calendar '.$calendarName.' has been cleared !');
 
         return $this->redirect($this->generateUrl('les_polypodes_app_index', array(
             'serverName' => $serverName,
@@ -415,6 +419,10 @@ class EventsController extends Controller
     public function clearHardAction($serverName, $calendarName)
     {
         // TODO: Delete a calendar, save his name, and create one with the same name, then show all calendars.
+        
+        $this->get('session')->getFlashBag()->add(
+            'notice',
+            'Not implemented yet');
 
         return $this->redirect($this->generateUrl('les_polypodes_app_index', array(
             'serverName' => $serverName,
