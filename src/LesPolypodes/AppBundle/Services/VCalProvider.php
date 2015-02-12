@@ -49,7 +49,7 @@ class VCalProvider extends ContainerAware {
         $vevent->add('DTEND', $event->getEndDate()->format('Ymd\THis'));
         $vevent->add('X-ODE-PRICE', sprintf('%d€', $event->getPrice()));
         $vevent->add('DESCRIPTION', $event->getDescription());
-
+        
         return $vcal;
     }
 

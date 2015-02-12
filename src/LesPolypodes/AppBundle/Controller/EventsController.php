@@ -502,7 +502,7 @@ class EventsController extends Controller
 
         $this->get('session')->getFlashBag()->add(
             'notice',
-            'L\'évènement a bien été supprimé !');
+            'The event "'.$vCal->VEVENT->SUMMARY.'" has been deleted !');
 
         return $this->redirect($this->generateUrl('les_polypodes_app_event', array(
             'calendarName' => $calendarName,

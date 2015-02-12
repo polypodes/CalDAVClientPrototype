@@ -13,7 +13,7 @@ Events | {{ app.request.get('serverName') }} | {{ calendarName }}
         {% if data.vcal.vevent.summary is defined %}
     	   <legend>{{ data.vcal.vevent.summary }}</legend>
         {% else %}
-            <legend>Évènement {{ loop.index }}</legend>
+            <legend>Event {{ loop.index }}</legend>
         {% endif %}
 
         | <a id="view_{{ loop.index}}" href="{{ path('les_polypodes_app_view', {serverName: app.request.get('serverName'), calendarName:calendarName, eventID:data.vcal.vevent.uid}) }}">View this event</a>
@@ -21,9 +21,9 @@ Events | {{ app.request.get('serverName') }} | {{ calendarName }}
         | <a id="update_{{ loop.index}}" href="{{ path('les_polypodes_app_update', {serverName: app.request.get('serverName'), calendarName:calendarName, eventID:data.vcal.vevent.uid}) }}">Edit this event</a>
         |
                 
-    	<p>De : {{ data.dateStart }}&ensp;À : {{ data.dateEnd }}</p>
+    	<p>From : {{ data.dateStart }}&ensp;To : {{ data.dateEnd }}</p>
 		{% if data.vcal.vevent.location is defined %}
-			<p>Lieu : {{ data.vcal.vevent.location }}</p>
+			<p>Location : {{ data.vcal.vevent.location }}</p>
 		{% endif %}
 		{% if data.vcal.vevent.description is defined %}
             {% autoescape false %}
