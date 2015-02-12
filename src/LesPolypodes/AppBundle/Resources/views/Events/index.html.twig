@@ -1,9 +1,7 @@
 Calendars | {{ app.request.get('serverName') }}
 
-<h2><span class="calLength">{{ result|length }}</span>
-	Remote calendars{% if 0 < result|length  %} exist!{% endif %}</h2>
+<h2>Remote calendars{% if 0 < result|length  %} exist!{% endif %}</h2>
 
-{% autoescape false %}
 <div style="margin-bottom:20px;">
 	<input type="text">
 	<button onclick="
@@ -15,7 +13,6 @@ Calendars | {{ app.request.get('serverName') }}
 		}
 	">Add</button>
 </div>
-{% endautoescape %}
 
 {% for flashMessage in app.session.flashbag.get('notice') %}
     <div class="flash-notice">
@@ -23,29 +20,30 @@ Calendars | {{ app.request.get('serverName') }}
     </div>
 {% endfor %}
 
-	<table>
-	{% for item in result %}
-	    	<tr>
-			<td><a id="link_{{ loop.index}}" href="{{ path('les_polypodes_app_event', {calendarName:item.calendar.displayname, serverName: app.request.get('serverName')}) }}">
-	    		{{ item.calendar.displayname }} (ID: {{ item.calendar.calendarid }})
-	    	</a>
-				</td><td>count: {{ item.length }} events
-				</td><td><a id="raw_{{ loop.index }}" href="{{ path('les_polypodes_app_event_raw', {calendarName:item.calendar.displayname, serverName: app.request.get('serverName')}) }}">
-				Raw</a>
-				</td><td><a id="form_{{ loop.index }}" href="{{ path('les_polypodes_app_form', {calendarName:item.calendar.displayname, serverName: app.request.get('serverName')}) }}">
-				Form</a>
-				</td><td><a id="select_{{ loop.index }}" href="{{ path('les_polypodes_app_select', {calendarName:item.calendar.displayname, serverName: app.request.get('serverName')}) }}">
-				Select</a>
-				</td><td><a id="create_{{ loop.index }}" href="{{ path('les_polypodes_app_create', {calendarName:item.calendar.displayname, serverName: app.request.get('serverName')}) }}">
-				Create 1</a>
-				</td><td><a id="insert10_{{ loop.index }}" href="{{ path('les_polypodes_app_insert', {calendarName:item.calendar.displayname, n:10, serverName: app.request.get('serverName')}) }}">
-				Insert 10</a>
-				</td><td><a id="clear_{{ loop.index }}" href="{{ path('les_polypodes_app_clear', {calendarName:item.calendar.displayname, serverName: app.request.get('serverName')}) }}">
-				Clear</a>
-				</td><td><a id="clearhard_{{ loop.index }}" href="{{ path('les_polypodes_app_clear_hard', {calendarName:item.calendar.displayname, serverName: app.request.get('serverName')}) }}">
-				Clear Hard</a>
-				</td><td><a id="remove_{{ loop.index }}" href="{{ path('les_polypodes_app_remove', {calendarName:item.calendar.displayname, serverName: app.request.get('serverName')}) }}" onclick="return confirm('Are you sure?');">
-				Remove</a>
-	    </td></tr>
-	{% endfor %}
+<h5 class="calLength">{{ result|length }} calendars found !</h5>
+<table>
+{% for item in result %}
+    <tr>
+		<td><a id="link_{{ loop.index}}" href="{{ path('les_polypodes_app_event', {calendarName:item.calendar.displayname, serverName: app.request.get('serverName')}) }}">
+    		{{ item.calendar.displayname }} (ID: {{ item.calendar.calendarid }})
+    	</a>
+		</td><td>count: {{ item.length }} events
+		</td><td><a id="raw_{{ loop.index }}" href="{{ path('les_polypodes_app_event_raw', {calendarName:item.calendar.displayname, serverName: app.request.get('serverName')}) }}">
+		Raw</a>
+		</td><td><a id="form_{{ loop.index }}" href="{{ path('les_polypodes_app_form', {calendarName:item.calendar.displayname, serverName: app.request.get('serverName')}) }}">
+		Form</a>
+		</td><td><a id="select_{{ loop.index }}" href="{{ path('les_polypodes_app_select', {calendarName:item.calendar.displayname, serverName: app.request.get('serverName')}) }}">
+		Select</a>
+		</td><td><a id="create_{{ loop.index }}" href="{{ path('les_polypodes_app_create', {calendarName:item.calendar.displayname, serverName: app.request.get('serverName')}) }}">
+		Create 1</a>
+		</td><td><a id="insert10_{{ loop.index }}" href="{{ path('les_polypodes_app_insert', {calendarName:item.calendar.displayname, n:10, serverName: app.request.get('serverName')}) }}">
+		Insert 10</a>
+		</td><td><a id="clear_{{ loop.index }}" href="{{ path('les_polypodes_app_clear', {calendarName:item.calendar.displayname, serverName: app.request.get('serverName')}) }}">
+		Clear</a>
+		</td><td><a id="clearhard_{{ loop.index }}" href="{{ path('les_polypodes_app_clear_hard', {calendarName:item.calendar.displayname, serverName: app.request.get('serverName')}) }}">
+		Clear Hard</a>
+		</td><td><a id="remove_{{ loop.index }}" href="{{ path('les_polypodes_app_remove', {calendarName:item.calendar.displayname, serverName: app.request.get('serverName')}) }}" onclick="return confirm('Are you sure?');">
+		Remove</a>
+    </td></tr>
+{% endfor %}
 </table>
