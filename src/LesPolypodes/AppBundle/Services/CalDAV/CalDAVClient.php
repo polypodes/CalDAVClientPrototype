@@ -291,18 +291,18 @@ class CalDAVClient
 
 // récommenter pour afficher request/response
 
-// echo'<div>
-//         <input type="button" value="';
-// echo $this->requestMethod;
-// echo '" onclick=
-//             "if (this.parentNode.getElementsByTagName(\'div\')[0].style.display != \'block\') {
-//                     this.parentNode.getElementsByTagName(\'div\')[0].style.display = \'block\';
-//                 } else {
-//                     this.parentNode.getElementsByTagName(\'div\')[0].style.display = \'none\';
-//                 }"/>
-//         <div style="display: none;">';
-// echo 'Req : <pre>HEAD:'.$this->httpRequest.'BODY:'.$this->body.'</pre><br/>Resp : <pre>'.$response.'</pre>';
-// echo '</div></div>';
+echo'<div>
+        <input type="button" value="';
+echo $this->requestMethod;
+echo '" onclick=
+            "if (this.parentNode.getElementsByTagName(\'div\')[0].style.display != \'block\') {
+                    this.parentNode.getElementsByTagName(\'div\')[0].style.display = \'block\';
+                } else {
+                    this.parentNode.getElementsByTagName(\'div\')[0].style.display = \'none\';
+                }"/>
+        <div style="display: none;">';
+echo 'Req : <pre>HEAD:'.$this->httpRequest.'BODY:'.$this->body.'</pre><br/>Resp : <pre>'.$response.'</pre>';
+echo '</div></div>';
 
         return $response;
     }
@@ -510,20 +510,6 @@ class CalDAVClient
     }
 
     /**
-     * Rajouté par Yolan, ne fonctionne pas.
-     */
-    public function DoMKCALENDARRequest($url, $rqbody)
-    {
-        $this->body = $rqbody;
-
-        $this->requestMethod = "MKCALENDAR";
-
-        $this->SetContentType('application/xml; charset="utf-8"');
-        $this->DoXMLRequest($url);
-        echo var_dump($this->body);
-    }
-
-    /**
      * DELETE a text/icalendar resource
      *
      * @param string $url The URL to make the request to
@@ -562,6 +548,68 @@ class CalDAVClient
         $this->requestMethod = "DELETE";
         $this->SetDepth('infinity');
         $this->DoRequest($this->full_url.$id.'/');
+    }
+
+    /**
+     * Rajouté par Yolan, ne fonctionne pas.
+     */
+    public function DoMKCALENDARRequest($calendarName)
+    {
+        $request_method = 'MKCALENDAR';
+
+        $calendarID = 'Generate-here-an-UUID'.'/';
+
+        $xml=
+'<?xml version="1.0" encoding="utf-8" ?>
+<C:mkcalendar   xmlns:D="DAV:"
+                xmlns:C="urn:ietf:params:xml:ns:caldav">
+    <D:set>
+        <D:prop>
+            <D:displayname>'.$calendarName.'</D:displayname>
+            <C:calendar-description xml:lang="en"
+>Calendar restricted to events.</C:calendar-description>
+            <C:supported-calendar-component-set>
+                <C:comp name="VEVENT"/>
+            </C:supported-calendar-component-set>
+            <C:calendar-timezone><![CDATA[BEGIN:VCALENDAR
+PRODID:-//Example Corp.//CalDAV Client//EN
+VERSION:2.0
+BEGIN:VTIMEZONE
+TZID:US-Eastern
+LAST-MODIFIED:19870101T000000Z
+BEGIN:STANDARD
+DTSTART:19671029T020000
+RRULE:FREQ=YEARLY;BYDAY=-1SU;BYMONTH=10
+TZOFFSETFROM:-0400
+TZOFFSETTO:-0500
+TZNAME:Eastern Standard Time (US & Canada)
+END:STANDARD
+BEGIN:DAYLIGHT
+DTSTART:19870405T020000
+RRULE:FREQ=YEARLY;BYDAY=1SU;BYMONTH=4
+TZOFFSETFROM:-0500
+TZOFFSETTO:-0400
+TZNAME:Eastern Daylight Time (US & Canada)
+END:DAYLIGHT
+END:VTIMEZONE
+END:VCALENDAR
+]]></C:calendar-timezone>
+        </D:prop>
+    </D:set>
+</C:mkcalendar>';
+
+        $url = $this->full_url.$calendarID;
+
+        $this->DoXMLRequest($request_method, $xml, $url);
+
+        return $this->httpResultCode;
+        // $this->body = $rqbody;
+
+        // $this->requestMethod = "MKCALENDAR";
+
+        // $this->SetContentType('application/xml; charset="utf-8"');
+        // $this->DoXMLRequest($url);
+        // echo var_dump($this->body);
     }
 
 

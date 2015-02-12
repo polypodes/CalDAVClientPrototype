@@ -115,6 +115,7 @@ class EventsController extends Controller
             'Not implemented yet');
 
         $calDavClient = $this->getSimplecalDavClient($serverName);
+        $calDavClient->makeCal($calendarName);
         
 
         return $this->redirect($this->generateUrl('les_polypodes_app_index', array(

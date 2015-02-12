@@ -313,8 +313,16 @@ class SimpleCalDAVClient
      */
     public function makeCal($calendarName)
     {
+        $st = $this->getClient()->DoMKCALENDARRequest($calendarName);
 
-        $this->getClient()->DoMKCALENDARRequest($url, $body);
+        if ($st == '201')
+        {
+            return true;
+        }
+        else
+        {
+            die('Erreur à la création du calendrier '.$calendarName);
+        }
     }
 
 
