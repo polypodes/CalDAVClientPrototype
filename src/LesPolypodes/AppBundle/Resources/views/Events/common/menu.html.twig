@@ -9,5 +9,5 @@
     <li><a href="{{ path('les_polypodes_app_insert', {calendarName: calendarName, n:10, serverName: app.request.get('serverName')}) }}">Insert 10</a></li>
     <li><a href="{{ path('les_polypodes_app_clear', {calendarName: calendarName, serverName: app.request.get('serverName')}) }}">Clear</a></li>
     <li><a href="{{ path('les_polypodes_app_clear_hard', {calendarName: calendarName, serverName: app.request.get('serverName')}) }}">Clear Hard</a></li>
-    <li><a href="{{ path('les_polypodes_app_remove', {calendarName: calendarName, serverName: app.request.get('serverName')}) }}">Remove</a></li>
+    <li><a href="{{ path('les_polypodes_app_remove', {calendarName: calendarName, serverName: app.request.get('serverName')}) }}" onclick="return confirm('Are you sure?')";>Remove</a></li>
 </ul>
