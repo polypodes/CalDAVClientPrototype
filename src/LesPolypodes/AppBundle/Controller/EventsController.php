@@ -83,7 +83,7 @@ class EventsController extends Controller
         $calDavClient = $this->getSimplecalDavClient($serverName);
 
         //set to true for debugging.
-        $calDavClient->getClient()->dev = true;
+        $calDavClient->getClient()->dev = false;
 
         $calendars = $calDavClient->findCalendars();
         $result = array();

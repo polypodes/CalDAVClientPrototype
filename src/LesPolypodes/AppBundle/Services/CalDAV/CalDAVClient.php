@@ -12,6 +12,8 @@
 
 namespace LesPolypodes\AppBundle\Services\CalDAV;
 
+use Sabre\DAV\UUIDUtil;
+
 class CalDAVClient
 {
     /**
@@ -601,10 +603,9 @@ EOXML;
      */
     public function DoMKCALENDARRequest($calendarName, $calendarDescription, $datas)
     {
-        // $uuidGen = new UUIDUtil();
+        $uuidGen = new UUIDUtil();
 
-        // $calendarID = $uuidGen->getUUID().'/';
-        $calendarID = 'UIDDFGHJKOJASKKNJNKJNSA'.'/';
+        $calendarID = $uuidGen->getUUID().'/';
 
         $request_method = 'MKCALENDAR';
 
