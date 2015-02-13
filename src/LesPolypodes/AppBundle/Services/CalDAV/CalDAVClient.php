@@ -307,9 +307,11 @@ class CalDAVClient
                     this.parentNode.getElementsByTagName(\'div\')[0].style.display = \'none\';
                 }"/>
         <div style="display: none;">';
-            echo var_dump($this->body);
-            echo 'Req : <pre>HEAD:'.$this->httpRequest.'BODY:'.$this->body.'</pre><br/>Resp : <pre>'.$response.'</pre>';
-            echo '</div></div>';
+            echo 'Req : <pre>HEAD:'.$this->httpRequest.'BODY:';
+            var_dump($this->body);
+            echo '</pre><br/>Resp : <pre>';
+            var_dump($response);
+            echo '</pre></div></div>';
         }
 
 
