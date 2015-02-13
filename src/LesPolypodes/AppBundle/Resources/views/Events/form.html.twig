@@ -1,13 +1,13 @@
 Form | {{ app.request.get('serverName') }} | {{ calendarName }}
 
-<h3>Formulaire de création d'évènement</h3>
+<h3>Create an Event</h3>
 
 <div class="well">
 	{{ form_start(form, {'attr': {'class': 'form-horizontal'}}) }}
 		{{ form_errors(form) }}
 
 		<table><tr><div class="form-group">
-			<td>{{ form_label(form.name, "Nom de l'évènement") }}
+			<td>{{ form_label(form.name, "Event name") }}
 			{{ form_errors(form.name) }}</td>
 
 			<td><div class="col-sm-4">
@@ -16,7 +16,7 @@ Form | {{ app.request.get('serverName') }} | {{ calendarName }}
 		</div></tr>
 
 		  <tr><div class="form-group"><td>
-		    {{ form_label(form.startDate, "Date et heure de début") }}
+		    {{ form_label(form.startDate, "Start") }}
 		    {{ form_errors(form.startDate) }}</td>
 
     		<td><div class="col-sm-4">
@@ -25,7 +25,7 @@ Form | {{ app.request.get('serverName') }} | {{ calendarName }}
     	</div></tr>
 
   		<tr><td><div class="form-group">
-      		{{ form_label(form.endDate, "Date et heure de fin") }}
+      		{{ form_label(form.endDate, "End") }}
       		{{ form_errors(form.endDate) }}</td>
 
     		<td><div class="col-sm-4">
@@ -34,7 +34,7 @@ Form | {{ app.request.get('serverName') }} | {{ calendarName }}
    		</div></td></tr>
 
   		<tr><div class="form-group">
-  			<td>{{ form_label(form.location, "Adresse") }}
+  			<td>{{ form_label(form.location, "Location") }}
   			{{ form_errors(form.location) }}</td>
 
   			<td><div class="col-sm-4">
@@ -43,7 +43,7 @@ Form | {{ app.request.get('serverName') }} | {{ calendarName }}
   		</div></tr>
 
   		<tr><div class="form-group">
-      		<td>{{ form_label(form.description, "Description de l'évènement") }}
+      		<td>{{ form_label(form.description, "Description") }}
       		{{ form_errors(form.description) }}</td>
       		<td><div class="col-sm-4">
         		{{ form_widget(form.description) }}
@@ -51,7 +51,7 @@ Form | {{ app.request.get('serverName') }} | {{ calendarName }}
     	</div></tr>
 
     	<tr><div class="form-group">
-        <td>{{ form_label(form.price, "Prix de l'évènement") }}
+        <td>{{ form_label(form.price, "Price") }}
           {{ form_errors(form.price) }}</td>
         <td> <div class="col-sm-4">
           {{ form_widget(form.price) }}
@@ -59,7 +59,7 @@ Form | {{ app.request.get('serverName') }} | {{ calendarName }}
       </div></tr>
 
       <tr><div class="form-group">
-        <td>{{ form_label(form.organizer, "Email de l'organisateur") }}
+        <td>{{ form_label(form.organizer, "Email") }}
           {{ form_errors(form.organizer) }}</td>
         <td> <div class="col-sm-4">
           {{ form_widget(form.organizer) }}

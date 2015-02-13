@@ -7,7 +7,7 @@ Select | {{ app.request.get('serverName') }} | {{ calendarName }}
 		{{ form_errors(form) }}
 	<table>
 		<tr><div class="form-group"><td>
-		    {{ form_label(form.startDate, "Date et heure de début") }}
+		    {{ form_label(form.startDate, "Start") }}
 		    {{ form_errors(form.startDate) }}</td>
 
     		<td><div class="col-sm-4">
@@ -16,7 +16,7 @@ Select | {{ app.request.get('serverName') }} | {{ calendarName }}
     	</div></tr>
 
   		<tr><td><div class="form-group">
-      		{{ form_label(form.endDate, "Date et heure de fin") }}
+      		{{ form_label(form.endDate, "End") }}
       		{{ form_errors(form.endDate) }}</td>
 
     		<td><div class="col-sm-4">
