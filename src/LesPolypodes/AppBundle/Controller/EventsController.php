@@ -328,7 +328,7 @@ class EventsController extends Controller
             ->add('description', 'textarea')
             ->add('price', 'money')
             ->add('organizer','email')
-            ->add('Valider', 'submit')
+            ->add('Sumbit', 'submit')
             ->getForm();
 
         $form->handleRequest($request);
@@ -360,25 +360,52 @@ class EventsController extends Controller
      *
      * @param $serverName
      * @param $calendarName
-     * @param $n
      *
      * @return \Symfony\Component\HttpFoundation\Response
      * @throws \Exception
      */
-    public function selectAction ($serverName, $calendarName)
+    public function selectAction (Request $request, $serverName, $calendarName)
     {
-        $calDavClient = $this->getSimplecalDavClient($serverName, $calendarName);
-        // TODO: A form that searchs events
+        $data = array(
+            "startDate" => new \DateTime(),
+            "endDate" =>((new \DateTime())->add(new \DateInterval('PT1H'))),
+        );
+        $form = $this->createFormBuilder($data)
+                    ->add('startDate', 'datetime')
+                    ->add('endDate', 'datetime')
+                    ->add('Sumbit', 'submit')
+                    ->getForm();
 
-        $sorting = new FormCal();
-        $sorting->setStartDate(new \DateTime());
-        $sorting->setEndDate((new \DateTime())->add(new \DateInterval('PT1H')));
+        $form->handleRequest($request);
 
-        $form = $this->createFormBuilder($sorting)
-            ->add('startDate', 'datetime')
-            ->add('endDate', 'datetime')
-            ->add('Valider', 'submit')
-            ->getForm();
+        if ($form->isValid()) {
+            $calDavClient = $this->getSimplecalDavClient($serverName, $calendarName);
+
+            $events = $calDavClient->getEvents($data["startDate"]->format('Ymd\THis\Z'), $data["endDate"]->format('Ymd\THis\Z'));
+
+            $dataContainer = new \stdClass();
+            $dataContainer->vcal = null;
+            $dataContainer->dateStart = null;
+            $dataContainer->dateEnd = null;
+
+            $datas = [];
+
+            $reader = new Reader();
+            
+            foreach ($events as $event) {
+                $vcal = $reader->read($event->getData());
+                $dataContainer->vcal = $vcal;
+                $dataContainer->dateStart = (new \datetime($vcal->VEVENT->DTSTART))->format('Y-m-d H:i');
+                $dataContainer->dateEnd = (new \datetime($vcal->VEVENT->DTEND))->format('Y-m-d H:i');
+
+                $datas[] = clone $dataContainer;
+            }
+
+            return $this->render('LesPolypodesAppBundle:Events:event.html.twig', array(
+                'calendarName' => $calendarName,
+                'datas' => $datas,
+            ));
+        }
 
         return $this->render('LesPolypodesAppBundle:Events:select.html.twig', array(
             'form' => $form->createView(),
