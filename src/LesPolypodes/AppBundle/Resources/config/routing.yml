@@ -18,7 +18,7 @@ les_polypodes_app_remove: # supprime un calendrier
         serverName: baikal|calserv
 
 les_polypodes_app_event: # Liste des events d'un calendrier
-    path:     /{serverName}/{calendarName}/start/end
+    path:     /{serverName}/{calendarName}
     defaults: { _controller: LesPolypodesAppBundle:Events:event, serverName: baikal}
     requirements:
         serverName: baikal|calserv

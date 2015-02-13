@@ -380,6 +380,8 @@ class EventsController extends Controller
 
         if ($form->isValid()) {
             $calDavClient = $this->getSimplecalDavClient($serverName, $calendarName);
+            
+            $data = $form->getData();
 
             $events = $calDavClient->getEvents($data["startDate"]->format('Ymd\THis\Z'), $data["endDate"]->format('Ymd\THis\Z'));
 
@@ -391,7 +393,7 @@ class EventsController extends Controller
             $datas = [];
 
             $reader = new Reader();
-            
+
             foreach ($events as $event) {
                 $vcal = $reader->read($event->getData());
                 $dataContainer->vcal = $vcal;
