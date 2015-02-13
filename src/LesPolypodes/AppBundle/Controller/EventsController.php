@@ -81,6 +81,10 @@ class EventsController extends Controller
     public function indexAction($serverName)
     {
         $calDavClient = $this->getSimplecalDavClient($serverName);
+
+        //set to true for debugging.
+        $calDavClient->getClient()->dev = false;
+
         $calendars = $calDavClient->findCalendars();
         $result = array();
 
@@ -109,13 +113,16 @@ class EventsController extends Controller
      */
     public function addAction($serverName, $calendarName)
     {
-        // TODO: add 1 calendar
-        $this->get('session')->getFlashBag()->add(
-            'notice',
-            'Not implemented yet');
-
         $calDavClient = $this->getSimplecalDavClient($serverName);
-        $calDavClient->makeCal($calendarName);
+
+        //set to true for debugging.
+        $calDavClient->getClient()->dev = true;
+
+        // $calendarDescription = sprintf('%s\'s calendar', $calDavClient->getClient()->getPrincipalDisplayName());
+        $calendarDescription = 'Description';
+
+
+        $calDavClient->makeCal($calendarName, $calendarDescription);
         
 
         return $this->redirect($this->generateUrl('les_polypodes_app_index', array(

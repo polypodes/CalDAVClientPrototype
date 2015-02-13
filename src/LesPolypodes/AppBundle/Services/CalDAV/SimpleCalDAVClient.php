@@ -304,16 +304,32 @@ class SimpleCalDAVClient
 
 
     /**
-     * Create a calendar
-     * 
-     * @author Yolan
-     * @param string $calendarName
+     * Create a calendar.
      *
-     * @throws \Exception
+     * @author https://github.com/Peshmelba
+     *
+     * @param string $calendarName          The name of the calendar to create.
+     * @param string $calendarDescription   The Description of the new calendar.
+     * @param string $datas                 An VCALENDAR with TIMEZONE datas.
      */
-    public function makeCal($calendarName)
+    public function makeCal($calendarName, $calendarDescription)
     {
-        $st = $this->getClient()->DoMKCALENDARRequest($calendarName);
+        $EmptyVCAL = <<<VCALENDAR
+BEGIN:VCALENDAR
+PRODID:-//ODE Dev//CalDAV Client//EN
+VERSION:2.0
+BEGIN:VTIMEZONE
+TZID:Europe/London
+BEGIN:DAYLIGHT
+DTSTART:20150101T000000
+TZOFFSETFROM:+0000
+TZOFFSETTO:+0000
+END:DAYLIGHT
+END:VTIMEZONE
+END:VCALENDAR
+VCALENDAR;
+
+        $st = $this->getClient()->DoMKCALENDARRequest($calendarName, $calendarDescription, $EmptyVCAL);
 
         if ($st == '201')
         {
@@ -321,7 +337,12 @@ class SimpleCalDAVClient
         }
         else
         {
-            die('Erreur à la création du calendrier '.$calendarName);
+            throw new CalDAVException(sprintf("Can\'t create a Calendar Collection %s at %s.
+                %d HTTP status",
+                $calendarName,
+                $this->getClient()->GetFullUrl(),
+                $this->getClient()->GetHttpResultCode()
+                ), $this->getClient());
         }
     }
 
@@ -329,7 +350,7 @@ class SimpleCalDAVClient
     /**
      * Delete the given calendar from the server
      *
-     * @author Yolan
+     * @author https://github.com/Peshmelba
      * @param string $calendarName
      *
      * @throws \Exception
@@ -453,7 +474,7 @@ class SimpleCalDAVClient
     /**
      * identifie l'id d'un calendrier grâce à son nom.
      *
-     * @author Yolan
+     * @author https://github.com/Peshmelba
      *
      * @param string $name nom du calendrier cherché.
      *
@@ -471,6 +492,7 @@ class SimpleCalDAVClient
         }
         return $calendarID;
     }
+
 
     /**
      * findCalendars()
@@ -492,7 +514,11 @@ class SimpleCalDAVClient
         return $this->getClient()->FindCalendars(true);
     }
 
+
     /**
+     * Set the current calendar with his display name.
+     * 
+     * @author https://github.com/Peshmelba
      * @param string $calendarName
      *
      * @throws \Exception

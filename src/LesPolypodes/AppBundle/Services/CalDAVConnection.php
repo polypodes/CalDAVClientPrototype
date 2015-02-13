@@ -31,7 +31,7 @@ class CalDAVConnection extends ContainerAware
     protected $caldav_login = null;
     protected $caldav_password = null;
     protected $caldav_host = null;
-    protected $caldav_maincal_name = null;
+    protected $principalDisplayName = null;
 
     /**
      * @var SimpleCalDAVClient
@@ -46,7 +46,7 @@ class CalDAVConnection extends ContainerAware
         $this->caldav_login = $caldav['baikal']['login'];
         $this->caldav_password = $caldav['baikal']['password'];
         $this->caldav_host = $caldav['baikal']['host'];
-        $this->caldav_maincal_name = $caldav['baikal']['maincal_name'];
+
     }
 
     protected function getCalserv_CalDavConnection()
@@ -55,7 +55,6 @@ class CalDAVConnection extends ContainerAware
         $this->caldav_login= $caldav['calserv']['login'];
         $this->caldav_password = $caldav['calserv']['password'];
         $this->caldav_host = $caldav['calserv']['host'];
-        $this->caldav_maincal_name = $caldav['calserv']['maincal_name'];
     }
 
     public function getSimplecalDavClient($serv)
@@ -74,6 +73,8 @@ class CalDAVConnection extends ContainerAware
         $url = sprintf("%s%s/", $this->caldav_host, $this->caldav_login);
         $this->scdClient->connect($url, $this->caldav_login, $this->caldav_password);
 
+        $this->principalDisplayName = $this->scdClient->getPrincipalDisplayName();
+
         return $this->scdClient;
     }
 
@@ -86,5 +87,10 @@ class CalDAVConnection extends ContainerAware
         }
 
         $this->scdClient->setCalendar($this->scdClient->findCalendars()[$calendarID]);
+    }
+
+    public function getPrincipalDisplayName()
+    {
+        return $this->principalDisplayName;
     }
 }

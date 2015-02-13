@@ -15,6 +15,11 @@ namespace LesPolypodes\AppBundle\Services\CalDAV;
 class CalDAVClient
 {
     /**
+     * Set it to "true" if you need to display REQUEST/RESPONSE
+     */
+    public $dev;
+
+    /**
      * The calendar-URL we're using
      */
     public $calendar_url;
@@ -290,19 +295,23 @@ class CalDAVClient
         */
 
 // récommenter pour afficher request/response
-
-echo'<div>
+        if ($this->dev == true)
+        {
+            echo'<div>
         <input type="button" value="';
-echo $this->requestMethod;
-echo '" onclick=
+            echo $this->requestMethod;
+            echo '" onclick=
             "if (this.parentNode.getElementsByTagName(\'div\')[0].style.display != \'block\') {
                     this.parentNode.getElementsByTagName(\'div\')[0].style.display = \'block\';
                 } else {
                     this.parentNode.getElementsByTagName(\'div\')[0].style.display = \'none\';
                 }"/>
         <div style="display: none;">';
-echo 'Req : <pre>HEAD:'.$this->httpRequest.'BODY:'.$this->body.'</pre><br/>Resp : <pre>'.$response.'</pre>';
-echo '</div></div>';
+            echo var_dump($this->body);
+            echo 'Req : <pre>HEAD:'.$this->httpRequest.'BODY:'.$this->body.'</pre><br/>Resp : <pre>'.$response.'</pre>';
+            echo '</div></div>';
+        }
+
 
         return $response;
     }
@@ -531,15 +540,44 @@ echo '</div></div>';
     }
 
     /**
-     * Delete the given event from the server.
+     * Return the URL we are using.
      *
+     * @author https://github.com/Peshmelba
      *
-     * @author yolan
+     * @param string $id The UUID of the calendar to delete.
      *
-     * @param string $url The URL to make the request to
-     * @param string $etag The etag of an existing resource to be deleted, or '*' for any resource at that URL.
+     * @return string the full URL.
+     */
+    public function GetFullUrl()
+    {
+        return $this->full_url;
+    }
+
+    /**
+     * get the current principal's display name.
+     * 
+     * @author https://github.com/Peshmelba
      *
-     * @return int The HTTP Result Code for the DELETE
+     * @return string Principal's display name.
+     */
+    public function GetPrincipalDisplayName()
+    {
+      $xml = <<<EOXML
+<?xml version="1.0" encoding="utf-8" ?>
+   <D:acl-principal-prop-set xmlns:D="DAV:">
+   </D:acl-principal-prop-set>
+EOXML;
+        $url = $this->first_url_part.$this->FindPrincipal();
+        $this->SetDepth();
+        // die(var_dump($this->DoXMLRequest('REPORT', $xml, $url)));   
+    }
+
+    /**
+     * Delete the given calendar from the server.
+     *
+     * @author https://github.com/Peshmelba
+     *
+     * @param string $id The UUID of the calendar to delete.
      */
     public function DoRMCALRequest($id)
     {
@@ -551,52 +589,41 @@ echo '</div></div>';
     }
 
     /**
-     * Rajouté par Yolan, ne fonctionne pas.
+     * Add a calendar to the server.
+     *
+     * @author https://github.com/Peshmelba
+     *
+     * @param string $calendarName          The name of the calendar to create.
+     * @param string $calendarDescription   The Description of the new calendar.
+     * @param string $datas                 An VCALENDAR with TIMEZONE datas.
      */
-    public function DoMKCALENDARRequest($calendarName)
+    public function DoMKCALENDARRequest($calendarName, $calendarDescription, $datas)
     {
+        // $uuidGen = new UUIDUtil();
+
+        // $calendarID = $uuidGen->getUUID().'/';
+        $calendarID = 'UIDDFGHJKOJASKKNJNKJNSA'.'/';
+
         $request_method = 'MKCALENDAR';
 
-        $calendarID = 'Generate-here-an-UUID'.'/';
-
-        $xml=
-'<?xml version="1.0" encoding="utf-8" ?>
-<C:mkcalendar   xmlns:D="DAV:"
-                xmlns:C="urn:ietf:params:xml:ns:caldav">
+        $xml = sprintf(
+<<<EOXML
+<?xml version="1.0" encoding="utf-8" ?>
+<C:mkcalendar   xmlns:D="DAV:" xmlns:C="urn:ietf:params:xml:ns:caldav">
     <D:set>
         <D:prop>
-            <D:displayname>'.$calendarName.'</D:displayname>
-            <C:calendar-description xml:lang="en"
->Calendar restricted to events.</C:calendar-description>
+            <D:displayname>%s</D:displayname>
+            <C:calendar-description xml:lang="en">%s</C:calendar-description>
             <C:supported-calendar-component-set>
                 <C:comp name="VEVENT"/>
             </C:supported-calendar-component-set>
-            <C:calendar-timezone><![CDATA[BEGIN:VCALENDAR
-PRODID:-//Example Corp.//CalDAV Client//EN
-VERSION:2.0
-BEGIN:VTIMEZONE
-TZID:US-Eastern
-LAST-MODIFIED:19870101T000000Z
-BEGIN:STANDARD
-DTSTART:19671029T020000
-RRULE:FREQ=YEARLY;BYDAY=-1SU;BYMONTH=10
-TZOFFSETFROM:-0400
-TZOFFSETTO:-0500
-TZNAME:Eastern Standard Time (US & Canada)
-END:STANDARD
-BEGIN:DAYLIGHT
-DTSTART:19870405T020000
-RRULE:FREQ=YEARLY;BYDAY=1SU;BYMONTH=4
-TZOFFSETFROM:-0500
-TZOFFSETTO:-0400
-TZNAME:Eastern Daylight Time (US & Canada)
-END:DAYLIGHT
-END:VTIMEZONE
-END:VCALENDAR
-]]></C:calendar-timezone>
+            <C:calendar-timezone><![CDATA[%s]]></C:calendar-timezone>
         </D:prop>
     </D:set>
-</C:mkcalendar>';
+</C:mkcalendar>
+EOXML
+, $calendarName, $calendarDescription, $datas);
+
 
         $url = $this->full_url.$calendarID;
 
@@ -728,7 +755,7 @@ END:VCALENDAR
             }
         }
 
-        return $this->PrincipalURL($principal_url);
+        return $this->getPrincipalURL($principal_url);
     }
 
     /**
@@ -824,7 +851,7 @@ END:VCALENDAR
      *
      * @param $url string The Principal URL to set
      */
-    public function PrincipalURL($url = null)
+    public function getPrincipalURL($url = null)
     {
         if (isset($url)) {
             $this->principal_url = $url;
